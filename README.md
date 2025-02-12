@@ -1,3 +1,4 @@
-###README
+# Avatar Maker
 
-*blank*
+A simple and fun project that allows you to create customizable avatars.
+
