@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.XR.Interaction.Toolkit;
 using Ubiq.Avatars;
 using Ubiq.Messaging;
@@ -7,7 +8,13 @@ using Ubiq.Rooms;
 
 public class AvatarTextureStealer : MonoBehaviour
 {
-     public GameObject prefab;
+    public GameObject prefab;
+    
+    // public BoxCollider headCollider;
+    // public BoxCollider torsoCollider;
+    // public BoxCollider leftHandCollider;
+    // public BoxCollider rightHandCollider;
+
     
     private UnityEngine.XR.Interaction.Toolkit.Interactables.XRSimpleInteractable interactable;
     private RoomClient roomClient;
@@ -23,6 +30,9 @@ public class AvatarTextureStealer : MonoBehaviour
         var networkScene = NetworkScene.Find(this); 
         roomClient = networkScene.GetComponentInChildren<RoomClient>();
         avatarManager = networkScene.GetComponentInChildren<AvatarManager>();
+
+
+
     }
 
     private void OnDestroy()
@@ -37,6 +47,7 @@ public class AvatarTextureStealer : MonoBehaviour
 
     private void Interactable_SelectEntered(SelectEnterEventArgs arg0)
     {
+        Debug.Log(arg0);
         // The button has been pressed.
         
         // Change the local avatar prefab to the default one, because we have
