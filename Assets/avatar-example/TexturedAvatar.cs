@@ -32,6 +32,12 @@ public class TexturedAvatar : MonoBehaviour
         
         avatar = GetComponent<Avatar>();
 
+        if (avatar == null)
+        {
+            Debug.LogError("TexturedAvatar requires an Avatar component.");
+            return;
+        }
+        
         if (avatar.IsLocal)
         {
             var hasSavedSettings = false;
