@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -25,6 +26,12 @@ public class AvatarTextureStealerWithSegmentation : MonoBehaviour
     private RoomClient roomClient;
     private AvatarManager avatarManager;
 
+    // Store listeners so we can remove them later.
+    private UnityAction<SelectEnterEventArgs> headListener;
+    private UnityAction<SelectEnterEventArgs> torsoListener;
+    private UnityAction<SelectEnterEventArgs> leftHandListener;
+    private UnityAction<SelectEnterEventArgs> rightHandListener;
+
 
     private void Start()
     {
@@ -33,15 +40,22 @@ public class AvatarTextureStealerWithSegmentation : MonoBehaviour
         // interactable.selectEntered.AddListener(Interactable_SelectEntered);
         // interactable.selectEntered.AddListener((arg0) => Interactable_SelectEntered_Segment(AvatarPart.HEAD));
 
-        headInteractable = GameObject.Find("Body/Floating_Head").GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRSimpleInteractable>();
-        torsoInteractable = GameObject.Find("Body/Floating_Torso_A").GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRSimpleInteractable>();
-        leftHandInteractable = GameObject.Find("Body/Floating_LeftHand_A").GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRSimpleInteractable>();
-        rightHandInteractable = GameObject.Find("Body/Floating_RightHand_A").GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRSimpleInteractable>();
+        headInteractable = transform.Find("Body/Floating_Head").GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRSimpleInteractable>();
+        torsoInteractable = transform.Find("Body/Floating_Torso_A").GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRSimpleInteractable>();
+        leftHandInteractable = transform.Find("Body/Floating_LeftHand_A").GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRSimpleInteractable>();
+        rightHandInteractable = transform.Find("Body/Floating_RightHand_A").GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRSimpleInteractable>();
 
-        headInteractable.selectEntered.AddListener(Interactable_SelectEntered);
-        torsoInteractable.selectEntered.AddListener(Interactable_SelectEntered);
-        leftHandInteractable.selectEntered.AddListener(Interactable_SelectEntered);
-        rightHandInteractable.selectEntered.AddListener(Interactable_SelectEntered);
+        // Create delegates that call our method with the proper parameter.
+        headListener = (args) => Interactable_SelectEntered_Segment(AvatarPart.HEAD);
+        torsoListener = (args) => Interactable_SelectEntered_Segment(AvatarPart.TORSO);
+        leftHandListener = (args) => Interactable_SelectEntered_Segment(AvatarPart.BOTHHANDS);
+        rightHandListener = (args) => Interactable_SelectEntered_Segment(AvatarPart.BOTHHANDS);
+
+        // Add listeners using the lambda delegates.
+        headInteractable.selectEntered.AddListener(headListener);
+        torsoInteractable.selectEntered.AddListener(torsoListener);
+        leftHandInteractable.selectEntered.AddListener(leftHandListener);
+        rightHandInteractable.selectEntered.AddListener(rightHandListener);
 
 
         var networkScene = NetworkScene.Find(this);
@@ -60,41 +74,42 @@ public class AvatarTextureStealerWithSegmentation : MonoBehaviour
         // {
         //     interactable.selectEntered.RemoveListener(Interactable_SelectEntered);
         // }
-        if (headInteractable) headInteractable.selectEntered.RemoveListener(Interactable_SelectEntered);
-        if (torsoInteractable) torsoInteractable.selectEntered.RemoveListener(Interactable_SelectEntered);
-        if (leftHandInteractable) leftHandInteractable.selectEntered.RemoveListener(Interactable_SelectEntered);
-        if (rightHandInteractable) rightHandInteractable.selectEntered.RemoveListener(Interactable_SelectEntered);
+        // Remove the same listeners that were added.
+        if (headInteractable != null) headInteractable.selectEntered.RemoveListener(headListener);
+        if (torsoInteractable != null) torsoInteractable.selectEntered.RemoveListener(torsoListener);
+        if (leftHandInteractable != null) leftHandInteractable.selectEntered.RemoveListener(leftHandListener);
+        if (rightHandInteractable != null) rightHandInteractable.selectEntered.RemoveListener(rightHandListener);
 
     }
 
-    private void Interactable_SelectEntered(SelectEnterEventArgs arg0)
-    {
-        // The button has been pressed.
+    // private void Interactable_SelectEntered(SelectEnterEventArgs arg0)
+    // {
+    //     // The button has been pressed.
 
-        // Change the local avatar prefab to the default one, because we have
-        // a few costumes for that avatar bundled with Ubiq. The AvatarManager
-        // will do the work of letting other peers know about the prefab change.
-        //avatarManager.avatarPrefab = prefab; 
+    //     // Change the local avatar prefab to the default one, because we have
+    //     // a few costumes for that avatar bundled with Ubiq. The AvatarManager
+    //     // will do the work of letting other peers know about the prefab change.
+    //     //avatarManager.avatarPrefab = prefab; 
 
-        // Also, set the texture to the texture of the model avatar
-        SetAvatarTexture();
-    }
+    //     // Also, set the texture to the texture of the model avatar
+    //     SetAvatarTexture();
+    // }
 
     private void Interactable_SelectEntered_Segment(AvatarPart avatarPart)
     {
-        SetAvatarTexture();
+        SetAvatarTexture(avatarPart);
     }
 
-    private void SetAvatarTexture()
+    private void SetAvatarTexture(AvatarPart avatarPart)
     {
-        Debug.Log("Setting avatar texture...");
+        // Debug.Log("Setting avatar texture...");
+        Debug.Log("Avatar part: " + avatarPart);
 
         // Get the model avatar that was interacted with
         GameObject selectedAvatar = gameObject; // The GameObject this script is attached to (ModelAvatar)
 
         // Get the TexturedModelAvatar component from the selected avatar
         var modelTexture = selectedAvatar.GetComponent<TexturedModelAvatar>();
-        Debug.Log(modelTexture);
 
 
         // Retrieve the texture from the model avatar
@@ -107,6 +122,12 @@ public class AvatarTextureStealerWithSegmentation : MonoBehaviour
         // Get the player's TexturedAvatar component
         var playerTexture = playerAvatar.GetComponent<TexturedAvatar>();
 
+        var floatingAvatar = playerAvatar.GetComponentInChildren<FloatingAvatarSeparatedTextures>();
+        if (floatingAvatar != null){
+            // if (floatingAvatar.avatarPart == avatarPart) floatingAvatar.avatarPart = AvatarPart.FULLBODY;
+            // else floatingAvatar.avatarPart = avatarPart;
+            floatingAvatar.avatarPart = avatarPart;
+        }
 
         // Apply the stolen texture to the player's avatar
         playerTexture.SetTexture(stolenTexture);
