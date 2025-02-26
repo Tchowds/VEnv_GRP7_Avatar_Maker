@@ -84,7 +84,3 @@ configure_fingerprint.bin
 # Burst Debug
 VEnv_GRP7_Avatar_Maker_BurstDebugInformation_DoNotShip/
 tempburstlibs/
-
-# Ignore AllSkyFree package (if downloaded from Asset Store)
-Assets/AllSkyFree/
-Assets/AllSkyFree.meta
