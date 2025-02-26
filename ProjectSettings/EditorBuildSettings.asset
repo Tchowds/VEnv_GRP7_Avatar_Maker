@@ -8,9 +8,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 1
+  - enabled: 0
     path: Assets/avatar-example/Avatar Example.unity
     guid: 2e0581e857a80de44a4309c477e7c7d0
+  - enabled: 1
+    path: Assets/Scenes/SwapAvatarsWithParts.unity
+    guid: 5155ea8ad6a40184fb300ced891c216e
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: d9498c70c8b3d974786fdddd0f05ef9b, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
