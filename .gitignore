@@ -72,3 +72,19 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# CMake/Build System Auto-Generated Files
+.cmake/
+.ninja_deps
+.ninja_log
+compile_commands.json
+configure_fingerprint.bin
+
+
+# Burst Debug
+VEnv_GRP7_Avatar_Maker_BurstDebugInformation_DoNotShip/
+tempburstlibs/
+
+# Ignore AllSkyFree package (if downloaded from Asset Store)
+Assets/AllSkyFree/
+Assets/AllSkyFree.meta
