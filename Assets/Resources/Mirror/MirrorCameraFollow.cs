@@ -1,8 +1,11 @@
 using UnityEngine;
 
 public class MirrorCameraFollow : MonoBehaviour
-{
+{   
+    [Tooltip("Assign the player's XR Rig Main Camera here. If the camera does not move, it's because it hasn't been assigned here.")]
+
     public Transform playerCamera; // XR Rig's Main Camera
+    [Tooltip("Assign the mirror's plane (the reflective surface).")]
     public Transform mirrorPlane;  // The Mirror Plane (reflective surface)
     private Camera mirrorCam; // The camera rendering the mirror
 
