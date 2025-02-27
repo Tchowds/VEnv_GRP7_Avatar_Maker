@@ -6,6 +6,8 @@ public class MirrorCameraFollow : MonoBehaviour
     public Transform mirrorPlane;  // The Mirror Plane (reflective surface)
     private Camera mirrorCam; // The camera rendering the mirror
 
+    private RenderTexture mirrorTexture; // Unique Render Texture
+
     void Start()
     {
         mirrorCam = GetComponent<Camera>(); // Get the Camera component attached to this object
@@ -13,6 +15,28 @@ public class MirrorCameraFollow : MonoBehaviour
         {
             Debug.LogError("MirrorCameraFollow: No Camera component found on this GameObject!");
         }
+
+         // create a unique Render Texture for this mirror
+        mirrorTexture = new RenderTexture(1024, 1024, 16) 
+        {
+            name = "MirrorTexture_" + gameObject.name,
+            filterMode = FilterMode.Bilinear,
+            antiAliasing = 4 
+        };
+
+        mirrorCam.targetTexture = mirrorTexture; 
+
+         // Assign the new Render Texture to the mirror material
+        Renderer mirrorRenderer = mirrorPlane.GetComponent<Renderer>();
+        if (mirrorRenderer != null)
+        {
+            mirrorRenderer.material.mainTexture = mirrorTexture;
+        }
+        else
+        {
+            Debug.LogError("MirrorCameraFollow: No Renderer found on mirrorPlane! Make sure your mirror has a material.");
+        }
+
     }
 
     void LateUpdate()
