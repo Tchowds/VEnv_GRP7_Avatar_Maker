@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 8067044985236945966}
   - component: {fileID: -1501423061270029649}
   - component: {fileID: 4879411640079367770}
+  - component: {fileID: 8583003690775338813}
   m_Layer: 0
   m_Name: ModelAvatarSegmented
   m_TagString: Untagged
@@ -207,6 +208,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 3770059784482875993}
+--- !u!114 &8583003690775338813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3770059784482875993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37057d05c687e4e9fa5959c41c1a7bfb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationSpeed: 90
 --- !u!1001 &6371544007697405205
 PrefabInstance:
   m_ObjectHideFlags: 0
