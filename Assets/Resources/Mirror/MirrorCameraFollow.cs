@@ -42,26 +42,31 @@ public class MirrorCameraFollow : MonoBehaviour
 
     }
 
-    void LateUpdate()
+void LateUpdate()
+{
+    if (playerCamera == null || mirrorPlane == null || mirrorCam == null)
     {
-        if (playerCamera == null || mirrorPlane == null || mirrorCam == null)
-        {
-            Debug.LogError("MirrorCameraFollow: Missing references! Assign playerCamera, mirrorPlane, and ensure a Camera component is attached.");
-            return;
-        }
-
-        // Ensure the mirror normal is correct (whichever worked before)
-        Vector3 mirrorNormal = mirrorPlane.right; // Adjust this if necessary
-
-        // Reflect the camera’s position across the mirror
-        Vector3 toPlayer = playerCamera.position - mirrorPlane.position;
-        Vector3 reflectedPosition = playerCamera.position - 2 * Vector3.Dot(toPlayer, mirrorNormal) * mirrorNormal;
-
-        // Ensure the mirror camera follows horizontal movement, but not tilt
-        Vector3 lookDirection = new Vector3(reflectedPosition.x, transform.position.y, reflectedPosition.z) - transform.position;
-        transform.rotation = Quaternion.LookRotation(lookDirection, Vector3.up); // Forces world-up
-
-        // Apply the same projection matrix as the player camera
-        mirrorCam.projectionMatrix = playerCamera.GetComponent<Camera>().projectionMatrix;
+        Debug.LogError("MirrorCameraFollow: Missing references! Assign playerCamera, mirrorPlane, and ensure a Camera component is attached.");
+        return;
     }
+
+    // Ensure the mirror normal is correct (whichever worked before)
+    Vector3 mirrorNormal = mirrorPlane.right; // Adjust this if necessary
+
+    // Reflect the camera’s position across the mirror
+    Vector3 toPlayer = playerCamera.position - mirrorPlane.position;
+    Vector3 reflectedPosition = playerCamera.position - 2 * Vector3.Dot(toPlayer, mirrorNormal) * mirrorNormal;
+
+    // Ensure the mirror camera follows horizontal movement, but not tilt (lock roll)
+    Vector3 lookDirection = new Vector3(reflectedPosition.x, transform.position.y, reflectedPosition.z) - transform.position;
+    Quaternion targetRotation = Quaternion.LookRotation(lookDirection, Vector3.up); // Forces world-up
+
+    // Lock the roll by setting the z-axis rotation to zero
+    targetRotation = Quaternion.Euler(targetRotation.eulerAngles.x, targetRotation.eulerAngles.y, 0f);
+
+    transform.rotation = targetRotation;
+
+    // Apply the same projection matrix as the player camera
+    mirrorCam.projectionMatrix = playerCamera.GetComponent<Camera>().projectionMatrix;
+}
 }
