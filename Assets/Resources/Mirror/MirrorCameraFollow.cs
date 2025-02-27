@@ -23,18 +23,18 @@ public class MirrorCameraFollow : MonoBehaviour
             return;
         }
 
-        // ✅ Ensure the mirror normal is correct (whichever worked before)
+        // Ensure the mirror normal is correct (whichever worked before)
         Vector3 mirrorNormal = mirrorPlane.right; // Adjust this if necessary
 
-        // ✅ Reflect the camera’s position across the mirror
+        // Reflect the camera’s position across the mirror
         Vector3 toPlayer = playerCamera.position - mirrorPlane.position;
         Vector3 reflectedPosition = playerCamera.position - 2 * Vector3.Dot(toPlayer, mirrorNormal) * mirrorNormal;
 
-        // ✅ Ensure the mirror camera looks correctly
-        Vector3 lookDirection = reflectedPosition - transform.position;
-        transform.rotation = Quaternion.LookRotation(lookDirection, playerCamera.up);
+        // Ensure the mirror camera follows horizontal movement, but not tilt
+        Vector3 lookDirection = new Vector3(reflectedPosition.x, transform.position.y, reflectedPosition.z) - transform.position;
+        transform.rotation = Quaternion.LookRotation(lookDirection, Vector3.up); // Forces world-up
 
-        // ✅ Apply the same projection matrix as the player camera
+        // Apply the same projection matrix as the player camera
         mirrorCam.projectionMatrix = playerCamera.GetComponent<Camera>().projectionMatrix;
     }
 }
