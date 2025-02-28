@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem; // Import the new Input System
 
 public class DoorController : MonoBehaviour
 {
@@ -9,36 +8,17 @@ public class DoorController : MonoBehaviour
     [SerializeField] private float speed = 90f;  // Speed at which the door opens and closes
 
     private float currentAngle = 0f;  // Current angle of the door
-
     private bool isOpening = false;   // Whether the door is in the process of opening
     private float targetAngle = 0f;   // The target angle for the door to reach
 
-    public InputActionReference openCloseAction; // Input Action Reference for the controller button (A button)
-
-    void OnEnable()
+    void Start()
     {
-        // Enable the input action when the script is enabled
-        openCloseAction.action.Enable();
-    }
-
-    void OnDisable()
-    {
-        // Disable the input action when the script is disabled
-        openCloseAction.action.Disable();
+        // Set the initial door angle to the closed angle
+        currentAngle = openAngle;
     }
 
     void Update()
     {
-        // Check for either keyboard input (E key) or controller input (Action button)
-        bool isButtonPressed = Keyboard.current.eKey.wasPressedThisFrame || openCloseAction.action.triggered;
-
-        if (isButtonPressed) // If either input was triggered
-        {
-            Debug.Log("Button Pressed!");
-            isOpening = !isOpening;  // Toggle the door open/close state
-            targetAngle = isOpening ? openAngle : closedAngle;  // Set the target angle based on state
-        }
-
         // Animate the door opening or closing
         if (isOpening && currentAngle < targetAngle)
         {
@@ -51,8 +31,15 @@ public class DoorController : MonoBehaviour
             currentAngle = Mathf.Max(currentAngle, targetAngle);  // Clamp to target
         }
 
-        Debug.Log("Current Door Angle: " + currentAngle);
         // Apply the rotation to the door based on the current angle
-        door.rotation = Quaternion.Euler(0, currentAngle, 0);  // Rotate the door along the Y-axis
+        door.rotation = Quaternion.Euler(0, currentAngle, 0);
+    }
+
+    // Toggle door state between open and closed
+    public void ToggleDoorState()
+    {
+        Debug.Log("Toggling door state!");
+        isOpening = !isOpening;
+        targetAngle = isOpening ? openAngle : closedAngle;  // Toggle between open and closed
     }
 }
