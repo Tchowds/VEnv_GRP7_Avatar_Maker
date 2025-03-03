@@ -118,6 +118,8 @@ public class AvatarTextureStealerWithSegmentation : MonoBehaviour
 
         // Find the player's avatar
         var playerAvatar = avatarManager.FindAvatar(roomClient.Me);
+        
+        PrintAllPlayerIds();
 
         // Get the player's TexturedAvatar component
         var playerTexture = playerAvatar.GetComponent<TexturedAvatar>();
@@ -133,6 +135,43 @@ public class AvatarTextureStealerWithSegmentation : MonoBehaviour
         playerTexture.SetTexture(stolenTexture);
 
         Debug.Log("Texture successfully applied to the player!");
+    }
+
+        private void PrintAllPlayerIds()
+    {
+        // Check if roomClient and avatarManager are available
+        if (roomClient != null && avatarManager != null)
+        {
+            Debug.Log("RoomClient and AvatarManager are available.");
+            // Get the total count of peers (players)
+            int peerCount = 0;
+
+            // Loop through all the connected peers in the room (other than the local player)
+            foreach (var peer in roomClient.Peers)
+            {
+                peerCount++;
+                Debug.Log("Peer: " + peer.ToString());
+
+                // Now retrieve the avatar corresponding to this peer
+                var avatar = avatarManager.FindAvatar(peer);  // Find the avatar by peer
+
+                if (avatar != null)
+                {
+                    // Log the NetworkId of the avatar (player)
+                    Debug.Log("Connected player ID: " + avatar.NetworkId);
+                }
+                else
+                {
+                    Debug.Log("No avatar found for peer: " + peer);
+                }
+            }
+
+            Debug.Log("Total peers in the room: " + peerCount);
+        }
+        else
+        {
+            Debug.LogError("RoomClient or AvatarManager is not available.");
+        }
     }
 
 }

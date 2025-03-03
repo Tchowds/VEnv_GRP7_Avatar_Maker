@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &3965553953709847902
+--- !u!1 &4777172906563835465
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,11 +8,11 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5047087087447736718}
-  - component: {fileID: 5865478343366737293}
-  - component: {fileID: 1644731799289886078}
-  - component: {fileID: 1484071763382574828}
-  - component: {fileID: 7625259505437837535}
+  - component: {fileID: 9164239166339342324}
+  - component: {fileID: 3449076404900505307}
+  - component: {fileID: 5560966798243228920}
+  - component: {fileID: 4232300919924207281}
+  - component: {fileID: 8903355907932278819}
   m_Layer: 0
   m_Name: DoorHandle
   m_TagString: Untagged
@@ -20,13 +20,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5047087087447736718
+--- !u!4 &9164239166339342324
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3965553953709847902}
+  m_GameObject: {fileID: 4777172906563835465}
   serializedVersion: 2
   m_LocalRotation: {x: -0.000018195271, y: 1, z: -0.0000038582293, w: 0.000009775159}
   m_LocalPosition: {x: 0.991, y: 1.272, z: 0.086}
@@ -35,13 +35,13 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &5865478343366737293
+--- !u!65 &3449076404900505307
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3965553953709847902}
+  m_GameObject: {fileID: 4777172906563835465}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -56,20 +56,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.08193871, y: 0.87523985, z: 0.18517575}
   m_Center: {x: 0.009299257, y: -0.1746682, z: 0.09459155}
---- !u!114 &1644731799289886078
+--- !u!114 &5560966798243228920
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3965553953709847902}
+  m_GameObject: {fileID: 4777172906563835465}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8a35f6cfbfba9b548aaa00d52cfe8a50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_InteractionManager: {fileID: 0}
-  m_Colliders: []
+  m_Colliders:
+  - {fileID: 3449076404900505307}
   m_InteractionLayers:
     m_Bits: 1
   m_DistanceCalculationMode: 1
@@ -128,20 +129,20 @@ MonoBehaviour:
   m_StartingHoverFilters: []
   m_StartingSelectFilters: []
   m_StartingInteractionStrengthFilters: []
---- !u!114 &1484071763382574828
+--- !u!114 &4232300919924207281
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3965553953709847902}
+  m_GameObject: {fileID: 4777172906563835465}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 115f1a2a50d85cd4b9d6dad4c95622be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Interactable: {fileID: 1644731799289886078}
-  m_PokeCollider: {fileID: 5865478343366737293}
+  m_Interactable: {fileID: 5560966798243228920}
+  m_PokeCollider: {fileID: 3449076404900505307}
   m_PokeConfiguration:
     m_UseConstant: 1
     m_ConstantValue:
@@ -150,13 +151,13 @@ MonoBehaviour:
       m_EnablePokeAngleThreshold: 1
       m_PokeAngleThreshold: 45
     m_Variable: {fileID: 0}
---- !u!114 &7625259505437837535
+--- !u!114 &8903355907932278819
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3965553953709847902}
+  m_GameObject: {fileID: 4777172906563835465}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5a3e4c6f28b364fc4903b3768b239c23, type: 3}
