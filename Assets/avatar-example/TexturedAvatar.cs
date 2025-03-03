@@ -82,6 +82,7 @@ public class TexturedAvatar : MonoBehaviour
     /// </summary>
     public void SetTexture(Texture2D texture)
     {
+        Debug.Log("Setting texture to " + texture);
         SetTexture(Textures.Get(texture));
     }
 
@@ -89,6 +90,7 @@ public class TexturedAvatar : MonoBehaviour
     {
         if(String.IsNullOrWhiteSpace(uuid))
         {
+            Debug.Log("null");
             return;
         }
 
@@ -109,6 +111,10 @@ public class TexturedAvatar : MonoBehaviour
             {
                 SaveSettings();
             }
+        } // added by taha to stop the bug of not able to copy body parts from the same texture
+        else
+        { 
+            OnTextureChanged.Invoke(cached);
         }
     }
 

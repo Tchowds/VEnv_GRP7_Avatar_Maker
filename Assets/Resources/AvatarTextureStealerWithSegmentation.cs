@@ -124,8 +124,6 @@ public class AvatarTextureStealerWithSegmentation : MonoBehaviour
 
         var floatingAvatar = playerAvatar.GetComponentInChildren<FloatingAvatarSeparatedTextures>();
         if (floatingAvatar != null){
-            // if (floatingAvatar.avatarPart == avatarPart) floatingAvatar.avatarPart = AvatarPart.FULLBODY;
-            // else floatingAvatar.avatarPart = avatarPart;
             floatingAvatar.avatarPart = avatarPart;
         }
 
