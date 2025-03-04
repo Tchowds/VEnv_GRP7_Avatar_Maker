@@ -22,6 +22,7 @@ public class AvatarTextureStealerWithSegmentation : MonoBehaviour
     private UnityEngine.XR.Interaction.Toolkit.Interactables.XRSimpleInteractable torsoInteractable;
     private UnityEngine.XR.Interaction.Toolkit.Interactables.XRSimpleInteractable leftHandInteractable;
     private UnityEngine.XR.Interaction.Toolkit.Interactables.XRSimpleInteractable rightHandInteractable;
+    private UnityEngine.XR.Interaction.Toolkit.Interactables.XRSimpleInteractable cubeInteractable;
 
     private RoomClient roomClient;
     private AvatarManager avatarManager;
@@ -31,6 +32,7 @@ public class AvatarTextureStealerWithSegmentation : MonoBehaviour
     private UnityAction<SelectEnterEventArgs> torsoListener;
     private UnityAction<SelectEnterEventArgs> leftHandListener;
     private UnityAction<SelectEnterEventArgs> rightHandListener;
+    private UnityAction<SelectEnterEventArgs> cubeListener;
 
 
     private void Start()
@@ -44,18 +46,21 @@ public class AvatarTextureStealerWithSegmentation : MonoBehaviour
         torsoInteractable = transform.Find("Body/Floating_Torso_A").GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRSimpleInteractable>();
         leftHandInteractable = transform.Find("Body/Floating_LeftHand_A").GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRSimpleInteractable>();
         rightHandInteractable = transform.Find("Body/Floating_RightHand_A").GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRSimpleInteractable>();
+        cubeInteractable = transform.Find("Cube").GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRSimpleInteractable>();
 
         // Create delegates that call our method with the proper parameter.
         headListener = (args) => Interactable_SelectEntered_Segment(AvatarPart.HEAD);
         torsoListener = (args) => Interactable_SelectEntered_Segment(AvatarPart.TORSO);
         leftHandListener = (args) => Interactable_SelectEntered_Segment(AvatarPart.BOTHHANDS);
         rightHandListener = (args) => Interactable_SelectEntered_Segment(AvatarPart.BOTHHANDS);
+        cubeListener = (args) => Interactable_SelectEntered_Segment(AvatarPart.FULLBODY);
 
         // Add listeners using the lambda delegates.
         headInteractable.selectEntered.AddListener(headListener);
         torsoInteractable.selectEntered.AddListener(torsoListener);
         leftHandInteractable.selectEntered.AddListener(leftHandListener);
         rightHandInteractable.selectEntered.AddListener(rightHandListener);
+        cubeInteractable.selectEntered.AddListener(cubeListener);
 
 
         var networkScene = NetworkScene.Find(this);
@@ -79,6 +84,7 @@ public class AvatarTextureStealerWithSegmentation : MonoBehaviour
         if (torsoInteractable != null) torsoInteractable.selectEntered.RemoveListener(torsoListener);
         if (leftHandInteractable != null) leftHandInteractable.selectEntered.RemoveListener(leftHandListener);
         if (rightHandInteractable != null) rightHandInteractable.selectEntered.RemoveListener(rightHandListener);
+        if (cubeInteractable != null) cubeInteractable.selectEntered.RemoveListener(cubeListener);
 
     }
 
