@@ -106,7 +106,7 @@ public class BarrierOperator : MonoBehaviour
         }
         else
         {
-            if (isSameAvatar(avatarCatalogue, primaryAvatarParts, floatingAvatar)) gameObject.SetActive(false);
+            if (isSameAvatar(avatarCatalogue, primaryAvatarParts, floatingAvatar)) setActiveAndSendMessage(false, false);
         }
     }
 
