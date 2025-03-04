@@ -21,6 +21,7 @@ public class BarrierOperator : MonoBehaviour
     private GameObject SecondaryAvatar;
     private XRSimpleInteractable interactable;
     private NetworkContext context;
+    private float lastDownTime = 0.0f;
 
 
     private struct BarrierMessage
@@ -54,8 +55,16 @@ public class BarrierOperator : MonoBehaviour
         context = NetworkScene.Register(this);
     }
 
+    void Update()
+    {
+        if (dualAvatars && (!primaryAvatar.activeSelf || !SecondaryAvatar.activeSelf))
+        {
+            if (Time.time - lastDownTime > countdown) setActiveAndSendMessage(true, true);
+        }
+    }
+
     void setupAvatarTextures(GameObject avatar, int[] avatarParts)
-{
+    {
     // Retrieve the required components
     var floating = avatar.GetComponentInChildren<FloatingAvatarSeparatedTextures>();
     var textured = avatar.GetComponent<TexturedAvatar>();
@@ -69,7 +78,7 @@ public class BarrierOperator : MonoBehaviour
         floating.avatarPart = parts[i];
         textured.SetTexture(avatarParts[i].ToString());
     }
-}
+    }
 
     private void Interactable_SelectEntered_Match_Avatar(SelectEnterEventArgs arg0)
     {
@@ -106,6 +115,7 @@ public class BarrierOperator : MonoBehaviour
         gameObject.SetActive(primary || secondary);
         primaryAvatar.SetActive(primary);
         SecondaryAvatar.SetActive(secondary);
+        lastDownTime = Time.time;
 
         context.SendJson(new BarrierMessage()
         {
