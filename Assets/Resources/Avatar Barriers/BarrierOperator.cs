@@ -22,12 +22,11 @@ public class BarrierOperator : MonoBehaviour
     private XRSimpleInteractable interactable;
     private NetworkContext context;
 
-    private bool lastActive;
-
 
     private struct BarrierMessage
     {
-        public bool barrierActive;
+        public bool primaryActive;
+        public bool secondaryActive;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -53,7 +52,6 @@ public class BarrierOperator : MonoBehaviour
         setupAvatarTextures(primaryAvatar, primaryAvatarParts);
 
         context = NetworkScene.Register(this);
-        lastActive = gameObject.activeSelf;
     }
 
     void setupAvatarTextures(GameObject avatar, int[] avatarParts)
@@ -73,21 +71,6 @@ public class BarrierOperator : MonoBehaviour
     }
 }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (lastActive != gameObject.activeSelf)
-        {
-            lastActive = gameObject.activeSelf;
-            context.SendJson(new BarrierMessage { barrierActive = lastActive });
-        }
-    }
-
-    private void Interactable_SelectEntered_Disappear(SelectEnterEventArgs arg0)
-    {
-        gameObject.SetActive(false);
-    }
-
     private void Interactable_SelectEntered_Match_Avatar(SelectEnterEventArgs arg0)
     {
         var networkScene = NetworkScene.Find(this);
@@ -101,31 +84,34 @@ public class BarrierOperator : MonoBehaviour
 
         var avatarCatalogue = playerTexture.Textures;
 
-        // bool same = isSameAvatar(avatarCatalogue, primaryAvatarParts, floatingAvatar);
-
-        // if (same) gameObject.SetActive(false);
-
         if (dualAvatars)
         {
             if (primaryAvatar.activeSelf && SecondaryAvatar.activeSelf)
             {
-                if (isSameAvatar(avatarCatalogue, secondaryAvatarParts, floatingAvatar)) SecondaryAvatar.SetActive(false);
-                else if (isSameAvatar(avatarCatalogue, primaryAvatarParts, floatingAvatar)) primaryAvatar.SetActive(false);
+                if (isSameAvatar(avatarCatalogue, secondaryAvatarParts, floatingAvatar)) setActiveAndSendMessage(true, false);
+                else if (isSameAvatar(avatarCatalogue, primaryAvatarParts, floatingAvatar)) setActiveAndSendMessage(false, true);
             }
-            else if (primaryAvatar.activeSelf)
-            {
-                if (isSameAvatar(avatarCatalogue, primaryAvatarParts, floatingAvatar)) gameObject.SetActive(false);
-            }
-            else if (SecondaryAvatar.activeSelf)
-            {
-                if (isSameAvatar(avatarCatalogue, secondaryAvatarParts, floatingAvatar)) gameObject.SetActive(false);
-            }
-            else gameObject.SetActive(false);
+            else if (primaryAvatar.activeSelf && isSameAvatar(avatarCatalogue, primaryAvatarParts, floatingAvatar)) setActiveAndSendMessage(false, false);
+            else if (SecondaryAvatar.activeSelf && isSameAvatar(avatarCatalogue, secondaryAvatarParts, floatingAvatar)) setActiveAndSendMessage(false, false);
+            else setActiveAndSendMessage(false, false);
         }
         else
         {
             if (isSameAvatar(avatarCatalogue, primaryAvatarParts, floatingAvatar)) gameObject.SetActive(false);
         }
+    }
+
+    private void setActiveAndSendMessage(bool primary, bool secondary)
+    {
+        gameObject.SetActive(primary || secondary);
+        primaryAvatar.SetActive(primary);
+        SecondaryAvatar.SetActive(secondary);
+
+        context.SendJson(new BarrierMessage()
+        {
+            primaryActive = primary,
+            secondaryActive = secondary
+        });
     }
 
     private bool isSameAvatar(AvatarTextureCatalogue catalogue, int[] modelParts, FloatingAvatarSeparatedTextures avatar)
@@ -143,8 +129,6 @@ public class BarrierOperator : MonoBehaviour
         return true;
     }
 
-
-
     private void OnDestroy()
     {
         if (interactable) interactable.selectEntered.RemoveListener(Interactable_SelectEntered_Match_Avatar);
@@ -153,6 +137,13 @@ public class BarrierOperator : MonoBehaviour
     public void ProcessMessage(ReferenceCountedSceneGraphMessage message)
     {
         var m = message.FromJson<BarrierMessage>();
-        gameObject.SetActive(m.barrierActive);
+        bool remotePrimaryActive = m.primaryActive;
+        bool remoteSecondaryActive = m.secondaryActive;
+        if(!remotePrimaryActive && !remoteSecondaryActive) gameObject.SetActive(false);
+        else
+        {
+            primaryAvatar.SetActive(remotePrimaryActive);
+            SecondaryAvatar.SetActive(remoteSecondaryActive);
+        }
     }
 }
