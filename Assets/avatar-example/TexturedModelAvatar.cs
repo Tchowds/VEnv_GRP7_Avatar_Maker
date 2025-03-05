@@ -131,4 +131,14 @@ public class TexturedModelAvatar : MonoBehaviour
     {
         return cachedTexture;
     }
+
+    public Texture2D GetTexture(AvatarPart avatarPart)
+    {
+        Debug.Log("Getting texture");
+        if(avatarPart == AvatarPart.HEAD) return transform.Find("Body/Floating_Head").GetComponent<Renderer>().material.mainTexture as Texture2D;
+        else if(avatarPart == AvatarPart.TORSO) return transform.Find("Body/Floating_Torso_A").GetComponent<Renderer>().material.mainTexture as Texture2D;
+        else if(avatarPart == AvatarPart.LEFTHAND) return transform.Find("Body/Floating_LeftHand_A").GetComponentInChildren<Renderer>().material.mainTexture as Texture2D;
+        else if(avatarPart == AvatarPart.RIGHTHAND) return transform.Find("Body/Floating_RightHand_A").GetComponentInChildren<Renderer>().material.mainTexture as Texture2D;
+        else return null;
+    }
 }

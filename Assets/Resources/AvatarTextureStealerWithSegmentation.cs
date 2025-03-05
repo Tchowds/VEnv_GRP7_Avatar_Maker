@@ -119,7 +119,18 @@ public class AvatarTextureStealerWithSegmentation : MonoBehaviour
 
 
         // Retrieve the texture from the model avatar
-        Texture2D stolenTexture = modelTexture.GetTexture();
+        // Texture2D stolenTexture = modelTexture.GetTexture();
+        if (avatarPart == AvatarPart.FULLBODY)
+        {
+            SetFullBodyTexture();
+            return;
+        } else if (avatarPart == AvatarPart.BOTHHANDS)
+        {
+            SetAvatarTexture(AvatarPart.LEFTHAND);
+            SetAvatarTexture(AvatarPart.RIGHTHAND);
+            return;
+        }
+        Texture2D stolenTexture = modelTexture.GetTexture(avatarPart);
 
 
         // Find the player's avatar
@@ -137,6 +148,14 @@ public class AvatarTextureStealerWithSegmentation : MonoBehaviour
         playerTexture.SetTexture(stolenTexture);
 
         Debug.Log("Texture successfully applied to the player!");
+    }
+
+    private void SetFullBodyTexture()
+    {
+        SetAvatarTexture(AvatarPart.HEAD);
+        SetAvatarTexture(AvatarPart.TORSO);
+        SetAvatarTexture(AvatarPart.LEFTHAND);
+        SetAvatarTexture(AvatarPart.RIGHTHAND);
     }
 
 }
