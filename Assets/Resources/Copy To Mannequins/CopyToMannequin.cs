@@ -11,6 +11,7 @@ using Ubiq.Avatars;
 public class CopyToMannequin : MonoBehaviour
 {
 
+    private NetworkContext context;
 
     private XRSimpleInteractable copySphereInteractable;
     private Renderer headRenderer;
@@ -38,6 +39,8 @@ public class CopyToMannequin : MonoBehaviour
         torsoRenderer = floating.torsoRenderer;
         leftHandRenderer = floating.leftHandRenderer;
         rightHandRenderer = floating.rightHandRenderer;
+
+        context = NetworkScene.Register(this);
     }
 
     private void Interactable_SelectEntered_CopyToMannequin(SelectEnterEventArgs arg0)
@@ -54,6 +57,19 @@ public class CopyToMannequin : MonoBehaviour
         torsoRenderer.material.mainTexture = floatingAvatar.torsoRenderer.material.mainTexture;
         leftHandRenderer.material.mainTexture = floatingAvatar.leftHandRenderer.material.mainTexture;
         rightHandRenderer.material.mainTexture = floatingAvatar.rightHandRenderer.material.mainTexture;
+
+        sendMessage();
+    }
+
+    public void sendMessage()
+    {
+        context.SendJson(new CopyMessage
+        {
+            headTexture = headRenderer.material.mainTexture,
+            torsoTexture = torsoRenderer.material.mainTexture,
+            leftHandTexture = leftHandRenderer.material.mainTexture,
+            rightHandTexture = rightHandRenderer.material.mainTexture
+        });
     }
 
     public void ProcessMessage(ReferenceCountedSceneGraphMessage message)
