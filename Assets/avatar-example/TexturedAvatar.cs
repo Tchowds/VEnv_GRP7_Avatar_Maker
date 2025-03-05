@@ -32,6 +32,12 @@ public class TexturedAvatar : MonoBehaviour
         
         avatar = GetComponent<Avatar>();
 
+        if (avatar == null)
+        {
+            Debug.LogError("TexturedAvatar requires an Avatar component.");
+            return;
+        }
+        
         if (avatar.IsLocal)
         {
             var hasSavedSettings = false;
@@ -76,13 +82,24 @@ public class TexturedAvatar : MonoBehaviour
     /// </summary>
     public void SetTexture(Texture2D texture)
     {
+        Debug.Log("Setting texture to " + texture);
+        SetTexture(Textures.Get(texture));
+    }
+
+    public void SetTexture(Texture2D texture, AvatarPart avatarPart)
+    {
+        Debug.Log("Setting texture to " + texture);
+        var floatingAvatar = GetComponentInChildren<FloatingAvatarSeparatedTextures>();
+        if (floatingAvatar == null) SetTexture(texture);
         SetTexture(Textures.Get(texture));
     }
 
     public void SetTexture(string uuid)
     {
+        Debug.Log("Setting texture to " + uuid);
         if(String.IsNullOrWhiteSpace(uuid))
         {
+            Debug.Log("null");
             return;
         }
 
@@ -103,18 +120,41 @@ public class TexturedAvatar : MonoBehaviour
             {
                 SaveSettings();
             }
+        } // added by taha to stop the bug of not able to copy body parts from the same texture
+        else
+        { 
+            OnTextureChanged.Invoke(cached);
         }
     }
 
+    // These settings have been changed by Taha
     private void SaveSettings()
     {
         PlayerPrefs.SetString("ubiq.avatar.texture.uuid", uuid);
+        PlayerPrefs.SetString("ubiq.avatar.texture.head.uuid", uuid);
+        PlayerPrefs.SetString("ubiq.avatar.texture.torso.uuid", uuid);
+        PlayerPrefs.SetString("ubiq.avatar.texture.lefthand.uuid", uuid);
+        PlayerPrefs.SetString("ubiq.avatar.texture.righthand.uuid", uuid);
     }
 
     private bool LoadSettings()
     {
         var uuid = PlayerPrefs.GetString("ubiq.avatar.texture.uuid", "");
+
+        var headUuid = PlayerPrefs.GetString("ubiq.avatar.texture.head.uuid", "");
+        var torsoUuid = PlayerPrefs.GetString("ubiq.avatar.texture.torso.uuid", "");
+        var leftHandUuid = PlayerPrefs.GetString("ubiq.avatar.texture.lefthand.uuid", "");
+        var rightHandUuid = PlayerPrefs.GetString("ubiq.avatar.texture.righthand.uuid", "");
+
+        
+
         SetTexture(uuid);
+        // if uuid != headUuid && headUuid != ""
+        // {
+        //     SetTexture(headUuid);
+        // }
+
+
         return !String.IsNullOrWhiteSpace(uuid);
     }
 
