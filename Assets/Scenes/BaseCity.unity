@@ -2814,6 +2814,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3317875243874149491, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
+      propertyPath: Textures
+      value: 
+      objectReference: {fileID: 11400000, guid: b9b5ab83068724908937dfdd4d246538, type: 2}
+    - target: {fileID: 1512858996523430110, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 566df5f5cb1b0489b859c2e35766383e, type: 2}
     - target: {fileID: 1826479346687900168, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 12.313822
@@ -2854,6 +2862,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2982952347918996568, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 566df5f5cb1b0489b859c2e35766383e, type: 2}
+    - target: {fileID: 3504530348746024124, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 566df5f5cb1b0489b859c2e35766383e, type: 2}
     - target: {fileID: 3770059784482875993, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
       propertyPath: m_Name
       value: Mannequin
