@@ -2874,6 +2874,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mannequin
       objectReference: {fileID: 0}
+    - target: {fileID: 8930610318754038311, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
+      propertyPath: Textures
+      value: 
+      objectReference: {fileID: 11400000, guid: b9b5ab83068724908937dfdd4d246538, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

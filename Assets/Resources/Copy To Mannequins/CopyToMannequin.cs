@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using Ubiq.Messaging;
 using Ubiq.Rooms;
 using Ubiq.Avatars;
+using System;
+
 
 public class CopyToMannequin : MonoBehaviour
 {
@@ -18,6 +20,8 @@ public class CopyToMannequin : MonoBehaviour
     private Renderer torsoRenderer;
     private Renderer leftHandRenderer;
     private Renderer rightHandRenderer;
+
+    public CustomAvatarTextureCatalogue textureCatalogue;  // Reference to the texture catalogue
 
     private struct CopyMessage
     {
@@ -53,12 +57,42 @@ public class CopyToMannequin : MonoBehaviour
         var playerTexture = playerAvatar.GetComponent<TexturedAvatar>();
         var floatingAvatar = playerAvatar.GetComponentInChildren<FloatingAvatarSeparatedTextures>();
 
-        headRenderer.material.mainTexture = floatingAvatar.headRenderer.material.mainTexture;
-        torsoRenderer.material.mainTexture = floatingAvatar.torsoRenderer.material.mainTexture;
-        leftHandRenderer.material.mainTexture = floatingAvatar.leftHandRenderer.material.mainTexture;
-        rightHandRenderer.material.mainTexture = floatingAvatar.rightHandRenderer.material.mainTexture;
+        // Get the player's textures
+        Texture2D headTex = floatingAvatar.headRenderer.material.mainTexture as Texture2D;
+        Texture2D torsoTex = floatingAvatar.torsoRenderer.material.mainTexture as Texture2D;
+        Texture2D leftHandTex = floatingAvatar.leftHandRenderer.material.mainTexture as Texture2D;
+        Texture2D rightHandTex = floatingAvatar.rightHandRenderer.material.mainTexture as Texture2D;
+
+        // Modify textures (example: tinting them)
+        Texture2D modifiedHeadTex = ModifyTexture(headTex);
+        Texture2D modifiedTorsoTex = ModifyTexture(torsoTex);
+        Texture2D modifiedLeftHandTex = ModifyTexture(leftHandTex);
+        Texture2D modifiedRightHandTex = ModifyTexture(rightHandTex);
+
+        // Apply the modified textures to the mannequin
+        headRenderer.material.mainTexture = modifiedHeadTex;
+        torsoRenderer.material.mainTexture = modifiedTorsoTex;
+        leftHandRenderer.material.mainTexture = modifiedLeftHandTex;
+        rightHandRenderer.material.mainTexture = modifiedRightHandTex;
+
+        // Save the modified textures as new dynamic textures
+        if (textureCatalogue != null)
+        {
+            textureCatalogue.AddDynamicTexture(modifiedHeadTex);
+            textureCatalogue.AddDynamicTexture(modifiedTorsoTex);
+            textureCatalogue.AddDynamicTexture(modifiedLeftHandTex);
+            textureCatalogue.AddDynamicTexture(modifiedRightHandTex);
+
+            Debug.Log("Modified textures and added them to CustomAvatarTextureCatalogue!");
+        }
+        else
+        {
+            Debug.LogError("CustomAvatarTextureCatalogue not found in the scene!");
+        }
 
         sendMessage();
+    
+
     }
 
     public void sendMessage()
@@ -102,4 +136,32 @@ public class CopyToMannequin : MonoBehaviour
     {
         if (copySphereInteractable) copySphereInteractable.selectEntered.RemoveListener(Interactable_SelectEntered_CopyToMannequin);
     }
+
+    private Texture2D ModifyTexture(Texture2D originalTexture)
+    {
+        if (originalTexture == null)
+        {
+            Debug.LogError("ModifyTexture: Original texture is null!");
+            return null;
+        }
+        Texture2D newTexture = new Texture2D(originalTexture.width, originalTexture.height, TextureFormat.RGB24, false);
+
+        newTexture.SetPixels(originalTexture.GetPixels());
+
+        // Apply modifications (red tint)
+        Color[] pixels = newTexture.GetPixels();
+        for (int i = 0; i < pixels.Length; i++)
+        {
+            pixels[i] *= new Color(0.8f, 1.2f, 0.8f); // Apply green tint
+            pixels[i].a = 1f;
+        }
+        newTexture.SetPixels(pixels);
+        newTexture.Apply();
+
+        //newTexture.name = originalTexture.name + "_Modified_" + DateTime.Now.ToString("HHmmss");
+        newTexture.name = textureCatalogue.getNextTextureName();
+        Debug.Log($"Created new modified texture {newTexture.name} with matching format: {originalTexture.format}");
+        return newTexture;
+    }
+
 }

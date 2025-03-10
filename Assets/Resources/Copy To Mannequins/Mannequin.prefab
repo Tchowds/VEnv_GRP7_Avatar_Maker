@@ -64,7 +64,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35252a0fbdb464ddfbeadca56ed10cb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Textures: {fileID: 11400000, guid: 711a32cdfac3cd644a666f4575bf6f22, type: 2}
+  Textures: {fileID: 11400000, guid: b9b5ab83068724908937dfdd4d246538, type: 2}
   DefaultTextureId: 0
 --- !u!114 &4879411640079367770
 MonoBehaviour:
@@ -104,6 +104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4763eb94d250d7849a012624c0aee3a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  textureCatalogue: {fileID: 11400000, guid: b9b5ab83068724908937dfdd4d246538, type: 2}
 --- !u!1 &6615159234546098292
 GameObject:
   m_ObjectHideFlags: 0
