@@ -7,16 +7,28 @@ using System.Collections.Generic;
 using Ubiq.Messaging;
 using Ubiq.Rooms;
 using Ubiq.Avatars;
+using Newtonsoft.Json;
+
+// This class matches the JSON structure.
+[System.Serializable]
+public class JsonDataWrapper 
+{
+    public int[][] head;
+    public int[][] torso;
+    public int[][] hands;
+}
 
 public class BarrierOperator : MonoBehaviour
 {
 
+    public TextAsset jsonFile;
     public bool dualAvatars = false;
     public float countdown = 5.0f;
     public int[] primaryAvatarParts = new int[4];
     public int[] secondaryAvatarParts = new int[4];
 
 
+    private Dictionary<string, List<HashSet<int>>> overrides;
     private GameObject primaryAvatar;
     private GameObject SecondaryAvatar;
     private XRSimpleInteractable interactable;
@@ -52,7 +64,45 @@ public class BarrierOperator : MonoBehaviour
         }
         setupAvatarTextures(primaryAvatar, primaryAvatarParts);
 
+        parseJson();
+
         context = NetworkScene.Register(this);
+    }
+
+    public void parseJson()
+    {
+        // Use Newtonsoft.Json to deserialize the JSON
+        JsonDataWrapper data = JsonConvert.DeserializeObject<JsonDataWrapper>(jsonFile.text);
+        Debug.Log(data.head);
+
+        overrides = new Dictionary<string, List<HashSet<int>>>();
+        overrides.Add("head", new List<HashSet<int>>());
+        overrides.Add("torso", new List<HashSet<int>>());
+        overrides.Add("hands", new List<HashSet<int>>());
+
+        foreach (int[] array in data.head)
+        {
+            HashSet<int> set = new HashSet<int>();
+            foreach (int i in array)
+                set.Add(i);
+            overrides["head"].Add(set);
+        }
+
+        foreach (int[] array in data.torso)
+        {
+            HashSet<int> set = new HashSet<int>();
+            foreach (int i in array)
+                set.Add(i);
+            overrides["torso"].Add(set);
+        }
+
+        foreach (int[] array in data.hands)
+        {
+            HashSet<int> set = new HashSet<int>();
+            foreach (int i in array)
+                set.Add(i);
+            overrides["hands"].Add(set);
+        }
     }
 
     void Update()
@@ -130,13 +180,38 @@ public class BarrierOperator : MonoBehaviour
                                      avatar.torsoRenderer.material.mainTexture,
                                      avatar.leftHandRenderer.material.mainTexture,
                                      avatar.rightHandRenderer.material.mainTexture };
+        string[] order = { "head", "torso", "hands", "hands"};
 
         for (int i = 0; i < modelParts.Length; i++)
         {
-            if (catalogue.Get(modelParts[i]) != avatarTextures[i]) return false;
+            if (catalogue.Get(modelParts[i]) != avatarTextures[i] && !matchOverrides(catalogue, catalogue.Get(modelParts[i]), avatarTextures[i], overrides[order[i]])) return false;
         }
 
         return true;
+    }
+
+    private bool matchOverrides(AvatarTextureCatalogue catalogue, Texture modelTexture, Texture avatarTecture, List<HashSet<int>> overrideSets)
+    {
+        {
+            int modelIndex = -1;
+            int avatarIndex = -1;
+            
+            // Assuming catalogue.Textures is an array or list of Texture objects.
+            for (int i = 0; i < catalogue.Textures.Count; i++)
+            {
+                if (catalogue.Textures[i] == modelTexture) modelIndex = i;
+                if (catalogue.Textures[i] == avatarTecture) avatarIndex = i;
+            };
+            if (modelIndex == avatarIndex) return true;
+            if (modelIndex == -1 || avatarIndex == -1) return false;
+
+            foreach (HashSet<int> set in overrideSets)
+            {
+                if (set.Contains(modelIndex) && set.Contains(avatarIndex)) return true;
+            }
+            
+            return false;
+        }
     }
 
     private void OnDestroy()
