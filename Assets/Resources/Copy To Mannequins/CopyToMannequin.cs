@@ -21,10 +21,10 @@ public class CopyToMannequin : MonoBehaviour
 
     private struct CopyMessage
     {
-        public Texture headTexture;
-        public Texture torsoTexture;
-        public Texture leftHandTexture;
-        public Texture rightHandTexture;
+        public string headTexture;
+        public string torsoTexture;
+        public string leftHandTexture;
+        public string rightHandTexture;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -65,20 +65,37 @@ public class CopyToMannequin : MonoBehaviour
     {
         context.SendJson(new CopyMessage
         {
-            headTexture = headRenderer.material.mainTexture,
-            torsoTexture = torsoRenderer.material.mainTexture,
-            leftHandTexture = leftHandRenderer.material.mainTexture,
-            rightHandTexture = rightHandRenderer.material.mainTexture
+            headTexture = EncodeTexture(headRenderer.material.mainTexture),
+            torsoTexture = EncodeTexture(torsoRenderer.material.mainTexture),
+            leftHandTexture = EncodeTexture(leftHandRenderer.material.mainTexture),
+            rightHandTexture = EncodeTexture(rightHandRenderer.material.mainTexture)
         });
     }
 
     public void ProcessMessage(ReferenceCountedSceneGraphMessage message)
     {
         var m = message.FromJson<CopyMessage>();
-        headRenderer.material.mainTexture = m.headTexture;
-        torsoRenderer.material.mainTexture = m.torsoTexture;
-        leftHandRenderer.material.mainTexture = m.leftHandTexture;
-        rightHandRenderer.material.mainTexture = m.rightHandTexture;
+        headRenderer.material.mainTexture = DecodeTexture(m.headTexture);
+        torsoRenderer.material.mainTexture = DecodeTexture(m.torsoTexture);
+        leftHandRenderer.material.mainTexture = DecodeTexture(m.leftHandTexture);
+        rightHandRenderer.material.mainTexture = DecodeTexture(m.rightHandTexture);
+    }
+
+    private string EncodeTexture (Texture tex)
+    {
+        Texture2D tex2D = tex as Texture2D;
+        if (tex2D == null) return "";
+
+        byte[] bytes = tex2D.EncodeToPNG();
+        return System.Convert.ToBase64String(bytes);
+    }
+
+    private Texture2D DecodeTexture (string encoded)
+    {
+        byte[] bytes = System.Convert.FromBase64String(encoded);
+        Texture2D tex = new Texture2D(2, 2);
+        tex.LoadImage(bytes);
+        return tex;
     }
 
     void OnDestroy()
