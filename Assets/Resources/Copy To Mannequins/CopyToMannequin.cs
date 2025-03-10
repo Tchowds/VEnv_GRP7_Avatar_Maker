@@ -148,7 +148,7 @@ public class CopyToMannequin : MonoBehaviour
 
         newTexture.SetPixels(originalTexture.GetPixels());
 
-        // Apply modifications (red tint)
+        // Apply modification (red tint)
         Color[] pixels = newTexture.GetPixels();
         for (int i = 0; i < pixels.Length; i++)
         {
