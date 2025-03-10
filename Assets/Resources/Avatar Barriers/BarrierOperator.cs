@@ -9,6 +9,7 @@ using Ubiq.Rooms;
 using Ubiq.Avatars;
 using Newtonsoft.Json;
 
+
 // This class matches the JSON structure.
 [System.Serializable]
 public class JsonDataWrapper 
