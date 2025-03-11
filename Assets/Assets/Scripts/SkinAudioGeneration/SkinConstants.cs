@@ -2,6 +2,14 @@ using System.Collections.Generic;
 
 public static class SkinConstants
 {
+        public enum RequestMode
+    {
+        None,
+        SelectSkin,
+        GenerateSkin
+    }
+
+
     public static readonly Dictionary<string, string> skinDescriptionToSkinFile = new Dictionary<string, string> {
         {"fantasyMaleB", "fantasyMaleB.png"},
         {"fantasyMaleA", "fantasyMaleA.png"},

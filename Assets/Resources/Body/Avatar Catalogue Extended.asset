@@ -70,3 +70,4 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 33d381644ff0b884299815a06b1e77f0, type: 3}
   - {fileID: 2800000, guid: 34f45b641fba3a946a81d3ae0c17f73d, type: 3}
   baseCatalogue: {fileID: 11400000, guid: abc37fb79b0384875b38e2a1e41c8658, type: 2}
+  dynamicTextures: []
