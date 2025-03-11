@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class CustomAvatarTextureCatalogue : AvatarTextureCatalogue
 {
     [SerializeField] private AvatarTextureCatalogue baseCatalogue; // Ubiq's Catalogue
-    private List<Texture2D> dynamicTextures = new List<Texture2D>();
+    [SerializeField] private List<Texture2D> dynamicTextures = new List<Texture2D>();
     // [System.NonSerialized]
     public void Initialize(AvatarTextureCatalogue existingCatalogue)
     {
