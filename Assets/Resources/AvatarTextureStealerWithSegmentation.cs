@@ -131,7 +131,8 @@ public class AvatarTextureStealerWithSegmentation : MonoBehaviour
             return;
         }
         Texture2D stolenTexture = modelTexture.GetTexture(avatarPart);
-
+        Debug.Log("avatar part: " + avatarPart);
+        Debug.Log("Stolen texture: " + stolenTexture);
 
         // Find the player's avatar
         var playerAvatar = avatarManager.FindAvatar(roomClient.Me);

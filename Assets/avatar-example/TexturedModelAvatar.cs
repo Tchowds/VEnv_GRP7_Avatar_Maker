@@ -8,8 +8,8 @@ using Ubiq.Messaging;
 
 public class TexturedModelAvatar : MonoBehaviour
 {
+    [SerializeReference] // Allows Unity to accept subclass references
     public AvatarTextureCatalogue Textures;  // Reference to the texture catalogue
-
     public int DefaultTextureId = 5;  // Default texture for non-local avatars
 
     private Avatar avatar;

@@ -12,7 +12,7 @@ using Ubiq.Messaging;
 /// </summary>
 public class TexturedAvatar : MonoBehaviour
 {
-    public AvatarTextureCatalogue Textures;
+    public CustomAvatarTextureCatalogue Textures;
     public bool RandomTextureOnSpawn;
     public bool SaveTextureSetting;
 
@@ -47,7 +47,7 @@ public class TexturedAvatar : MonoBehaviour
             }
             if (!hasSavedSettings && RandomTextureOnSpawn)
             {
-                SetTexture(Textures.Get(UnityEngine.Random.Range(0, Textures.Count)));
+                SetTexture(Textures.Get(UnityEngine.Random.Range(0, Textures.baseCatalogueCount())));
             }
         }
         
@@ -82,24 +82,29 @@ public class TexturedAvatar : MonoBehaviour
     /// </summary>
     public void SetTexture(Texture2D texture)
     {
-        Debug.Log("Setting texture to " + texture);
+        Debug.Log("Setting texture to" + texture);
         SetTexture(Textures.Get(texture));
     }
 
     public void SetTexture(Texture2D texture, AvatarPart avatarPart)
     {
-        Debug.Log("Setting texture to " + texture);
         var floatingAvatar = GetComponentInChildren<FloatingAvatarSeparatedTextures>();
-        if (floatingAvatar == null) SetTexture(texture);
-        SetTexture(Textures.Get(texture));
+        if (floatingAvatar == null)
+        {
+            SetTexture(texture);
+        }
+        else {
+            SetTexture(Textures.Get(texture));
+        }
     }
 
     public void SetTexture(string uuid)
     {
-        Debug.Log("Setting texture to " + uuid);
+
         if(String.IsNullOrWhiteSpace(uuid))
         {
-            Debug.Log("null");
+            Debug.Log(uuid);
+            Debug.Log("uuid is null");
             return;
         }
 
