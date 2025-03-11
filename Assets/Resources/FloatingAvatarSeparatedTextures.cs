@@ -128,9 +128,9 @@ public class FloatingAvatarSeparatedTextures : MonoBehaviour
         if (avatarPart == AvatarPart.FULLBODY)
         {
             headRenderer.material.mainTexture = tex;
-            torsoRenderer.material = headRenderer.material;
-            leftHandRenderer.material = headRenderer.material;
-            rightHandRenderer.material = headRenderer.material;
+            torsoRenderer.material.mainTexture = tex;
+            leftHandRenderer.material.mainTexture = tex;
+            rightHandRenderer.material.mainTexture = tex;
         }
         else if (avatarPart == AvatarPart.HEAD)
         {
