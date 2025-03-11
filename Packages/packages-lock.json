@@ -112,6 +112,13 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.unity.nuget.newtonsoft-json": {
+      "version": "3.2.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.render-pipelines.core": {
       "version": "17.0.3",
       "depth": 1,
@@ -321,6 +328,12 @@
       "source": "git",
       "dependencies": {},
       "hash": "f2c6cb09817832dccd0600f291053d8d55298ee9"
+    },  
+    "com.whisper.unity": {
+      "version": "file:com.whisper.unity",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
