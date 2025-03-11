@@ -69,6 +69,15 @@ public class CopyToMannequin : MonoBehaviour
         Texture2D modifiedLeftHandTex = ModifyTexture(leftHandTex);
         Texture2D modifiedRightHandTex = ModifyTexture(rightHandTex);
 
+        // Apply and save the modified textures
+        ApplyAndSave(modifiedHeadTex, modifiedTorsoTex, modifiedLeftHandTex, modifiedRightHandTex);
+
+        sendMessage();
+    
+    }
+
+    public void ApplyAndSave(Texture2D modifiedHeadTex, Texture2D modifiedTorsoTex, Texture2D modifiedLeftHandTex, Texture2D modifiedRightHandTex)
+    {
         // Apply the modified textures to the mannequin
         headRenderer.material.mainTexture = modifiedHeadTex;
         torsoRenderer.material.mainTexture = modifiedTorsoTex;
@@ -89,10 +98,6 @@ public class CopyToMannequin : MonoBehaviour
         {
             Debug.LogError("CustomAvatarTextureCatalogue not found in the scene!");
         }
-
-        sendMessage();
-    
-
     }
 
     public void sendMessage()
@@ -109,10 +114,12 @@ public class CopyToMannequin : MonoBehaviour
     public void ProcessMessage(ReferenceCountedSceneGraphMessage message)
     {
         var m = message.FromJson<CopyMessage>();
-        headRenderer.material.mainTexture = DecodeTexture(m.headTexture);
-        torsoRenderer.material.mainTexture = DecodeTexture(m.torsoTexture);
-        leftHandRenderer.material.mainTexture = DecodeTexture(m.leftHandTexture);
-        rightHandRenderer.material.mainTexture = DecodeTexture(m.rightHandTexture);
+        Texture2D headTex = DecodeTexture(m.headTexture);
+        Texture2D torsoTex = DecodeTexture(m.torsoTexture);
+        Texture2D leftHandTex = DecodeTexture(m.leftHandTexture);
+        Texture2D rightHandTex = DecodeTexture(m.rightHandTexture);
+
+        ApplyAndSave(headTex, torsoTex, leftHandTex, rightHandTex);
     }
 
     private string EncodeTexture (Texture tex)
@@ -158,8 +165,8 @@ public class CopyToMannequin : MonoBehaviour
         newTexture.SetPixels(pixels);
         newTexture.Apply();
 
-        //newTexture.name = originalTexture.name + "_Modified_" + DateTime.Now.ToString("HHmmss");
-        newTexture.name = textureCatalogue.getNextTextureName();
+        newTexture.name = originalTexture.name + "_Modified_" + DateTime.Now.ToString("HHmmss");
+        // newTexture.name = textureCatalogue.getNextTextureName();
         Debug.Log($"Created new modified texture {newTexture.name} with matching format: {originalTexture.format}");
         return newTexture;
     }
