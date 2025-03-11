@@ -47,7 +47,7 @@ public class TexturedAvatar : MonoBehaviour
             }
             if (!hasSavedSettings && RandomTextureOnSpawn)
             {
-                SetTexture(Textures.Get(UnityEngine.Random.Range(0, Textures.Count)));
+                SetTexture(Textures.Get(UnityEngine.Random.Range(0, Textures.baseCatalogueCount())));
             }
         }
         

@@ -20,6 +20,11 @@ public class CustomAvatarTextureCatalogue : AvatarTextureCatalogue
         Debug.Log($"CustomAvatarTextureCatalogue: Loaded {baseCatalogue.Textures.Count} base textures.");
     }
 
+    public int baseCatalogueCount()
+    {
+        return baseCatalogue.Textures.Count;
+    }
+
 
     public string getNextTextureName()
     {
@@ -38,12 +43,8 @@ public class CustomAvatarTextureCatalogue : AvatarTextureCatalogue
         Textures = new List<Texture2D>(baseCatalogue.Textures);
         Debug.Log($"Copied {Textures.Count} textures from base catalogue.");
 
-        // ✅ Only initialize if NULL (DO NOT RESET)
-        if (dynamicTextures == null)
-        {
-            Debug.Log("🔄 Ensuring `dynamicTextures` is initialized.");
-            dynamicTextures = new List<Texture2D>(); 
-        }
+        dynamicTextures = new List<Texture2D>(); 
+        
     }
 
 
