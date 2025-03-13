@@ -725,7 +725,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9140274860854871984}
   m_Layer: 0
-  m_Name: Dong-A_Silk
+  m_Name: SwapStudio
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
