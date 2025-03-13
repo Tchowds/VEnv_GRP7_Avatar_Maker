@@ -33,7 +33,6 @@ public class DoorHandlePokeInteraction : MonoBehaviour
     // Trigger action when the door handle is poked
     void OnPoked(SelectEnterEventArgs args)
     {
-        Debug.Log(args);
         Debug.Log("Door handle poked!");
         // Toggle the door open/close state
         if (doorController != null)

@@ -3,7 +3,7 @@ using Ubiq.Rooms;
 
 public class ShopTrigger : MonoBehaviour
 {
-    public ShopMusicManager musicManager; // Reference to the ShopMusicManager script
+    public MixMatchShopManager shopManager; // Reference to the MixMatchShopManager script
 
     public GameObject playerXRig; // Reference to the XR Rig (player's rig)
 
@@ -13,7 +13,7 @@ public class ShopTrigger : MonoBehaviour
         if (other.gameObject == playerXRig)
         {
             Debug.Log("Player entered the shop");
-            musicManager.EnterShop();  // Play the music when the local player enters
+            shopManager.EnterShop();  // Play the music when the local player enters
         }
     }
 
@@ -23,7 +23,7 @@ public class ShopTrigger : MonoBehaviour
         if (other.gameObject == playerXRig)
         {
             Debug.Log("Player exited the shop");
-            musicManager.ExitShop();  // Stop the music when the local player exits
+            shopManager.ExitShop();  // Stop the music when the local player exits
         }
     }
 }
