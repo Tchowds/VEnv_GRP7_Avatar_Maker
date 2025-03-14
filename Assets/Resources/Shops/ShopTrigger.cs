@@ -3,7 +3,7 @@ using Ubiq.Rooms;
 
 public class ShopTrigger : MonoBehaviour
 {
-    public MixMatchShopManager shopManager; // Reference to the MixMatchShopManager script
+    public ShopManager shopManager; // Reference to the MixMatchShopManager script
 
     public GameObject playerXRig; // Reference to the XR Rig (player's rig)
 

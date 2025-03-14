@@ -1,12 +1,26 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!244 &-6953458946833788131
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: b1ec64f74597c47bda4ce8c835bb0279
+  m_EffectName: Attenuation
+  m_MixLevel: 7357e371671c5485dbd36f644d052396
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
 --- !u!243 &-2408147010179146313
 AudioMixerGroupController:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shop
+  m_Name: ShopMusicSwapStudio
   m_AudioMixer: {fileID: 24100000}
   m_GroupID: 386d34a39230b44cf8f13c9de045c297
   m_Children: []
@@ -38,13 +52,32 @@ AudioMixerGroupController:
   m_Mute: 0
   m_Solo: 0
   m_BypassEffects: 0
+--- !u!243 &-554101060330774993
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ShopMusicDiffusionDesign
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: fe95d05eb07314ab6b9bd3dcaed55d24
+  m_Children: []
+  m_Volume: f19159ea2446d46ada27f38dced19e89
+  m_Pitch: 68821af4022ba4ad0b8c962b8108ee84
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: -6953458946833788131}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
 --- !u!241 &24100000
 AudioMixerController:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ShopAudioMixer
+  m_Name: GlobalAudioMixer
   m_OutputGroup: {fileID: 0}
   m_MasterGroup: {fileID: 24300002}
   m_Snapshots:
@@ -55,14 +88,17 @@ AudioMixerController:
   m_UpdateMode: 0
   m_ExposedParameters:
   - guid: 0de25551a04bf43c89129a5cc63ee7b4
-    name: CrowdVolume
+    name: Crowd_Volume
+  - guid: f19159ea2446d46ada27f38dced19e89
+    name: ShopMusicDiffusionDesign_Volume
   - guid: 6275b9202f45d48c186c3a060bcd194a
-    name: ShopVolume
+    name: ShopMusicSwapStudio_Volume
   m_AudioMixerGroupViews:
   - guids:
     - 7d1db97a0acbe4dac8181c2f7e532534
     - 04c8427286124449892e84eedfc5d121
     - 386d34a39230b44cf8f13c9de045c297
+    - fe95d05eb07314ab6b9bd3dcaed55d24
     name: View
   m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
@@ -78,6 +114,7 @@ AudioMixerGroupController:
   m_Children:
   - {fileID: -1178985429829852684}
   - {fileID: -2408147010179146313}
+  - {fileID: -554101060330774993}
   m_Volume: 5aa032a18ae174a13a86d3215a79b89f
   m_Pitch: 4dad4210f85a2414b8aebbcd0fcea52e
   m_Send: 00000000000000000000000000000000
