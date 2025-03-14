@@ -41,7 +41,12 @@ public class DiffuseSkinToMannequinApplier : MonoBehaviour
             }
 
             // Equip the texture on the corresponding avatar mannequin
-            avatarMannequins[i].SetTexture(texture);
+            if (body_part == "face"){
+                avatarMannequins[i].transform.Find("Body/Floating_Head").GetComponent<Renderer>().material.mainTexture = texture;
+            }
+            else{
+                avatarMannequins[i].transform.Find("Body/Floating_Torso_A").GetComponent<Renderer>().material.mainTexture = texture;
+            }
         }
     }
 
