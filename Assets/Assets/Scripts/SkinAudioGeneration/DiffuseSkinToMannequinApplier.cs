@@ -12,7 +12,7 @@ public class DiffuseSkinToMannequinApplier : MonoBehaviour
     // Reference to the shared texture catalogue where dynamic textures are stored
     public CustomAvatarTextureCatalogue textureCatalogue; 
 
-    public void ApplyGeneratedSkins(List<string> imagesBase64)
+    public void ApplyGeneratedSkins(List<string> imagesBase64, string body_part)
     {
         if (avatarMannequins == null || avatarMannequins.Count == 0)
         {

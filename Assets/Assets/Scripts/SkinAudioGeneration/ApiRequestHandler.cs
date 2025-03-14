@@ -90,11 +90,18 @@ public class ApiRequestHandler : MonoBehaviour
         }
     }
 
-    private async Task SendGenerateSkinRequest(string facePrompt)
+    private async Task SendGenerateSkinRequest(string prompt)
     {
         var requestUrl = $"http://{ipAddress}:8000/generate_skin_image";
 
-        var requestBody = new { prompt_face = facePrompt, num_images = 4 };
+        var body_part = "face";
+        var promptLower = prompt.ToLower();
+        if (!promptLower.Contains("face") && !promptLower.Contains("head") && !promptLower.Contains("mask"))
+        {
+            body_part = "body";
+        }
+        Debug.Log($"Body Part: {body_part}");
+        var requestBody = new { prompt = prompt, num_images = 4, body_part = body_part};
         string jsonBody = JsonConvert.SerializeObject(requestBody);
         var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
 
@@ -108,7 +115,7 @@ public class ApiRequestHandler : MonoBehaviour
 
             if (result?.images_base64 != null)
             {
-                skinManager.ApplyGeneratedSkins(result.images_base64);
+                skinManager.ApplyGeneratedSkins(result.images_base64, body_part);
                 resultTextMesh.text = $"{result.images_base64.Count} textures generated!";
             }
             else
