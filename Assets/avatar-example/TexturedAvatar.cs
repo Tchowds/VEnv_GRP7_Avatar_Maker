@@ -94,6 +94,7 @@ public class TexturedAvatar : MonoBehaviour
             SetTexture(texture);
         }
         else {
+            Debug.Log("Setting texture here");
             SetTexture(Textures.Get(texture));
         }
     }

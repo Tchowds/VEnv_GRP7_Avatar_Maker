@@ -67,8 +67,6 @@ public class AvatarTextureStealerWithSegmentation : MonoBehaviour
         roomClient = networkScene.GetComponentInChildren<RoomClient>();
         avatarManager = networkScene.GetComponentInChildren<AvatarManager>();
 
-
-
     }
 
     private void OnDestroy()
