@@ -67,34 +67,45 @@ public class CopyToMannequin : MonoBehaviour
         Texture2D leftHandTex = floatingAvatar.leftHandRenderer.material.mainTexture as Texture2D;
         Texture2D rightHandTex = floatingAvatar.rightHandRenderer.material.mainTexture as Texture2D;
 
+        ApplyAndSave(headTex, torsoTex, leftHandTex, rightHandTex);
         // Modify textures (example: tinting them)
-        Texture2D modifiedHeadTex = ModifyTexture(headTex);
-        Texture2D modifiedTorsoTex = ModifyTexture(torsoTex);
-        Texture2D modifiedLeftHandTex = ModifyTexture(leftHandTex);
-        Texture2D modifiedRightHandTex = ModifyTexture(rightHandTex);
+        // Texture2D modifiedHeadTex = ModifyTexture(headTex);
+        // Texture2D modifiedTorsoTex = ModifyTexture(torsoTex);
+        // Texture2D modifiedLeftHandTex = ModifyTexture(leftHandTex);
+        // Texture2D modifiedRightHandTex = ModifyTexture(rightHandTex);
 
         // Apply and save the modified textures
-        ApplyAndSave(modifiedHeadTex, modifiedTorsoTex, modifiedLeftHandTex, modifiedRightHandTex);
+        //ApplyAndSave(modifiedHeadTex, modifiedTorsoTex, modifiedLeftHandTex, modifiedRightHandTex);
 
         sendMessage();
     
     }
 
-    public void ApplyAndSave(Texture2D modifiedHeadTex, Texture2D modifiedTorsoTex, Texture2D modifiedLeftHandTex, Texture2D modifiedRightHandTex)
+    public void ApplyAndSave(Texture2D headTex, Texture2D torsoTex, Texture2D leftHandTex, Texture2D rightHandTex)
     {
-        // Apply the modified textures to the mannequin
-        headRenderer.material.mainTexture = modifiedHeadTex;
-        torsoRenderer.material.mainTexture = modifiedTorsoTex;
-        leftHandRenderer.material.mainTexture = modifiedLeftHandTex;
-        rightHandRenderer.material.mainTexture = modifiedRightHandTex;
+        // Combine into 1 texture
+        Debug.Log("Cominging textures");
+        Texture2D combinedTexture = textureCatalogue.CombineTextures(headTex, torsoTex, leftHandTex, rightHandTex);
+
+       // Apply the modified textures to the mannequin
+        // headRenderer.material.mainTexture = modifiedHeadTex;
+        // torsoRenderer.material.mainTexture = modifiedTorsoTex;
+        // leftHandRenderer.material.mainTexture = modifiedLeftHandTex;
+        // rightHandRenderer.material.mainTexture = modifiedRightHandTex;
+
+        headRenderer.material.mainTexture = combinedTexture;
+        torsoRenderer.material.mainTexture = combinedTexture;
+        leftHandRenderer.material.mainTexture = combinedTexture;
+        rightHandRenderer.material.mainTexture = combinedTexture;
 
         // Save the modified textures as new dynamic textures
         if (textureCatalogue != null)
         {
-            textureCatalogue.AddDynamicTexture(modifiedHeadTex);
-            textureCatalogue.AddDynamicTexture(modifiedTorsoTex);
-            textureCatalogue.AddDynamicTexture(modifiedLeftHandTex);
-            textureCatalogue.AddDynamicTexture(modifiedRightHandTex);
+            textureCatalogue.AddDynamicTexture(combinedTexture);
+            // textureCatalogue.AddDynamicTexture(modifiedHeadTex);
+            // textureCatalogue.AddDynamicTexture(modifiedTorsoTex);
+            // textureCatalogue.AddDynamicTexture(modifiedLeftHandTex);
+            // textureCatalogue.AddDynamicTexture(modifiedRightHandTex);
 
             Debug.Log("Modified textures and added them to CustomAvatarTextureCatalogue!");
         }
