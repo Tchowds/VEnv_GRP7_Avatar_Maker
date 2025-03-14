@@ -29,6 +29,7 @@ public class CustomAvatarTextureCatalogue : AvatarTextureCatalogue
         var skinFiles = Directory.GetFiles(path, "*.png")
                              .OrderByDescending(File.GetLastWriteTime)
                              .Take(numDynamicTexturesLoad)
+                             .Reverse()
                              .ToList();
     
         foreach (var file in skinFiles)
@@ -93,7 +94,7 @@ public class CustomAvatarTextureCatalogue : AvatarTextureCatalogue
         }
 
         Debug.Log($"Get texture {i} (Base Count: {baseCatalogue.Textures.Count}, Dynamic Count: {dynamicTextures.Count})");
-
+        
         // Use existing textures first
         if (i < baseCatalogue.Textures.Count)
         {
@@ -103,6 +104,9 @@ public class CustomAvatarTextureCatalogue : AvatarTextureCatalogue
         {
             // Handle dynamically added textures
             int dynamicIndex = i - baseCatalogue.Textures.Count;
+            if (dynamicIndex >= dynamicTextures.Count){
+                return null;
+            }
             return dynamicTextures[dynamicIndex];
         }
     }

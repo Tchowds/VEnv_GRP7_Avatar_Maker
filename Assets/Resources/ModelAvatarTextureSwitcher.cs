@@ -15,6 +15,8 @@ public class ModelAvatarTextureSwitcher : MonoBehaviour
 
     private int maxTextures;
 
+    public CustomAvatarTextureCatalogue Textures;  // Reference to the texture catalogue
+
 
     private UnityEngine.XR.Interaction.Toolkit.Interactables.XRSimpleInteractable pokeInteractable;
 
@@ -45,11 +47,10 @@ public class ModelAvatarTextureSwitcher : MonoBehaviour
         Debug.Log("Avatars found: "+avatars.Count);
 
         // Ensure we have textures
-        if (avatars.Count > 0 && avatars[0].Textures != null)
-        {
-            maxTextures = avatars[0].Textures.Count;
-            initialRotation = avatars[0].transform.rotation;
-        }
+
+        maxTextures = Textures.Count;
+        initialRotation = avatars[0].transform.rotation;
+        
 
         
 
@@ -66,6 +67,7 @@ public class ModelAvatarTextureSwitcher : MonoBehaviour
         //3 Cyborg, fantasy, Zombie, Robot
         //4 military Survivor Criminal
         //5 Racers
+        // Custom dynamic textures
         sectionTextureIds = new Dictionary<int, List<int>>();
         sectionTextureIds[0] = new List<int> {0,1,2,3,4,5,6};
         sectionTextureIds[1] = new List<int> {7,8,9,10,11,12,13,14};
@@ -73,7 +75,7 @@ public class ModelAvatarTextureSwitcher : MonoBehaviour
         sectionTextureIds[3] = new List<int> {22,23,24,25,26,27,44,45,46,53,54,55};
         sectionTextureIds[4] = new List<int> {21,30,31,32,33,49,50,51,52,};
         sectionTextureIds[5] = new List<int> { 34,35,36,37,38,39,40,41,42,43};
-
+        sectionTextureIds[6] = new List<int> {56,57,58,59,60,61,62,63,64,65,66,67};
     }
 
     void OnDestroy()
@@ -93,6 +95,7 @@ public class ModelAvatarTextureSwitcher : MonoBehaviour
 
     private IEnumerator SwitchTextureSectionCoroutine()
     {
+        Debug.Log($"Loading for Section {currentSectionIndex}");
         // Get the new section's texture IDs
         List<int> newTextureIds = sectionTextureIds[currentSectionIndex];
 
@@ -102,12 +105,18 @@ public class ModelAvatarTextureSwitcher : MonoBehaviour
             if (i < newTextureIds.Count)
             {
                 int newTextureId = newTextureIds[i];
-                avatars[i].gameObject.SetActive(true);
-                avatars[i].DefaultTextureId = newTextureId;
-                avatars[i].SetTexture(avatars[i].Textures.Get(newTextureId));
-                avatars[i].transform.rotation = initialRotation;
-                
-                Debug.Log($"Avatar {avatars[i].name} switched to Texture ID {newTextureId}");
+                Texture2D texture = Textures.Get(newTextureId);
+                if (texture != null){
+                    avatars[i].gameObject.SetActive(true);
+                    avatars[i].DefaultTextureId = newTextureId;
+                    avatars[i].SetTexture(texture);
+                    avatars[i].transform.rotation = initialRotation;
+                    
+                    Debug.Log($"Avatar {avatars[i].name} switched to Texture ID {newTextureId}");
+                } else {
+                    Debug.Log("texture for id: "+newTextureId+" not found");
+                    avatars[i].gameObject.SetActive(false);
+                }
             }
             else
             {
@@ -116,12 +125,9 @@ public class ModelAvatarTextureSwitcher : MonoBehaviour
 
             yield return null; // Allow Unity to process change s over multiple frames
         }
-        Debug.Log("Textures switched! Current Section: " + currentSectionIndex);
 
         // Move to the next section (loop back to 0 after last section)
         currentSectionIndex = (currentSectionIndex + 1) % sectionTextureIds.Count;
-        Debug.Log($"Switching to Section {currentSectionIndex}");
-
     }
 
 }
