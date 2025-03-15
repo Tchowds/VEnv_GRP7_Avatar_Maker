@@ -50,9 +50,6 @@ public class ModelAvatarTextureSwitcher : MonoBehaviour
 
         maxTextures = Textures.Count;
         initialRotation = avatars[0].transform.rotation;
-        
-
-        
 
         DefineSectionTextureIds();
         StartCoroutine(SwitchTextureSectionCoroutine());
