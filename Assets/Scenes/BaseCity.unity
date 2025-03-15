@@ -688,6 +688,10 @@ PrefabInstance:
       value: AvatarBarrierPrefab
       objectReference: {fileID: 0}
     - target: {fileID: 6532183733705706557, guid: c8fb8ad5f533b1a439e3c70f5a9ac815, type: 3}
+      propertyPath: jsonFile
+      value: 
+      objectReference: {fileID: 4900000, guid: 95431d68d89fe96449530485b6e48d76, type: 3}
+    - target: {fileID: 6532183733705706557, guid: c8fb8ad5f533b1a439e3c70f5a9ac815, type: 3}
       propertyPath: dualAvatars
       value: 0
       objectReference: {fileID: 0}
@@ -5027,6 +5031,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d2249d6cc40c46ebb80830139b59fc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Textures: {fileID: 11400000, guid: b9b5ab83068724908937dfdd4d246538, type: 2}
 --- !u!135 &1113753896
 SphereCollider:
   m_ObjectHideFlags: 0
