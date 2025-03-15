@@ -97,14 +97,6 @@ public class CopyToMannequin : MonoBehaviour
     {
         context.SendJson(new CopyMessage
         {
-            // headName = headRenderer.material.mainTexture.name,
-            // headTexture = EncodeTexture(headRenderer.material.mainTexture),
-            // torsoName = torsoRenderer.material.mainTexture.name,
-            // torsoTexture = EncodeTexture(torsoRenderer.material.mainTexture),
-            // leftHandName = leftHandRenderer.material.mainTexture.name,
-            // leftHandTexture = EncodeTexture(leftHandRenderer.material.mainTexture),
-            // rightHandName = rightHandRenderer.material.mainTexture.name,
-            // rightHandTexture = EncodeTexture(rightHandRenderer.material.mainTexture)
             name = headRenderer.material.mainTexture.name,
             texture = EncodeTexture(headRenderer.material.mainTexture)
         });
@@ -113,14 +105,6 @@ public class CopyToMannequin : MonoBehaviour
     public void ProcessMessage(ReferenceCountedSceneGraphMessage message)
     {
         var m = message.FromJson<CopyMessage>();
-        // Texture2D headTex = DecodeTexture(m.headTexture);
-        // headTex.name = m.headName;
-        // Texture2D torsoTex = DecodeTexture(m.torsoTexture);
-        // torsoTex.name = m.torsoName;
-        // Texture2D leftHandTex = DecodeTexture(m.leftHandTexture);
-        // leftHandTex.name = m.leftHandName;
-        // Texture2D rightHandTex = DecodeTexture(m.rightHandTexture);
-        // rightHandTex.name = m.rightHandName;
         Texture2D tex = DecodeTexture(m.texture);
         tex.name = m.name;
 
