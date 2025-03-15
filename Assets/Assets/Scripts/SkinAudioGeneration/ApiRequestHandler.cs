@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using static SkinConstants;
+using Ubiq.Messaging;
 
 public class ApiRequestHandler : MonoBehaviour
 {
@@ -24,8 +25,11 @@ public class ApiRequestHandler : MonoBehaviour
 
     public RequestMode CurrentMode { get; set; } = RequestMode.GenerateSkin;
 
+    private NetworkContext context;
+
     private void Start() {
         httpClient.Timeout = TimeSpan.FromSeconds(180);
+        context = NetworkScene.Register(this);
     }
 
     public async void HandleRequest(string recognizedText)
@@ -206,6 +210,12 @@ public class ApiRequestHandler : MonoBehaviour
         }
     }
 
+    public void SetIp(string ip)
+    {
+        ipAddress = ip;
+        sendMessage();
+    }
+
     [Serializable]
     private class SkinResponse
     {
@@ -216,5 +226,24 @@ public class ApiRequestHandler : MonoBehaviour
     private class GeneratedImagesResponse
     {
         public List<string> images_base64;
+    }
+
+    private struct IpMessage
+    {
+        public string ip;
+    }
+
+    public void sendMessage()
+    {
+        context.SendJson(new IpMessage
+        {
+            ip = ipAddress
+        });
+    }
+
+    public void ProcessMessage(ReferenceCountedSceneGraphMessage message)
+    {
+        var m = message.FromJson<IpMessage>();
+        ipAddress = m.ip;
     }
 }
