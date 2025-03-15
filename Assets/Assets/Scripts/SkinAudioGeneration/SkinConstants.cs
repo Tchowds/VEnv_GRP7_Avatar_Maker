@@ -9,6 +9,13 @@ public static class SkinConstants
         GenerateSkin
     }
 
+        public enum SkinPart
+    {
+        Head,
+        Torso,
+        Both
+    }
+
 
     public static readonly Dictionary<string, string> skinDescriptionToSkinFile = new Dictionary<string, string> {
         {"fantasyMaleB", "fantasyMaleB.png"},

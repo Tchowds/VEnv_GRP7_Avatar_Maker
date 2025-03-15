@@ -18,6 +18,7 @@ public class ApiRequestHandler : MonoBehaviour
     public CustomAvatarTextureCatalogue customAvatarTextureCatalogue;
     public TextMeshPro resultTextMesh;
     public DiffuseSkinToMannequinApplier skinManager;
+    public SkinPart selectedSkinPart = SkinPart.Head;
 
     private HttpClient httpClient = new HttpClient();
 
@@ -90,40 +91,114 @@ public class ApiRequestHandler : MonoBehaviour
         }
     }
 
-    private async Task SendGenerateSkinRequest(string prompt)
+       private async Task SendGenerateSkinRequest(string prompt)
     {
-        var requestUrl = $"http://{ipAddress}:8000/generate_skin_image";
-
-        var body_part = "face";
-        var promptLower = prompt.ToLower();
-        if (!promptLower.Contains("face") && !promptLower.Contains("head") && !promptLower.Contains("mask"))
-        {
-            body_part = "body";
-        }
-        Debug.Log($"Body Part: {body_part}");
-        var requestBody = new { prompt = prompt, num_images = 4, body_part = body_part};
-        string jsonBody = JsonConvert.SerializeObject(requestBody);
-        var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
-
         try
         {
-            var response = await httpClient.PostAsync(requestUrl, content);
-            response.EnsureSuccessStatusCode();
-
-            var responseString = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<GeneratedImagesResponse>(responseString);
-
-            if (result?.images_base64 != null)
+            if(selectedSkinPart == SkinConstants.SkinPart.Head)
             {
-                skinManager.ApplyGeneratedSkins(result.images_base64, body_part);
-                resultTextMesh.text = $"{result.images_base64.Count} textures generated!";
+                // For Head, use the /generate_skin_image_face endpoint
+                string endpoint = $"http://{ipAddress}:8000/generate_skin_image_face";
+                var requestBody = new { prompt_face = prompt, num_images = 4 };
+                string jsonBody = JsonConvert.SerializeObject(requestBody);
+                var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+
+                var response = await httpClient.PostAsync(endpoint, content);
+                response.EnsureSuccessStatusCode();
+
+                var responseString = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<GeneratedImagesResponse>(responseString);
+
+                if(result?.images_base64 != null)
+                {
+                    skinManager.ApplyGeneratedSkins(result.images_base64, "face");
+                    resultTextMesh.text = $"{result.images_base64.Count} head textures generated!";
+                }
+                else
+                {
+                    resultTextMesh.text = "No head images received.";
+                }
             }
-            else
+            else if(selectedSkinPart == SkinConstants.SkinPart.Torso)
             {
-                resultTextMesh.text = "No images received.";
+                // For Torso, use the /generate_skin_image_torso endpoint
+                string endpoint = $"http://{ipAddress}:8000/generate_skin_image_torso";
+                var requestBody = new { prompt_torso = prompt, num_images = 4 };
+                string jsonBody = JsonConvert.SerializeObject(requestBody);
+                var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+
+                var response = await httpClient.PostAsync(endpoint, content);
+                response.EnsureSuccessStatusCode();
+
+                var responseString = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<GeneratedImagesResponse>(responseString);
+
+                if(result?.images_base64 != null)
+                {
+                    skinManager.ApplyGeneratedSkins(result.images_base64, "body");
+                    resultTextMesh.text = $"{result.images_base64.Count} torso textures generated!";
+                }
+                else
+                {
+                    resultTextMesh.text = "No torso images received.";
+                }
+            }
+            else if(selectedSkinPart == SkinConstants.SkinPart.Both)
+            {
+                // For Both, call both endpoints
+
+                // Request for Head:
+                string endpointFace = $"http://{ipAddress}:8000/generate_skin_image_face";
+                var requestBodyFace = new { prompt_face = prompt, num_images = 4 };
+                string jsonBodyFace = JsonConvert.SerializeObject(requestBodyFace);
+                var contentFace = new StringContent(jsonBodyFace, Encoding.UTF8, "application/json");
+
+                var responseFace = await httpClient.PostAsync(endpointFace, contentFace);
+                responseFace.EnsureSuccessStatusCode();
+                var responseStringFace = await responseFace.Content.ReadAsStringAsync();
+                var resultFace = JsonConvert.DeserializeObject<GeneratedImagesResponse>(responseStringFace);
+
+                // Request for Torso:
+                string endpointTorso = $"http://{ipAddress}:8000/generate_skin_image_torso";
+                var requestBodyTorso = new { prompt_torso = prompt, num_images = 4 };
+                string jsonBodyTorso = JsonConvert.SerializeObject(requestBodyTorso);
+                var contentTorso = new StringContent(jsonBodyTorso, Encoding.UTF8, "application/json");
+
+                var responseTorso = await httpClient.PostAsync(endpointTorso, contentTorso);
+                responseTorso.EnsureSuccessStatusCode();
+                var responseStringTorso = await responseTorso.Content.ReadAsStringAsync();
+                var resultTorso = JsonConvert.DeserializeObject<GeneratedImagesResponse>(responseStringTorso);
+
+                bool headSuccess = resultFace?.images_base64 != null;
+                bool torsoSuccess = resultTorso?.images_base64 != null;
+
+                if(headSuccess)
+                {
+                    skinManager.ApplyGeneratedSkins(resultFace.images_base64, "face");
+                }
+                if(torsoSuccess)
+                {
+                    skinManager.ApplyGeneratedSkins(resultTorso.images_base64, "body");
+                }
+                if(headSuccess && torsoSuccess)
+                {
+                    resultTextMesh.text = "Generated both head and torso textures!";
+                }
+                else if(headSuccess)
+                {
+                    resultTextMesh.text = "Only head textures generated.";
+                }
+                else if(torsoSuccess)
+                {
+                    resultTextMesh.text = "Only torso textures generated.";
+                }
+                else
+                {
+                    resultTextMesh.text = "No images received.";
+                }
             }
         }
-        catch (Exception e)
+        catch(Exception e)
         {
             Debug.LogError($"Generate Skin Request Failed: {e.Message}");
             resultTextMesh.text = "Generation Request Failed";
