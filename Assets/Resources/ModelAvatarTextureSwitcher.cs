@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.InputSystem; 
 using UnityEngine.XR.Interaction.Toolkit;
+using Ubiq.Messaging;
 
 public class ModelAvatarTextureSwitcher : MonoBehaviour
 {
@@ -19,6 +20,12 @@ public class ModelAvatarTextureSwitcher : MonoBehaviour
 
 
     private UnityEngine.XR.Interaction.Toolkit.Interactables.XRSimpleInteractable pokeInteractable;
+
+    private NetworkContext context;
+    private struct SwitchMessage
+    {
+        public int index;
+    }
 
     void Start()
     {
@@ -56,6 +63,8 @@ public class ModelAvatarTextureSwitcher : MonoBehaviour
 
         DefineSectionTextureIds();
         StartCoroutine(SwitchTextureSectionCoroutine());
+
+        context = NetworkScene.Register(this);
     }
 
     void DefineSectionTextureIds()
@@ -128,6 +137,20 @@ public class ModelAvatarTextureSwitcher : MonoBehaviour
 
         // Move to the next section (loop back to 0 after last section)
         currentSectionIndex = (currentSectionIndex + 1) % sectionTextureIds.Count;
+        sendMessage();
+    }
+
+    public void sendMessage()
+    {
+        SwitchMessage msg = new SwitchMessage();
+        msg.index = currentSectionIndex;
+        context.SendJson(msg);
+    }
+
+    public void ProcessMessage(ReferenceCountedSceneGraphMessage message)
+    {
+        var m = message.FromJson<SwitchMessage>();
+        StartCoroutine(SwitchTextureSectionCoroutine());
     }
 
 }
