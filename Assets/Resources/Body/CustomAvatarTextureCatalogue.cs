@@ -1,13 +1,48 @@
 using UnityEngine;
 using Ubiq.Avatars;
 using System.Collections.Generic;
+using System;
+using System.IO;
+using System.Linq;
+
 
 [CreateAssetMenu(menuName = "Custom Avatar Texture Catalogue")]
 public class CustomAvatarTextureCatalogue : AvatarTextureCatalogue
 {
-    [SerializeField] private AvatarTextureCatalogue baseCatalogue; // Ubiq's Catalogue
-    [SerializeField] private List<Texture2D> dynamicTextures = new List<Texture2D>();
-    // [System.NonSerialized]
+    [SerializeField, Tooltip("Base Ubiq Avatar Catalogue")]
+     private AvatarTextureCatalogue baseCatalogue; // Ubiq's Catalogue
+    [SerializeField, Tooltip("Dynamically generated and saved textures")]
+    private List<Texture2D> dynamicTextures = new List<Texture2D>();
+    
+    [SerializeField, Tooltip("Number of recent textures to load.")]
+    private int numDynamicTexturesLoad;
+
+    public void LoadRecentDynamicTextures()
+    {
+        Debug.Log("Loading recent textures");
+        string path = Application.persistentDataPath;
+        if (!Directory.Exists(path))
+        {
+            Debug.LogError("Persistent data path does not exist!");
+            return;
+        }
+        var skinFiles = Directory.GetFiles(path, "*.png")
+                             .OrderByDescending(File.GetLastWriteTime)
+                             .Take(numDynamicTexturesLoad)
+                             .Reverse()
+                             .ToList();
+    
+        foreach (var file in skinFiles)
+        {
+            Texture2D loadedTexture = LoadTextureFromFile(file);
+            if (loadedTexture != null)
+            {
+                dynamicTextures.Add(loadedTexture);
+                Debug.Log($"Loaded recent texture: {loadedTexture.name}");
+            }
+        }
+    }
+
     public void Initialize(AvatarTextureCatalogue existingCatalogue)
     {
         if (existingCatalogue == null)
@@ -44,6 +79,8 @@ public class CustomAvatarTextureCatalogue : AvatarTextureCatalogue
         Debug.Log($"Copied {Textures.Count} textures from base catalogue.");
 
         dynamicTextures = new List<Texture2D>(); 
+        LoadRecentDynamicTextures();
+        Debug.Log("dynamic textures: "+dynamicTextures.Count);
         
     }
 
@@ -57,7 +94,7 @@ public class CustomAvatarTextureCatalogue : AvatarTextureCatalogue
         }
 
         Debug.Log($"Get texture {i} (Base Count: {baseCatalogue.Textures.Count}, Dynamic Count: {dynamicTextures.Count})");
-
+        
         // Use existing textures first
         if (i < baseCatalogue.Textures.Count)
         {
@@ -67,6 +104,9 @@ public class CustomAvatarTextureCatalogue : AvatarTextureCatalogue
         {
             // Handle dynamically added textures
             int dynamicIndex = i - baseCatalogue.Textures.Count;
+            if (dynamicIndex >= dynamicTextures.Count){
+                return null;
+            }
             return dynamicTextures[dynamicIndex];
         }
     }
@@ -146,8 +186,8 @@ public class CustomAvatarTextureCatalogue : AvatarTextureCatalogue
                 return;
             }
         }
-
-        Texture2D savedTexture = SaveTextureAsAsset(texture);
+        // TODO - this doesnt need to return the texture
+        Texture2D savedTexture = SaveTexture(texture);
 
         if (savedTexture != null)
         {
@@ -160,7 +200,44 @@ public class CustomAvatarTextureCatalogue : AvatarTextureCatalogue
         }
     }
 
-    private Texture2D SaveTextureAsAsset(Texture2D texture)
+    public Texture2D CombineTextures(Texture2D headTex, Texture2D torsoTex, Texture2D leftHandTex, Texture2D rightHandTex)
+    {
+        Texture2D combinedTexture = new Texture2D(1024, 1024);
+        combinedTexture.name = "combined_texture_"+DateTime.Now.ToString("HHmmss");
+
+        Rect headRegion = new Rect(0, 535, 641, 488);  
+        Rect torsoRegionUpper = new Rect(0, 0, 624, 533);
+        Rect torsoRegionLower = new Rect(620, 0, 400, 259);
+        Rect handRegion = new Rect(640, 502, 381, 522);
+        Rect unknownRegion = new Rect(625, 260, 397, 240);
+
+        Debug.Log("here");
+
+        // Copy regions from each texture
+        CopyRegion(combinedTexture, headTex, headRegion);
+        CopyRegion(combinedTexture, torsoTex, torsoRegionUpper);
+        CopyRegion(combinedTexture, torsoTex, torsoRegionLower);
+        CopyRegion(combinedTexture, leftHandTex, handRegion);
+        CopyRegion(combinedTexture, rightHandTex, unknownRegion);
+
+        // Apply changes
+        combinedTexture.Apply();
+
+        return combinedTexture;
+    }
+
+    private void CopyRegion(Texture2D target, Texture2D source, Rect region)
+    {
+        int xStart = Mathf.RoundToInt(region.x);
+        int yStart = Mathf.RoundToInt(region.y);
+        int width = Mathf.RoundToInt(region.width);
+        int height = Mathf.RoundToInt(region.height);
+
+        Color[] pixels = source.GetPixels(xStart, yStart, width, height);
+        target.SetPixels(xStart, yStart, width, height, pixels);
+    }
+
+    private Texture2D SaveTexture(Texture2D texture)
     {
         // Use the texture's name when saving
         string fileName = texture.name + ".png";
@@ -170,17 +247,22 @@ public class CustomAvatarTextureCatalogue : AvatarTextureCatalogue
         System.IO.File.WriteAllBytes(path, pngData);
         Debug.Log($"Saved texture as PNG: {path}");
 
-        // Load the PNG as a new Texture2D
-        byte[] fileData = System.IO.File.ReadAllBytes(path);
-        Texture2D newTexture = new Texture2D(2, 2, TextureFormat.RGB24, false);
-        if (newTexture.LoadImage(fileData))
-        {
-            newTexture.name = texture.name;
-            Debug.Log($"Loaded saved texture: {newTexture.name}");
-            return newTexture;
-        }
+        // Load the PNG as a new Texture2D - this solves a Null texture error by reloading the texture
+        return LoadTextureFromFile(path);
+    }
+    
+    private Texture2D LoadTextureFromFile(string filePath)
+    {
 
-        Debug.LogError("Failed to load saved texture from file!");
+        byte[] fileData = File.ReadAllBytes(filePath);
+        Texture2D texture = new Texture2D(2, 2, TextureFormat.RGB24, false);
+        if (texture.LoadImage(fileData))
+        {
+            texture.name = Path.GetFileNameWithoutExtension(filePath);
+            return texture;
+        } 
+
+        Debug.LogError($"Failed to load texture from {filePath}");
         return null;
     }
 

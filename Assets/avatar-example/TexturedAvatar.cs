@@ -74,6 +74,10 @@ public class TexturedAvatar : MonoBehaviour
         }
         
         SetTexture(peer["ubiq.avatar.texture.uuid"]);
+        SetTexture(Textures.Get(peer["ubiq.avatar.texture.head.uuid"]), AvatarPart.HEAD);
+        SetTexture(Textures.Get(peer["ubiq.avatar.texture.torso.uuid"]), AvatarPart.TORSO);
+        SetTexture(Textures.Get(peer["ubiq.avatar.texture.lefthand.uuid"]), AvatarPart.LEFTHAND);
+        SetTexture(Textures.Get(peer["ubiq.avatar.texture.righthand.uuid"]), AvatarPart.RIGHTHAND);
     }
 
     /// <summary>
@@ -89,17 +93,13 @@ public class TexturedAvatar : MonoBehaviour
     public void SetTexture(Texture2D texture, AvatarPart avatarPart)
     {
         var floatingAvatar = GetComponentInChildren<FloatingAvatarSeparatedTextures>();
-        if (floatingAvatar == null)
-        {
-            SetTexture(texture);
-        }
-        else {
-            SetTexture(Textures.Get(texture));
-        }
+        floatingAvatar.avatarPart = avatarPart;
+        SetTexture(Textures.Get(texture));
     }
 
     public void SetTexture(string uuid)
     {
+        var floatingAvatar = GetComponentInChildren<FloatingAvatarSeparatedTextures>();
 
         if(String.IsNullOrWhiteSpace(uuid))
         {
@@ -119,6 +119,10 @@ public class TexturedAvatar : MonoBehaviour
             if(avatar.IsLocal)
             {
                 roomClient.Me["ubiq.avatar.texture.uuid"] = this.uuid;
+                roomClient.Me["ubiq.avatar.texture.head.uuid"] = Textures.Get(floatingAvatar.headRenderer.material.mainTexture as Texture2D);
+                roomClient.Me["ubiq.avatar.texture.torso.uuid"] = Textures.Get(floatingAvatar.torsoRenderer.material.mainTexture as Texture2D);
+                roomClient.Me["ubiq.avatar.texture.lefthand.uuid"] = Textures.Get(floatingAvatar.leftHandRenderer.material.mainTexture as Texture2D);
+                roomClient.Me["ubiq.avatar.texture.righthand.uuid"] = Textures.Get(floatingAvatar.rightHandRenderer.material.mainTexture as Texture2D);
             }
 
             if (avatar.IsLocal && SaveTextureSetting)
@@ -135,11 +139,13 @@ public class TexturedAvatar : MonoBehaviour
     // These settings have been changed by Taha
     private void SaveSettings()
     {
+        var floatingAvatar = GetComponentInChildren<FloatingAvatarSeparatedTextures>();
+
         PlayerPrefs.SetString("ubiq.avatar.texture.uuid", uuid);
-        PlayerPrefs.SetString("ubiq.avatar.texture.head.uuid", uuid);
-        PlayerPrefs.SetString("ubiq.avatar.texture.torso.uuid", uuid);
-        PlayerPrefs.SetString("ubiq.avatar.texture.lefthand.uuid", uuid);
-        PlayerPrefs.SetString("ubiq.avatar.texture.righthand.uuid", uuid);
+        PlayerPrefs.SetString("ubiq.avatar.texture.head.uuid", Textures.Get(floatingAvatar.headRenderer.material.mainTexture as Texture2D));
+        PlayerPrefs.SetString("ubiq.avatar.texture.torso.uuid", Textures.Get(floatingAvatar.torsoRenderer.material.mainTexture as Texture2D));
+        PlayerPrefs.SetString("ubiq.avatar.texture.lefthand.uuid", Textures.Get(floatingAvatar.leftHandRenderer.material.mainTexture as Texture2D));
+        PlayerPrefs.SetString("ubiq.avatar.texture.righthand.uuid", Textures.Get(floatingAvatar.rightHandRenderer.material.mainTexture as Texture2D));
     }
 
     private bool LoadSettings()
@@ -151,14 +157,11 @@ public class TexturedAvatar : MonoBehaviour
         var leftHandUuid = PlayerPrefs.GetString("ubiq.avatar.texture.lefthand.uuid", "");
         var rightHandUuid = PlayerPrefs.GetString("ubiq.avatar.texture.righthand.uuid", "");
 
-        
-
         SetTexture(uuid);
-        // if uuid != headUuid && headUuid != ""
-        // {
-        //     SetTexture(headUuid);
-        // }
-
+        SetTexture(Textures.Get(headUuid), AvatarPart.HEAD);
+        SetTexture(Textures.Get(torsoUuid), AvatarPart.TORSO);
+        SetTexture(Textures.Get(leftHandUuid), AvatarPart.LEFTHAND);
+        SetTexture(Textures.Get(rightHandUuid), AvatarPart.RIGHTHAND);
 
         return !String.IsNullOrWhiteSpace(uuid);
     }
