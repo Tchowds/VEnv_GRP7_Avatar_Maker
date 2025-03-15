@@ -74,6 +74,10 @@ public class TexturedAvatar : MonoBehaviour
         }
         
         SetTexture(peer["ubiq.avatar.texture.uuid"]);
+        SetTexture(peer["ubiq.avatar.texture.head.uuid"], AvatarPart.HEAD);
+        SetTexture(peer["ubiq.avatar.texture.torso.uuid"], AvatarPart.TORSO);
+        SetTexture(peer["ubiq.avatar.texture.lefthand.uuid"], AvatarPart.LEFTHAND);
+        SetTexture(peer["ubiq.avatar.texture.righthand.uuid"], AvatarPart.RIGHTHAND);
     }
 
     /// <summary>
