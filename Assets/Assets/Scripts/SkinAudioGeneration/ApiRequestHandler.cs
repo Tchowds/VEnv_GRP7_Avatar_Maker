@@ -22,7 +22,7 @@ public class ApiRequestHandler : MonoBehaviour
 
     private HttpClient httpClient = new HttpClient();
 
-    public RequestMode CurrentMode { get; set; } = RequestMode.None;
+    public RequestMode CurrentMode { get; set; } = RequestMode.GenerateSkin;
 
     private void Start() {
         httpClient.Timeout = TimeSpan.FromSeconds(180);
