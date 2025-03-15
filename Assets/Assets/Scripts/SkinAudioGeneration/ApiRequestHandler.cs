@@ -103,6 +103,7 @@ public class ApiRequestHandler : MonoBehaviour
                 string jsonBody = JsonConvert.SerializeObject(requestBody);
                 var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
 
+                Debug.Log($"Making request to: {endpoint} with parameters: {jsonBody}");
                 var response = await httpClient.PostAsync(endpoint, content);
                 response.EnsureSuccessStatusCode();
 
