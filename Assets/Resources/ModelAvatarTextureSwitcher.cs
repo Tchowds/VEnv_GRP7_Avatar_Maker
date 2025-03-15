@@ -98,6 +98,7 @@ public class ModelAvatarTextureSwitcher : MonoBehaviour
 
     void OnPoked(SelectEnterEventArgs args)
     {
+        sendMessage();
         StartCoroutine(SwitchTextureSectionCoroutine());
     }
 
@@ -137,7 +138,7 @@ public class ModelAvatarTextureSwitcher : MonoBehaviour
 
         // Move to the next section (loop back to 0 after last section)
         currentSectionIndex = (currentSectionIndex + 1) % sectionTextureIds.Count;
-        sendMessage();
+
     }
 
     public void sendMessage()
