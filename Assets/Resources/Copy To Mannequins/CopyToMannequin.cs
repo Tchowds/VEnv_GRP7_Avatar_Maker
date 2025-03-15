@@ -16,6 +16,8 @@ public class CopyToMannequin : MonoBehaviour
     private NetworkContext context;
 
     private XRSimpleInteractable copySphereInteractable;
+    private FloatingAvatarSeparatedTextures playerFloating;
+    private TexturedAvatar playerTextured;
     private Renderer headRenderer;
     private Renderer torsoRenderer;
     private Renderer leftHandRenderer;
@@ -25,14 +27,8 @@ public class CopyToMannequin : MonoBehaviour
 
     private struct CopyMessage
     {
-        public string headName;
-        public string headTexture;
-        public string torsoName;
-        public string torsoTexture;
-        public string leftHandName;
-        public string leftHandTexture;
-        public string rightHandName;
-        public string rightHandTexture;
+        public string name;
+        public string texture;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -41,7 +37,7 @@ public class CopyToMannequin : MonoBehaviour
         copySphereInteractable = transform.Find("Sphere").GetComponent<XRSimpleInteractable>();
         if (copySphereInteractable) copySphereInteractable.selectEntered.AddListener(Interactable_SelectEntered_CopyToMannequin);
 
-
+        // renderers for the mannequin
         var floating = transform.Find("Body").GetComponent<FloatingAvatarSeparatedTextures>();
         headRenderer = floating.headRenderer;
         torsoRenderer = floating.torsoRenderer;
@@ -58,24 +54,16 @@ public class CopyToMannequin : MonoBehaviour
         var avatarManager = networkScene.GetComponentInChildren<AvatarManager>();
         var playerAvatar = avatarManager.FindAvatar(roomClient.Me);
 
-        var playerTexture = playerAvatar.GetComponent<TexturedAvatar>();
-        var floatingAvatar = playerAvatar.GetComponentInChildren<FloatingAvatarSeparatedTextures>();
+        playerTextured = playerAvatar.GetComponent<TexturedAvatar>();
+        playerFloating = playerAvatar.GetComponentInChildren<FloatingAvatarSeparatedTextures>();
 
         // Get the player's textures
-        Texture2D headTex = floatingAvatar.headRenderer.material.mainTexture as Texture2D;
-        Texture2D torsoTex = floatingAvatar.torsoRenderer.material.mainTexture as Texture2D;
-        Texture2D leftHandTex = floatingAvatar.leftHandRenderer.material.mainTexture as Texture2D;
-        Texture2D rightHandTex = floatingAvatar.rightHandRenderer.material.mainTexture as Texture2D;
+        Texture2D headTex = playerFloating.headRenderer.material.mainTexture as Texture2D;
+        Texture2D torsoTex = playerFloating.torsoRenderer.material.mainTexture as Texture2D;
+        Texture2D leftHandTex = playerFloating.leftHandRenderer.material.mainTexture as Texture2D;
+        Texture2D rightHandTex = playerFloating.rightHandRenderer.material.mainTexture as Texture2D;
 
         ApplyAndSave(headTex, torsoTex, leftHandTex, rightHandTex);
-        // Modify textures (example: tinting them)
-        // Texture2D modifiedHeadTex = ModifyTexture(headTex);
-        // Texture2D modifiedTorsoTex = ModifyTexture(torsoTex);
-        // Texture2D modifiedLeftHandTex = ModifyTexture(leftHandTex);
-        // Texture2D modifiedRightHandTex = ModifyTexture(rightHandTex);
-
-        // Apply and save the modified textures
-        //ApplyAndSave(modifiedHeadTex, modifiedTorsoTex, modifiedLeftHandTex, modifiedRightHandTex);
 
         sendMessage();
     
@@ -87,12 +75,6 @@ public class CopyToMannequin : MonoBehaviour
         Debug.Log("Cominging textures");
         Texture2D combinedTexture = textureCatalogue.CombineTextures(headTex, torsoTex, leftHandTex, rightHandTex);
 
-       // Apply the modified textures to the mannequin
-        // headRenderer.material.mainTexture = modifiedHeadTex;
-        // torsoRenderer.material.mainTexture = modifiedTorsoTex;
-        // leftHandRenderer.material.mainTexture = modifiedLeftHandTex;
-        // rightHandRenderer.material.mainTexture = modifiedRightHandTex;
-
         headRenderer.material.mainTexture = combinedTexture;
         torsoRenderer.material.mainTexture = combinedTexture;
         leftHandRenderer.material.mainTexture = combinedTexture;
@@ -102,10 +84,6 @@ public class CopyToMannequin : MonoBehaviour
         if (textureCatalogue != null)
         {
             textureCatalogue.AddDynamicTexture(combinedTexture);
-            // textureCatalogue.AddDynamicTexture(modifiedHeadTex);
-            // textureCatalogue.AddDynamicTexture(modifiedTorsoTex);
-            // textureCatalogue.AddDynamicTexture(modifiedLeftHandTex);
-            // textureCatalogue.AddDynamicTexture(modifiedRightHandTex);
 
             Debug.Log("Modified textures and added them to CustomAvatarTextureCatalogue!");
         }
@@ -119,30 +97,40 @@ public class CopyToMannequin : MonoBehaviour
     {
         context.SendJson(new CopyMessage
         {
-            headName = headRenderer.material.mainTexture.name,
-            headTexture = EncodeTexture(headRenderer.material.mainTexture),
-            torsoName = torsoRenderer.material.mainTexture.name,
-            torsoTexture = EncodeTexture(torsoRenderer.material.mainTexture),
-            leftHandName = leftHandRenderer.material.mainTexture.name,
-            leftHandTexture = EncodeTexture(leftHandRenderer.material.mainTexture),
-            rightHandName = rightHandRenderer.material.mainTexture.name,
-            rightHandTexture = EncodeTexture(rightHandRenderer.material.mainTexture)
+            // headName = headRenderer.material.mainTexture.name,
+            // headTexture = EncodeTexture(headRenderer.material.mainTexture),
+            // torsoName = torsoRenderer.material.mainTexture.name,
+            // torsoTexture = EncodeTexture(torsoRenderer.material.mainTexture),
+            // leftHandName = leftHandRenderer.material.mainTexture.name,
+            // leftHandTexture = EncodeTexture(leftHandRenderer.material.mainTexture),
+            // rightHandName = rightHandRenderer.material.mainTexture.name,
+            // rightHandTexture = EncodeTexture(rightHandRenderer.material.mainTexture)
+            name = headRenderer.material.mainTexture.name,
+            texture = EncodeTexture(headRenderer.material.mainTexture)
         });
     }
 
     public void ProcessMessage(ReferenceCountedSceneGraphMessage message)
     {
         var m = message.FromJson<CopyMessage>();
-        Texture2D headTex = DecodeTexture(m.headTexture);
-        headTex.name = m.headName;
-        Texture2D torsoTex = DecodeTexture(m.torsoTexture);
-        torsoTex.name = m.torsoName;
-        Texture2D leftHandTex = DecodeTexture(m.leftHandTexture);
-        leftHandTex.name = m.leftHandName;
-        Texture2D rightHandTex = DecodeTexture(m.rightHandTexture);
-        rightHandTex.name = m.rightHandName;
+        // Texture2D headTex = DecodeTexture(m.headTexture);
+        // headTex.name = m.headName;
+        // Texture2D torsoTex = DecodeTexture(m.torsoTexture);
+        // torsoTex.name = m.torsoName;
+        // Texture2D leftHandTex = DecodeTexture(m.leftHandTexture);
+        // leftHandTex.name = m.leftHandName;
+        // Texture2D rightHandTex = DecodeTexture(m.rightHandTexture);
+        // rightHandTex.name = m.rightHandName;
+        Texture2D tex = DecodeTexture(m.texture);
+        tex.name = m.name;
 
-        ApplyAndSave(headTex, torsoTex, leftHandTex, rightHandTex);
+        headRenderer.material.mainTexture = tex;
+        torsoRenderer.material.mainTexture = tex;
+        leftHandRenderer.material.mainTexture = tex;
+        rightHandRenderer.material.mainTexture = tex;
+
+        textureCatalogue.AddDynamicTexture(tex);
+        // ApplyAndSave(headTex, torsoTex, leftHandTex, rightHandTex);
     }
 
     private string EncodeTexture (Texture tex)

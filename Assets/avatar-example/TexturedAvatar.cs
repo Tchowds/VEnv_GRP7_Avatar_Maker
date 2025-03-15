@@ -89,13 +89,8 @@ public class TexturedAvatar : MonoBehaviour
     public void SetTexture(Texture2D texture, AvatarPart avatarPart)
     {
         var floatingAvatar = GetComponentInChildren<FloatingAvatarSeparatedTextures>();
-        if (floatingAvatar == null)
-        {
-            SetTexture(texture);
-        }
-        else {
-            SetTexture(Textures.Get(texture));
-        }
+        floatingAvatar.avatarPart = avatarPart;
+        SetTexture(Textures.Get(texture));
     }
 
     public void SetTexture(string uuid)
