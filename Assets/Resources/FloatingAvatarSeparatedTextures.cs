@@ -134,12 +134,10 @@ public class FloatingAvatarSeparatedTextures : MonoBehaviour
         }
         else if (avatarPart == AvatarPart.HEAD)
         {
-            Debug.Log("HEAD");
             headRenderer.material.mainTexture = tex;
         }
         else if (avatarPart == AvatarPart.TORSO)
         {
-            Debug.Log("TORSO");
             torsoRenderer.material.mainTexture = tex;
         }
         else if (avatarPart == AvatarPart.LEFTHAND)
