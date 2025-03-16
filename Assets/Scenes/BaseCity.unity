@@ -1770,6 +1770,11 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -4397448026529202663, guid: 7525abf980c632c45ae63fbcdea453f3, type: 3}
+--- !u!4 &242486585 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5307293731841432397, guid: 029309455a059a7498ceaac162ae9cfc, type: 3}
+  m_PrefabInstance: {fileID: 1238912641}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &243034697
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4143,18 +4148,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c774d83cf4f4d45e29298522e8ba4923, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  whisper: {fileID: 105653041}
-  microphoneRecord: {fileID: 679502126}
-  streamSegments: 1
-  printLanguage: 1
-  button: {fileID: 0}
-  buttonText: {fileID: 0}
-  outputText: {fileID: 0}
-  timeText: {fileID: 0}
-  languageDropdown: {fileID: 0}
-  translateToggle: {fileID: 0}
-  vadToggle: {fileID: 0}
-  scroll: {fileID: 0}
 --- !u!1 &680001799 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4508703700540894606, guid: 029309455a059a7498ceaac162ae9cfc, type: 3}
@@ -6060,7 +6053,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultLookTargets:
   - {fileID: 1828815331}
-  - {fileID: 888199479}
+  - {fileID: 2029885652}
+  - {fileID: 1357316823}
+  - {fileID: 789127036}
+  - {fileID: 242486585}
   lookDefaultMinInterval: 5
   lookDefaultMaxInterval: 10
   lookDefaultLookSpeed: 2
