@@ -151,12 +151,12 @@ public class CustomAvatarTextureCatalogue : AvatarTextureCatalogue
             return index.ToString();
         }
 
-        Debug.Log($"Texture name: {texture.name}");
+        // Debug.Log($"Texture name: {texture.name}");
 
         // If the texture is dynamic, return its name
         foreach (var dynamicTexture in dynamicTextures)
         {
-            Debug.Log($"Dynamic texture name: {dynamicTexture.name}");
+            // Debug.Log($"Dynamic texture name: {dynamicTexture.name}");
             if (dynamicTexture.name == texture.name)
             {
                 return dynamicTexture.name;
