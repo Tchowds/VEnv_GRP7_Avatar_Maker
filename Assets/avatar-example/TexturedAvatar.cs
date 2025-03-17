@@ -108,31 +108,24 @@ public class TexturedAvatar : MonoBehaviour
             return;
         }
 
-        if (this.uuid != uuid)
+        var texture = Textures.Get(uuid);
+        this.uuid = uuid;
+        this.cached = texture;
+
+        OnTextureChanged.Invoke(texture);
+
+        if(avatar.IsLocal)
         {
-            var texture = Textures.Get(uuid);
-            this.uuid = uuid;
-            this.cached = texture;
+            roomClient.Me["ubiq.avatar.texture.uuid"] = this.uuid;
+            roomClient.Me["ubiq.avatar.texture.head.uuid"] = Textures.Get(floatingAvatar.headRenderer.material.mainTexture as Texture2D);
+            roomClient.Me["ubiq.avatar.texture.torso.uuid"] = Textures.Get(floatingAvatar.torsoRenderer.material.mainTexture as Texture2D);
+            roomClient.Me["ubiq.avatar.texture.lefthand.uuid"] = Textures.Get(floatingAvatar.leftHandRenderer.material.mainTexture as Texture2D);
+            roomClient.Me["ubiq.avatar.texture.righthand.uuid"] = Textures.Get(floatingAvatar.rightHandRenderer.material.mainTexture as Texture2D);
+        }
 
-            OnTextureChanged.Invoke(texture);
-
-            if(avatar.IsLocal)
-            {
-                roomClient.Me["ubiq.avatar.texture.uuid"] = this.uuid;
-                roomClient.Me["ubiq.avatar.texture.head.uuid"] = Textures.Get(floatingAvatar.headRenderer.material.mainTexture as Texture2D);
-                roomClient.Me["ubiq.avatar.texture.torso.uuid"] = Textures.Get(floatingAvatar.torsoRenderer.material.mainTexture as Texture2D);
-                roomClient.Me["ubiq.avatar.texture.lefthand.uuid"] = Textures.Get(floatingAvatar.leftHandRenderer.material.mainTexture as Texture2D);
-                roomClient.Me["ubiq.avatar.texture.righthand.uuid"] = Textures.Get(floatingAvatar.rightHandRenderer.material.mainTexture as Texture2D);
-            }
-
-            if (avatar.IsLocal && SaveTextureSetting)
-            {
-                SaveSettings();
-            }
-        } // added by taha to stop the bug of not able to copy body parts from the same texture
-        else
-        { 
-            OnTextureChanged.Invoke(cached);
+        if (avatar.IsLocal && SaveTextureSetting)
+        {
+            SaveSettings();
         }
     }
 
