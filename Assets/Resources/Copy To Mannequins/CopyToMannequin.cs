@@ -93,6 +93,26 @@ public class CopyToMannequin : MonoBehaviour
         }
     }
 
+    public void ApplyOnlyHead(Texture2D headTex)
+    {
+        ApplyAndSave(
+            headTex,
+            headRenderer.material.mainTexture as Texture2D, 
+            headRenderer.material.mainTexture as Texture2D, 
+            headRenderer.material.mainTexture as Texture2D
+        );
+    }
+
+    public void ApplyOnlyTorso(Texture2D torsoTex)
+    {
+        ApplyAndSave(
+            torsoRenderer.material.mainTexture as Texture2D, 
+            torsoTex,
+            torsoRenderer.material.mainTexture as Texture2D, 
+            torsoRenderer.material.mainTexture as Texture2D
+        );
+    }
+
     public void sendMessage()
     {
         context.SendJson(new CopyMessage

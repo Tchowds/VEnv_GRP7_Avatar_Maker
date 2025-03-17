@@ -6,7 +6,7 @@ public class DiffuseSkinToMannequinApplier : MonoBehaviour
 {
     [Header("Assign the 4 Avatar Mannequins Here")]
     // List of avatar mannequins (each must have a TexturedModelAvatar component)
-    public List<TexturedModelAvatar> avatarMannequins; 
+    public List<CopyToMannequin> avatarMannequins; 
 
     [Header("Catalogue Reference")]
     // Reference to the shared texture catalogue where dynamic textures are stored
@@ -42,10 +42,12 @@ public class DiffuseSkinToMannequinApplier : MonoBehaviour
 
             // Equip the texture on the corresponding avatar mannequin
             if (body_part == "face"){
-                avatarMannequins[i].transform.Find("Body/Floating_Head").GetComponent<Renderer>().material.mainTexture = texture;
+                // avatarMannequins[i].transform.Find("Body/Floating_Head").GetComponent<Renderer>().material.mainTexture = texture;
+                avatarMannequins[i].ApplyOnlyHead(texture);
             }
             else{
-                avatarMannequins[i].transform.Find("Body/Floating_Torso_A").GetComponent<Renderer>().material.mainTexture = texture;
+                // avatarMannequins[i].transform.Find("Body/Floating_Torso_A").GetComponent<Renderer>().material.mainTexture = texture;
+                avatarMannequins[i].ApplyOnlyTorso(texture);
             }
         }
     }
