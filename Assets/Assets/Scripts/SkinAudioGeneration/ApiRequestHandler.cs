@@ -23,6 +23,7 @@ public class ApiRequestHandler : MonoBehaviour
     private HttpClient httpClient = new HttpClient();
 
     public RequestMode CurrentMode { get; set; } = RequestMode.GenerateSkin;
+    public Animator curtainAnimator;
 
     private NetworkContext context;
 
@@ -95,8 +96,9 @@ public class ApiRequestHandler : MonoBehaviour
 
        private async Task SendGenerateSkinRequest(string prompt)
     {
-        //try
-        //{
+        curtainAnimator.SetTrigger("Show");
+        try
+        {
             if(selectedSkinPart == SkinConstants.SkinPart.Head)
             {
                 // For Head, use the /generate_skin_image_face endpoint
@@ -185,11 +187,13 @@ public class ApiRequestHandler : MonoBehaviour
                 }
                 
             }
-        //}
-        //catch(Exception e)
-        //{
-        //    Debug.LogError($"Generate Skin Request Failed: {e.Message}");
-        //}
+            
+        }
+        catch(Exception e)
+        {
+            Debug.LogError($"Generate Skin Request Failed: {e.Message}");
+        }
+        curtainAnimator.SetTrigger("Hide");
     }
 
     public void SetIp(string ip)
