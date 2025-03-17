@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Ubiq.Messaging;
 using Ubiq.Rooms;
+using static SkinConstants;
 
 public class SkinPartSelector : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class SkinPartSelector : MonoBehaviour
     public Button bothButton;
 
     public ApiRequestHandler apiRequestHandler;
+    public PromptHelper promptHelper;
 
     // Define your selected and normal colors.
     // You can adjust these as needed.
@@ -88,5 +90,36 @@ public class SkinPartSelector : MonoBehaviour
         else if (skinPart == SkinConstants.SkinPart.Torso) skinPart = SkinConstants.SkinPart.Head;
 
         incurSkinPart();
+    }
+
+    public void OnGenerateButtonPressed()
+    {
+        var (torsoPrompt, headPrompt) = promptHelper.getPrompts();
+
+        if (string.IsNullOrEmpty(torsoPrompt) && string.IsNullOrEmpty(headPrompt))
+        {
+            Debug.LogWarning("No confirmed prompt available.");
+            return;
+        }
+        
+        string confirmedPromptText = "";
+
+        if (apiRequestHandler.CurrentMode == RequestMode.GenerateSkin)
+        {
+            if (skinPart == SkinConstants.SkinPart.Head || skinPart == SkinConstants.SkinPart.Both)
+            {
+                confirmedPromptText = headPrompt;
+            }
+            else if (skinPart == SkinConstants.SkinPart.Torso)
+            {
+                confirmedPromptText = torsoPrompt;
+            }
+            
+            apiRequestHandler.HandleRequest(confirmedPromptText);
+        }
+        else
+        {
+            Debug.LogWarning("Unhandled API Request Mode: " + apiRequestHandler.CurrentMode);
+        }
     }
 }

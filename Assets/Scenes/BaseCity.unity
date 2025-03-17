@@ -740,9 +740,41 @@ PrefabInstance:
     m_TransformParent: {fileID: 618273707}
     m_Modifications:
     - target: {fileID: 1028937122907639872, guid: f0e91881b44df8d468f72c288d9da629, type: 3}
+      propertyPath: promptHelper
+      value: 
+      objectReference: {fileID: 1207690988}
+    - target: {fileID: 1028937122907639872, guid: f0e91881b44df8d468f72c288d9da629, type: 3}
       propertyPath: apiRequestHandler
       value: 
       objectReference: {fileID: 193553800}
+    - target: {fileID: 1823120005602207789, guid: f0e91881b44df8d468f72c288d9da629, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1823120005602207789, guid: f0e91881b44df8d468f72c288d9da629, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1823120005602207789, guid: f0e91881b44df8d468f72c288d9da629, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1207690989}
+    - target: {fileID: 1823120005602207789, guid: f0e91881b44df8d468f72c288d9da629, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1823120005602207789, guid: f0e91881b44df8d468f72c288d9da629, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnGenerateButtonPressed
+      objectReference: {fileID: 0}
+    - target: {fileID: 1823120005602207789, guid: f0e91881b44df8d468f72c288d9da629, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SkinPartSelector, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1823120005602207789, guid: f0e91881b44df8d468f72c288d9da629, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 2792995599939316924, guid: f0e91881b44df8d468f72c288d9da629, type: 3}
       propertyPath: m_Name
       value: GenerationMenuManager
@@ -886,7 +918,6 @@ MonoBehaviour:
   ipAddress: 10.130.214.11
   texturedModelAvatar: {fileID: 0}
   customAvatarTextureCatalogue: {fileID: 11400000, guid: b9b5ab83068724908937dfdd4d246538, type: 2}
-  resultTextMesh: {fileID: 0}
   skinManager: {fileID: 1892218466}
   selectedSkinPart: 0
 --- !u!1001 &200217633
@@ -1586,11 +1617,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43f54d50f338847df9175cf271a72b41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  apiRequestHandler: {fileID: 193553800}
   whisper: {fileID: 105653041}
   microphoneRecord: {fileID: 679502126}
   promptHelper: {fileID: 1207690988}
-  statusText: {fileID: 0}
 --- !u!1001 &253596832
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5836,6 +5865,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   torsoPrompt: {fileID: 1813938294}
   headPrompt: {fileID: 677900386}
+--- !u!114 &1207690989 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1028937122907639872, guid: f0e91881b44df8d468f72c288d9da629, type: 3}
+  m_PrefabInstance: {fileID: 140459461}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1207690982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10f30dcfa3538f94db3eb1ba8ecca113, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1213302564
 GameObject:
   m_ObjectHideFlags: 0
@@ -9477,7 +9517,6 @@ GameObject:
   - component: {fileID: 2088178534}
   - component: {fileID: 2088178537}
   - component: {fileID: 2088178536}
-  - component: {fileID: 2088178538}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -9600,11 +9639,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43f54d50f338847df9175cf271a72b41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  apiRequestHandler: {fileID: 193553800}
   whisper: {fileID: 105653041}
   microphoneRecord: {fileID: 679502126}
   promptHelper: {fileID: 0}
-  statusText: {fileID: 0}
 --- !u!114 &2088178536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9728,21 +9765,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &2088178538
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2088178529}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 106a62aaa44c547449ad137ca09189eb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  requestMode: 2
-  apiRequestHandler: {fileID: 193553800}
-  modeDisplayText: {fileID: 0}
 --- !u!1 &2088613456 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 536690654006145081, guid: 029309455a059a7498ceaac162ae9cfc, type: 3}

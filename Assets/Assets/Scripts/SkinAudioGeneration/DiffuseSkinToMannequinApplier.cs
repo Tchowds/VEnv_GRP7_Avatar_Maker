@@ -25,7 +25,9 @@ public class DiffuseSkinToMannequinApplier : MonoBehaviour
             return;
         }
 
-        for (int i = 0; i < avatarMannequins.Count; i++)
+        Debug.Log("Received " + imagesBase64.Count + " images to apply to mannequins.");
+
+        for (int i = 0; i < imagesBase64.Count; i++)
         {
             // Convert base64 string to a Texture2D
             Texture2D texture = ConvertBase64ToTexture(imagesBase64[i]);

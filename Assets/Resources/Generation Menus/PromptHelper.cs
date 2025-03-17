@@ -51,7 +51,6 @@ public class PromptHelper : MonoBehaviour
 
     public (string, string) getPrompts()
     {
-        if(torsoPromptText == "" || headPromptText == "") return (null, null);
         return (torsoPromptText, headPromptText);
     }
 

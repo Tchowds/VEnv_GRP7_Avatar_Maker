@@ -17,7 +17,6 @@ public class ApiRequestHandler : MonoBehaviour
     [Header("Dependencies")]
     public TexturedModelAvatar texturedModelAvatar;
     public CustomAvatarTextureCatalogue customAvatarTextureCatalogue;
-    public TextMeshPro resultTextMesh;
     public DiffuseSkinToMannequinApplier skinManager;
     public SkinPart selectedSkinPart = SkinPart.Head;
 
@@ -43,7 +42,7 @@ public class ApiRequestHandler : MonoBehaviour
                 await SendGenerateSkinRequest(recognizedText);
                 break;
             default:
-                resultTextMesh.text = "No request mode selected.";
+                Debug.Log("No request mode selected.");
                 break;
         }
     }
@@ -76,29 +75,28 @@ public class ApiRequestHandler : MonoBehaviour
                 if (SkinConstants.skinFileToID.TryGetValue(filename, out int skinId))
                 {
                     texturedModelAvatar.SetTexture(texturedModelAvatar.Textures.Get(skinId));
-                    resultTextMesh.text = $"Applied Skin: {filename}";
+                    Debug.Log($"Applied Skin: {filename}");
                 }
                 else
                 {
-                    resultTextMesh.text = "Skin ID not found";
+                    Debug.Log("Skin ID not found");
                 }
             }
             else
             {
-                resultTextMesh.text = "Skin not found in map";
+                Debug.Log("Skin not found in map");
             }
         }
         catch (Exception e)
         {
             Debug.LogError($"Skin Selection Request Failed: {e.Message}");
-            resultTextMesh.text = "Skin Selection Failed";
         }
     }
 
        private async Task SendGenerateSkinRequest(string prompt)
     {
-        try
-        {
+        //try
+        //{
             if(selectedSkinPart == SkinConstants.SkinPart.Head)
             {
                 // For Head, use the /generate_skin_image_face endpoint
@@ -117,11 +115,11 @@ public class ApiRequestHandler : MonoBehaviour
                 if(result?.images_base64 != null)
                 {
                     skinManager.ApplyGeneratedSkins(result.images_base64, "face");
-                    resultTextMesh.text = $"{result.images_base64.Count} head textures generated!";
+                    Debug.Log("{result.images_base64.Count} head textures generated!");
                 }
                 else
                 {
-                    resultTextMesh.text = "No head images received.";
+                    Debug.Log("No head images received.");
                 }
             }
             else if(selectedSkinPart == SkinConstants.SkinPart.Torso)
@@ -141,11 +139,11 @@ public class ApiRequestHandler : MonoBehaviour
                 if(result?.images_base64 != null)
                 {
                     skinManager.ApplyGeneratedSkins(result.images_base64, "body");
-                    resultTextMesh.text = $"{result.images_base64.Count} torso textures generated!";
+                    Debug.Log($"{result.images_base64.Count} torso textures generated!");
                 }
                 else
                 {
-                    resultTextMesh.text = "No torso images received.";
+                    Debug.Log("No torso images received.");
                 }
             }
             else if(selectedSkinPart == SkinConstants.SkinPart.Both)
@@ -185,29 +183,13 @@ public class ApiRequestHandler : MonoBehaviour
                 {
                     skinManager.ApplyGeneratedSkins(resultTorso.images_base64, "body");
                 }
-                if(headSuccess && torsoSuccess)
-                {
-                    resultTextMesh.text = "Generated both head and torso textures!";
-                }
-                else if(headSuccess)
-                {
-                    resultTextMesh.text = "Only head textures generated.";
-                }
-                else if(torsoSuccess)
-                {
-                    resultTextMesh.text = "Only torso textures generated.";
-                }
-                else
-                {
-                    resultTextMesh.text = "No images received.";
-                }
+                
             }
-        }
-        catch(Exception e)
-        {
-            Debug.LogError($"Generate Skin Request Failed: {e.Message}");
-            resultTextMesh.text = "Generation Request Failed";
-        }
+        //}
+        //catch(Exception e)
+        //{
+        //    Debug.LogError($"Generate Skin Request Failed: {e.Message}");
+        //}
     }
 
     public void SetIp(string ip)

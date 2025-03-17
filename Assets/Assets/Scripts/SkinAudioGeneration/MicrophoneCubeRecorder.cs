@@ -10,18 +10,15 @@ namespace Whisper.Samples
 {
     public class VoiceRecorder : MonoBehaviour
     {
-        public ApiRequestHandler apiRequestHandler;
         public WhisperManager whisper;
         public MicrophoneRecord microphoneRecord;
         public PromptHelper promptHelper;
-        public TextMeshPro statusText;
         
         private bool isRecording = false;
         private string _buffer;
         private Renderer cubeRenderer;  // For color change
         private Color initialColor;
         
-        public event Action<string> OnSpeechRecognized;
 
         private void Start()
         {
@@ -30,7 +27,6 @@ namespace Whisper.Samples
             // Subscribe to events
             whisper.OnProgress += OnProgressHandler;
             microphoneRecord.OnRecordStop += OnRecordStop;
-            OnSpeechRecognized += apiRequestHandler.HandleRequest;
 
             cubeRenderer = GetComponent<Renderer>();
             // Ensure there are at least 2 materials
@@ -47,10 +43,8 @@ namespace Whisper.Samples
             {
                 microphoneRecord.StartRecord();
                 isRecording = true;
-                if (statusText != null)
-                    statusText.text = "Recording...";
-                else
-                    Debug.Log("Recording...");
+
+                Debug.Log("Recording...");
                 
                 // Change the cube's color to green to indicate recording
                 Material[] mats = cubeRenderer.materials;
@@ -69,10 +63,7 @@ namespace Whisper.Samples
             {
                 microphoneRecord.StopRecord();
                 isRecording = false;
-                if (statusText != null)
-                    statusText.text = "Processing...";
-                else
-                    Debug.Log("Processing...");
+                Debug.Log("Stopped recording...");
                 
                 // Revert the cube's color
                 Material[] mats = cubeRenderer.materials;
@@ -89,10 +80,8 @@ namespace Whisper.Samples
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
-            if (statusText != null)
-                statusText.text = "Processing...";
-            else
-                Debug.Log("Processing...");
+
+            Debug.Log("Processing...");
 
             _buffer = "";
 
@@ -101,26 +90,17 @@ namespace Whisper.Samples
 
             if (res == null)
             {
-                if (statusText != null)
-                    statusText.text = "Recognition failed";
-                else
-                    Debug.Log("Recognition failed");
-                return;
+                Debug.Log("Recognition failed");
             }
 
             string output = res.Result;
             if(promptHelper != null) promptHelper.SetPrompt(output);
 
-            if (statusText != null)
-                statusText.text = output;
-            else
-                Debug.Log(output);
 
             long time = sw.ElapsedMilliseconds;
             float rate = recordedAudio.Length / (time * 0.001f);
             Debug.Log($"Time: {time} ms, Rate: {rate:F1}x");
 
-            OnSpeechRecognized?.Invoke(res.Result);
         }
 
         private void OnProgressHandler(int progress)
