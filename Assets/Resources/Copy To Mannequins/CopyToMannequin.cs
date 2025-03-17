@@ -34,8 +34,11 @@ public class CopyToMannequin : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        copySphereInteractable = transform.Find("Sphere").GetComponent<XRSimpleInteractable>();
-        if (copySphereInteractable) copySphereInteractable.selectEntered.AddListener(Interactable_SelectEntered_CopyToMannequin);
+        if (transform.Find("Sphere"))
+        {
+            copySphereInteractable = transform.Find("Sphere").GetComponent<XRSimpleInteractable>();
+            copySphereInteractable.selectEntered.AddListener(Interactable_SelectEntered_CopyToMannequin);
+        }
 
         // renderers for the mannequin
         var floating = transform.Find("Body").GetComponent<FloatingAvatarSeparatedTextures>();
@@ -95,8 +98,8 @@ public class CopyToMannequin : MonoBehaviour
 
     public void ApplyOnlyHead(Texture2D headTex)
     {
-        Debug.Log(headRenderer);
-        Debug.Log(torsoTex);
+        Debug.Log(headTex);
+        Debug.Log(torsoRenderer);
         Debug.Log(leftHandRenderer);
         Debug.Log(rightHandRenderer);
         
