@@ -14,25 +14,34 @@ namespace Whisper.Samples
         public WhisperManager whisper;
         public MicrophoneRecord microphoneRecord;
         public PromptHelper promptHelper;
-
-        // Optional UI: assign a TextMeshPro element in the Inspector if desired.
         public TextMeshPro statusText;
-
-        public event Action<string> OnSpeechRecognized;
-
+        
         private bool isRecording = false;
         private string _buffer;
+        private Renderer cubeRenderer;  // For color change
+        private Color initialColor;
+        
+        public event Action<string> OnSpeechRecognized;
 
         private void Start()
         {
+            cubeRenderer = GetComponent<Renderer>();  // Get the renderer component
+
             // Subscribe to events
-            //whisper.OnNewSegment += OnNewSegment;
             whisper.OnProgress += OnProgressHandler;
             microphoneRecord.OnRecordStop += OnRecordStop;
             OnSpeechRecognized += apiRequestHandler.HandleRequest;
+
+            cubeRenderer = GetComponent<Renderer>();
+            // Ensure there are at least 2 materials
+            if(cubeRenderer.materials.Length > 1)
+            {
+                initialColor = cubeRenderer.materials[1].color;
+            }
         }
 
-        public void ToggleRecording()
+        // Called on Select Entered event (press and hold)
+        public void StartRecording()
         {
             if (!isRecording)
             {
@@ -42,8 +51,21 @@ namespace Whisper.Samples
                     statusText.text = "Recording...";
                 else
                     Debug.Log("Recording...");
+                
+                // Change the cube's color to green to indicate recording
+                Material[] mats = cubeRenderer.materials;
+                if (mats.Length > 1)
+                {
+                    mats[1].color = Color.green;
+                }
+                cubeRenderer.materials = mats;
             }
-            else
+        }
+
+        // Called on Select Exited event (release)
+        public void StopRecording()
+        {
+            if (isRecording)
             {
                 microphoneRecord.StopRecord();
                 isRecording = false;
@@ -51,12 +73,19 @@ namespace Whisper.Samples
                     statusText.text = "Processing...";
                 else
                     Debug.Log("Processing...");
+                
+                // Revert the cube's color
+                Material[] mats = cubeRenderer.materials;
+                if (mats.Length > 1)
+                {
+                    mats[1].color = initialColor;
+                }
+                cubeRenderer.materials = mats;
             }
         }
 
         private async void OnRecordStop(AudioChunk recordedAudio)
         {
-            // Start measuring processing time
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
@@ -79,32 +108,19 @@ namespace Whisper.Samples
                 return;
             }
 
-            // Prepare the output string (including language info)
             string output = res.Result;
             if(promptHelper != null) promptHelper.SetPrompt(output);
-            //output += $"\nLanguage: {res.Language}";
 
             if (statusText != null)
                 statusText.text = output;
             else
                 Debug.Log(output);
 
-            // Log processing time and rate
             long time = sw.ElapsedMilliseconds;
             float rate = recordedAudio.Length / (time * 0.001f);
             Debug.Log($"Time: {time} ms, Rate: {rate:F1}x");
 
-            // Raise the event for further processing
             OnSpeechRecognized?.Invoke(res.Result);
-        }
-
-        private void OnNewSegment(WhisperSegment segment)
-        {
-            _buffer += segment.Text;
-            if (statusText != null)
-                statusText.text = _buffer + "...";
-            else
-                Debug.Log(_buffer + "...");
         }
 
         private void OnProgressHandler(int progress)
@@ -113,4 +129,3 @@ namespace Whisper.Samples
         }
     }
 }
-
