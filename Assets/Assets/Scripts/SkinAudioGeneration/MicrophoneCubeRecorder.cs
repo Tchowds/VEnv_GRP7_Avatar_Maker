@@ -13,6 +13,7 @@ namespace Whisper.Samples
         public ApiRequestHandler apiRequestHandler;
         public WhisperManager whisper;
         public MicrophoneRecord microphoneRecord;
+        public PromptHelper promptHelper;
 
         // Optional UI: assign a TextMeshPro element in the Inspector if desired.
         public TextMeshPro statusText;
@@ -80,6 +81,7 @@ namespace Whisper.Samples
 
             // Prepare the output string (including language info)
             string output = res.Result;
+            if(promptHelper != null) promptHelper.SetPrompt(output);
             //output += $"\nLanguage: {res.Language}";
 
             if (statusText != null)
