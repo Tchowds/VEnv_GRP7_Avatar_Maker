@@ -49,6 +49,12 @@ public class SkinPartSelector : MonoBehaviour
         incurSkinPart();
     }
 
+    public void ButtonOnClick(string part)
+    {
+        skinPart = (SkinConstants.SkinPart)Enum.Parse(typeof(SkinConstants.SkinPart), part);
+        OnButtonPressed(skinPart);
+    }
+
     void incurSkinPart()
     {
         UpdateButtonVisuals();

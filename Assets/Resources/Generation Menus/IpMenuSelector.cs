@@ -45,14 +45,14 @@ public class IpMenuSelector : MonoBehaviour
         recordButton.onClick.RemoveListener(Interactable_SelectEntered_Record_Button);
     }
 
-    private void Interactable_SelectEntered_Enter_Key(string field)
+    public void Interactable_SelectEntered_Enter_Key(string field)
     {
         string currentText = ipInputField.text;
         if (field == "<-" && currentText.Length > 0) ipInputField.text = currentText.Substring(0, currentText.Length - 1);
         else ipInputField.text = currentText + field;
     }
 
-    private void Interactable_SelectEntered_Record_Button()
+    public void Interactable_SelectEntered_Record_Button()
     {
         apiRequestHandler.SetIp(ipInputField.text);
     }
