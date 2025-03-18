@@ -915,7 +915,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2542adbb684f47dab79e88e81109f53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ipAddress: 10.130.214.11
+  ipAddress: 10.0.0.32
   texturedModelAvatar: {fileID: 0}
   customAvatarTextureCatalogue: {fileID: 11400000, guid: b9b5ab83068724908937dfdd4d246538, type: 2}
   skinManager: {fileID: 1892218466}
@@ -6058,7 +6058,7 @@ MonoBehaviour:
   globalAudioMixer: {fileID: 24100000, guid: b62c8a2a584d549d8b1fe48d63ba1b60, type: 2}
   shopMusicParameter: ShopMusicTinkerTailor_Volume
   crowdVolumeInside: -40
-  crowdVolumeOutside: -15
+  crowdVolumeOutside: -20
   shopVolumeInside: -15
   shopVolumeOutside: -50
 --- !u!4 &1214413448 stripped
@@ -6117,7 +6117,7 @@ MonoBehaviour:
   globalAudioMixer: {fileID: 24100000, guid: b62c8a2a584d549d8b1fe48d63ba1b60, type: 2}
   shopMusicParameter: ShopMusicSwapStudio_Volume
   crowdVolumeInside: -40
-  crowdVolumeOutside: -15
+  crowdVolumeOutside: -20
   shopVolumeInside: -15
   shopVolumeOutside: -50
 --- !u!4 &1229602776 stripped
@@ -10243,9 +10243,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   globalAudioMixer: {fileID: 24100000, guid: b62c8a2a584d549d8b1fe48d63ba1b60, type: 2}
   shopMusicParameter: ShopMusicDiffusionDesign_Volume
-  crowdVolumeInside: -40
-  crowdVolumeOutside: -15
-  shopVolumeInside: -15
+  crowdVolumeInside: -45
+  crowdVolumeOutside: -20
+  shopVolumeInside: -30
   shopVolumeOutside: -50
 --- !u!1 &2026700329441825
 GameObject:

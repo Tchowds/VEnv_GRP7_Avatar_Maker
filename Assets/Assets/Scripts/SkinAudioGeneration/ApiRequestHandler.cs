@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using static SkinConstants;
 using Ubiq.Messaging;
+using Newtonsoft.Json.Linq; 
 
 public class ApiRequestHandler : MonoBehaviour
 {
@@ -97,6 +98,8 @@ public class ApiRequestHandler : MonoBehaviour
        private async Task SendGenerateSkinRequest(string prompt)
     {
         curtainAnimator.SetTrigger("Show");
+        SendCurtainState(true);
+
         try
         {
             if(selectedSkinPart == SkinConstants.SkinPart.Head)
@@ -194,6 +197,15 @@ public class ApiRequestHandler : MonoBehaviour
             Debug.LogError($"Generate Skin Request Failed: {e.Message}");
         }
         curtainAnimator.SetTrigger("Hide");
+        SendCurtainState(false);
+    }
+
+    private void SendCurtainState(bool show)
+    {
+        context.SendJson(new CurtainMessage
+        {
+            show = show
+        });
     }
 
     public void SetIp(string ip)
@@ -219,6 +231,11 @@ public class ApiRequestHandler : MonoBehaviour
         public string ip;
     }
 
+    private struct CurtainMessage
+{
+    public bool show;
+}
+
     public void sendMessage()
     {
         context.SendJson(new IpMessage
@@ -229,7 +246,26 @@ public class ApiRequestHandler : MonoBehaviour
 
     public void ProcessMessage(ReferenceCountedSceneGraphMessage message)
     {
-        var m = message.FromJson<IpMessage>();
-        ipAddress = m.ip;
+        //var m = message.FromJson<IpMessage>();
+        //ipAddress = m.ip;
+        JObject jsonMessage = JObject.Parse(message.ToString());
+        if (jsonMessage.ContainsKey("ip"))
+        {
+            ipAddress = jsonMessage["ip"].ToString();
+            Debug.Log($"Updated IP Address: {ipAddress}");
+
+        } else {
+            bool show = jsonMessage["show"].ToObject<bool>();
+            if (show)
+            {
+                curtainAnimator.SetTrigger("Show");
+                Debug.Log("Curtain opened across all clients.");
+            }
+            else
+            {
+                curtainAnimator.SetTrigger("Hide");
+                Debug.Log("Curtain closed across all clients.");
+            }       
+        }
     }
 }
