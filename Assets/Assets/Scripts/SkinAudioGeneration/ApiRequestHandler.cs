@@ -262,12 +262,12 @@ public class ApiRequestHandler : MonoBehaviour
             if (show)
             {
                 curtainAnimator.SetTrigger("Show");
-                Debug.Log("Curtain opened across all clients.");
+                Debug.Log("Curtain dropped across all clients.");
             }
             else
             {
                 curtainAnimator.SetTrigger("Hide");
-                Debug.Log("Curtain closed across all clients.");
+                Debug.Log("Curtain raised across all clients.");
             }       
         }
     }
