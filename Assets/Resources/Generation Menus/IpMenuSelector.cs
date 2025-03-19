@@ -48,8 +48,15 @@ public class IpMenuSelector : MonoBehaviour
     public void Interactable_SelectEntered_Enter_Key(string field)
     {
         string currentText = ipInputField.text;
-        if (field == "<-" && currentText.Length > 0) ipInputField.text = currentText.Substring(0, currentText.Length - 1);
-        else ipInputField.text = currentText + field;
+        if (field == "<-" && currentText.Length > 0) 
+        {
+            ipInputField.text = currentText.Substring(0, currentText.Length - 1);
+        } else if  (field == "<-" && currentText.Length == 0){
+            ipInputField.text = "";
+        } 
+        else {
+            ipInputField.text = currentText + field;
+        }
     }
 
     public void Interactable_SelectEntered_Record_Button()
