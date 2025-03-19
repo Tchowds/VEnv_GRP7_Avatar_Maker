@@ -135,6 +135,7 @@ public class ApiRequestHandler : MonoBehaviour
                 string jsonBody = JsonConvert.SerializeObject(requestBody);
                 var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
 
+                Debug.Log($"Making request to: {endpoint} with parameters: {jsonBody}");
                 var response = await httpClient.PostAsync(endpoint, content);
                 response.EnsureSuccessStatusCode();
 
@@ -161,6 +162,7 @@ public class ApiRequestHandler : MonoBehaviour
                 string jsonBodyFace = JsonConvert.SerializeObject(requestBodyFace);
                 var contentFace = new StringContent(jsonBodyFace, Encoding.UTF8, "application/json");
 
+                Debug.Log($"Making request to: {endpointFace} with parameters: {jsonBodyFace}");
                 var responseFace = await httpClient.PostAsync(endpointFace, contentFace);
                 responseFace.EnsureSuccessStatusCode();
                 var responseStringFace = await responseFace.Content.ReadAsStringAsync();
@@ -172,6 +174,7 @@ public class ApiRequestHandler : MonoBehaviour
                 string jsonBodyTorso = JsonConvert.SerializeObject(requestBodyTorso);
                 var contentTorso = new StringContent(jsonBodyTorso, Encoding.UTF8, "application/json");
 
+                Debug.Log($"Making request to: {endpointTorso} with parameters: {jsonBodyTorso}");
                 var responseTorso = await httpClient.PostAsync(endpointTorso, contentTorso);
                 responseTorso.EnsureSuccessStatusCode();
                 var responseStringTorso = await responseTorso.Content.ReadAsStringAsync();
