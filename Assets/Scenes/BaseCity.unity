@@ -959,6 +959,34 @@ PrefabInstance:
       propertyPath: m_PresetInfoIsWorld
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 9045581472459460396, guid: f0e91881b44df8d468f72c288d9da629, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9045581472459460396, guid: f0e91881b44df8d468f72c288d9da629, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9045581472459460396, guid: f0e91881b44df8d468f72c288d9da629, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1207690989}
+    - target: {fileID: 9045581472459460396, guid: f0e91881b44df8d468f72c288d9da629, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9045581472459460396, guid: f0e91881b44df8d468f72c288d9da629, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnGenerateButtonPressed
+      objectReference: {fileID: 0}
+    - target: {fileID: 9045581472459460396, guid: f0e91881b44df8d468f72c288d9da629, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SkinPartSelector, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 9045581472459460396, guid: f0e91881b44df8d468f72c288d9da629, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
