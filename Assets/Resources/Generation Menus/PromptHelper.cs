@@ -47,6 +47,7 @@ public class PromptHelper : MonoBehaviour
             torsoPromptText = prompt;
             torsoPrompt.text = "Torso Prompt: " + torsoPromptText;
         }
+        sendPromptMessage();
     }
 
     public (string, string) getPrompts()
@@ -54,7 +55,7 @@ public class PromptHelper : MonoBehaviour
         return (torsoPromptText, headPromptText);
     }
 
-    public void sendMessage()
+    public void sendPromptMessage()
     {
         var message = new PromptHelperMessage
         {

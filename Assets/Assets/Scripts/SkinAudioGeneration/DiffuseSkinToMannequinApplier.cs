@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Ubiq.Messaging;
 
 public class DiffuseSkinToMannequinApplier : MonoBehaviour
 {
@@ -11,6 +12,18 @@ public class DiffuseSkinToMannequinApplier : MonoBehaviour
     [Header("Catalogue Reference")]
     // Reference to the shared texture catalogue where dynamic textures are stored
     public CustomAvatarTextureCatalogue textureCatalogue; 
+
+    private NetworkContext context;
+
+    private void Start() {
+        context = NetworkScene.Register(this);
+    }
+
+    public void DistributeAndApplySkins(List<string> imagesBase64, string body_part)
+    {
+        SendSkinsMessage(imagesBase64, body_part);
+        ApplyGeneratedSkins(imagesBase64, body_part);
+    }
 
     public void ApplyGeneratedSkins(List<string> imagesBase64, string body_part)
     {
@@ -53,6 +66,29 @@ public class DiffuseSkinToMannequinApplier : MonoBehaviour
             }
         }
     }
+
+    public struct SkinDistibutionMessage
+    {
+        public List<string> imagesBase64;
+        public string body_part;
+    }
+
+    public void SendSkinsMessage(List<string> imagesBase64, string body_part)
+    {
+        var message = new SkinDistibutionMessage
+        {
+            imagesBase64 = imagesBase64,
+            body_part = body_part
+        };
+        context.SendJson(message);
+    }
+
+    public void ProcessMessage(ReferenceCountedSceneGraphMessage message)
+    {
+        var m = message.FromJson<SkinDistibutionMessage>();
+        ApplyGeneratedSkins(m.imagesBase64, m.body_part);
+    }
+
 
     private Texture2D ConvertBase64ToTexture(string base64Image)
     {

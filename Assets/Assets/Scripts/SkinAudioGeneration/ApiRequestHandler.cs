@@ -29,7 +29,7 @@ public class ApiRequestHandler : MonoBehaviour
     private NetworkContext context;
 
     private void Start() {
-        httpClient.Timeout = TimeSpan.FromSeconds(180);
+        httpClient.Timeout = TimeSpan.FromSeconds(1800);
         context = NetworkScene.Register(this);
     }
 
@@ -119,7 +119,7 @@ public class ApiRequestHandler : MonoBehaviour
 
                 if(result?.images_base64 != null)
                 {
-                    skinManager.ApplyGeneratedSkins(result.images_base64, "face");
+                    skinManager.DistributeAndApplySkins(result.images_base64, "face");
                     Debug.Log("{result.images_base64.Count} head textures generated!");
                 }
                 else
@@ -144,7 +144,7 @@ public class ApiRequestHandler : MonoBehaviour
 
                 if(result?.images_base64 != null)
                 {
-                    skinManager.ApplyGeneratedSkins(result.images_base64, "body");
+                    skinManager.DistributeAndApplySkins(result.images_base64, "body");
                     Debug.Log($"{result.images_base64.Count} torso textures generated!");
                 }
                 else
@@ -185,11 +185,11 @@ public class ApiRequestHandler : MonoBehaviour
 
                 if(headSuccess)
                 {
-                    skinManager.ApplyGeneratedSkins(resultFace.images_base64, "face");
+                    skinManager.DistributeAndApplySkins(resultFace.images_base64, "face");
                 }
                 if(torsoSuccess)
                 {
-                    skinManager.ApplyGeneratedSkins(resultTorso.images_base64, "body");
+                    skinManager.DistributeAndApplySkins(resultTorso.images_base64, "body");
                 }
                 
             }
