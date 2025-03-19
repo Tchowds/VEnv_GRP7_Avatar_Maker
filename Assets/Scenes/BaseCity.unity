@@ -969,12 +969,30 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3442270520890847920, guid: f0e91881b44df8d468f72c288d9da629, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2125472422}
+    - targetCorrespondingSourceObject: {fileID: 3442270520890847920, guid: f0e91881b44df8d468f72c288d9da629, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2125472428}
+    - targetCorrespondingSourceObject: {fileID: 3442270520890847920, guid: f0e91881b44df8d468f72c288d9da629, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2125472427}
     - targetCorrespondingSourceObject: {fileID: 1048440520302575105, guid: f0e91881b44df8d468f72c288d9da629, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2027516223}
+    - targetCorrespondingSourceObject: {fileID: 1048440520302575105, guid: f0e91881b44df8d468f72c288d9da629, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2027516229}
+    - targetCorrespondingSourceObject: {fileID: 1048440520302575105, guid: f0e91881b44df8d468f72c288d9da629, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2027516228}
     - targetCorrespondingSourceObject: {fileID: 7499748806151115532, guid: f0e91881b44df8d468f72c288d9da629, type: 3}
       insertIndex: -1
       addedObject: {fileID: 906685096}
+    - targetCorrespondingSourceObject: {fileID: 7499748806151115532, guid: f0e91881b44df8d468f72c288d9da629, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 906685102}
+    - targetCorrespondingSourceObject: {fileID: 7499748806151115532, guid: f0e91881b44df8d468f72c288d9da629, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 906685097}
   m_SourcePrefab: {fileID: 100100000, guid: f0e91881b44df8d468f72c288d9da629, type: 3}
 --- !u!1 &193553798
 GameObject:
@@ -4830,6 +4848,49 @@ MonoBehaviour:
   m_StartingHoverFilters: []
   m_StartingSelectFilters: []
   m_StartingInteractionStrengthFilters: []
+--- !u!65 &906685097
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 906685091}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &906685102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 906685091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 115f1a2a50d85cd4b9d6dad4c95622be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Interactable: {fileID: 906685096}
+  m_PokeCollider: {fileID: 906685097}
+  m_PokeConfiguration:
+    m_UseConstant: 1
+    m_ConstantValue:
+      m_PokeDirection: 3
+      m_InteractionDepthOffset: 0
+      m_EnablePokeAngleThreshold: 1
+      m_PokeAngleThreshold: 45
+    m_Variable: {fileID: 0}
 --- !u!1 &937662537 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7472964180273265328, guid: e585b32b8177a724e9b7c04a236d5f87, type: 3}
@@ -10062,6 +10123,49 @@ MonoBehaviour:
   m_StartingHoverFilters: []
   m_StartingSelectFilters: []
   m_StartingInteractionStrengthFilters: []
+--- !u!114 &2027516228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2027516218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 115f1a2a50d85cd4b9d6dad4c95622be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Interactable: {fileID: 2027516223}
+  m_PokeCollider: {fileID: 2027516229}
+  m_PokeConfiguration:
+    m_UseConstant: 1
+    m_ConstantValue:
+      m_PokeDirection: 3
+      m_InteractionDepthOffset: 0
+      m_EnablePokeAngleThreshold: 1
+      m_PokeAngleThreshold: 45
+    m_Variable: {fileID: 0}
+--- !u!65 &2027516229
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2027516218}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &2029885652 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1826479346687900168, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
@@ -10962,6 +11066,49 @@ MonoBehaviour:
   m_StartingHoverFilters: []
   m_StartingSelectFilters: []
   m_StartingInteractionStrengthFilters: []
+--- !u!114 &2125472427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2125472417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 115f1a2a50d85cd4b9d6dad4c95622be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Interactable: {fileID: 2125472422}
+  m_PokeCollider: {fileID: 2125472428}
+  m_PokeConfiguration:
+    m_UseConstant: 1
+    m_ConstantValue:
+      m_PokeDirection: 3
+      m_InteractionDepthOffset: 0
+      m_EnablePokeAngleThreshold: 1
+      m_PokeAngleThreshold: 45
+    m_Variable: {fileID: 0}
+--- !u!65 &2125472428
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2125472417}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2143004166
 GameObject:
   m_ObjectHideFlags: 0
