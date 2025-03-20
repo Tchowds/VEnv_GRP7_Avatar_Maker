@@ -10,6 +10,8 @@ public class IpMenuSelector : MonoBehaviour
 {
     private List<GameObject> keypadObjects;
     private List<UnityAction> keypadListeners;
+    private List<UnityAction<SelectEnterEventArgs>> keypadEventListeners;
+
     private Button recordButton;
     private TMP_Text ipInputField;
     private ApiRequestHandler apiRequestHandler;
@@ -18,6 +20,7 @@ public class IpMenuSelector : MonoBehaviour
     {
         keypadObjects = new List<GameObject>();
         keypadListeners = new List<UnityAction>();
+        keypadEventListeners = new List<UnityAction<SelectEnterEventArgs>>();
 
         recordButton = transform.Find("RecordButton").GetComponent<Button>();
         ipInputField = transform.Find("IpInputField").GetComponent<TMP_Text>();
@@ -29,11 +32,17 @@ public class IpMenuSelector : MonoBehaviour
             keypadObjects.Add(child);
 
             UnityAction listener = () => Interactable_SelectEntered_Enter_Key(child.name);
+            UnityAction<SelectEnterEventArgs> eventListener = (arg0) => Interactable_SelectEntered_Enter_Key(child.name);
+
             keypadListeners.Add(listener);
+            keypadEventListeners.Add(eventListener);
+            
             child.GetComponent<Button>().onClick.AddListener(listener);
+            child.GetComponent<XRSimpleInteractable>().selectEntered.AddListener(eventListener);
         }
         apiRequestHandler = FindObjectOfType<ApiRequestHandler>();
         recordButton.onClick.AddListener(Interactable_SelectEntered_Record_Button);
+        recordButton.transform.GetComponent<XRSimpleInteractable>().selectEntered.AddListener((arg0) => Interactable_SelectEntered_Record_Button());
     }
 
     private void OnDestroy()
@@ -41,6 +50,7 @@ public class IpMenuSelector : MonoBehaviour
         for (int i = 0; i < keypadObjects.Count; i++)
         {
             keypadObjects[i].GetComponent<Button>().onClick.RemoveListener(keypadListeners[i]);
+            keypadObjects[i].GetComponent<XRSimpleInteractable>().selectEntered.RemoveListener(keypadEventListeners[i]);
         }
         recordButton.onClick.RemoveListener(Interactable_SelectEntered_Record_Button);
     }
@@ -57,6 +67,7 @@ public class IpMenuSelector : MonoBehaviour
         else {
             ipInputField.text = currentText + field;
         }
+        Debug.Log("Record:" + field);
     }
 
     public void Interactable_SelectEntered_Record_Button()
