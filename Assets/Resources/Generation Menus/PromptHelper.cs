@@ -12,6 +12,10 @@ public class PromptHelper : MonoBehaviour
     {
         public string torso;
         public string hand;
+
+        public bool clearTorso;
+
+        public bool clearHead;
     }
 
     public TMP_Text torsoPrompt;
@@ -85,7 +89,7 @@ public class PromptHelper : MonoBehaviour
         return (torsoPromptText, headPromptText);
     }
 
-    public void sendPromptMessage(clearTorso, clearHead)
+    public void sendPromptMessage(bool clearTorso, bool clearHead)
     {
         var message = new PromptHelperMessage
         {
