@@ -23,7 +23,7 @@ public class ApiRequestHandler : MonoBehaviour
     private HttpClient httpClient = new HttpClient();
 
     public RequestMode CurrentMode { get; set; } = RequestMode.GenerateSkin;
-    public Animator curtainAnimator;
+    public CurtainManager curtainManager;
 
     private NetworkContext context;
 
@@ -105,8 +105,7 @@ public class ApiRequestHandler : MonoBehaviour
             return;
         }
 
-        curtainAnimator.SetTrigger("Show");
-        SendCurtainState(true);
+        curtainManager.showCurtain();
 
         try
         {
@@ -211,8 +210,7 @@ public class ApiRequestHandler : MonoBehaviour
         {
             Debug.LogError($"Generate Skin Request Failed: {e.Message}");
         }
-        curtainAnimator.SetTrigger("Hide");
-        SendCurtainState(false);
+        curtainManager.hideCurtain();
     }
 
     private List<string> generateTextureUIDs(int count){
@@ -224,13 +222,6 @@ public class ApiRequestHandler : MonoBehaviour
         return textureUIDs;
     }
 
-    private void SendCurtainState(bool show)
-    {
-        context.SendJson(new CurtainMessage
-        {
-            show = show
-        });
-    }
 
     public void SetIp(string ip)
     {
@@ -255,10 +246,6 @@ public class ApiRequestHandler : MonoBehaviour
         public string ip;
     }
 
-    private struct CurtainMessage
-{
-    public bool show;
-}
 
     public void sendMessage()
     {
@@ -278,18 +265,6 @@ public class ApiRequestHandler : MonoBehaviour
             ipAddress = jsonMessage["ip"].ToString();
             Debug.Log($"Updated IP Address: {ipAddress}");
 
-        } else {
-            bool show = jsonMessage["show"].ToObject<bool>();
-            if (show)
-            {
-                curtainAnimator.SetTrigger("Show");
-                Debug.Log("Curtain dropped across all clients.");
-            }
-            else
-            {
-                curtainAnimator.SetTrigger("Hide");
-                Debug.Log("Curtain raised across all clients.");
-            }       
         }
     }
 }
