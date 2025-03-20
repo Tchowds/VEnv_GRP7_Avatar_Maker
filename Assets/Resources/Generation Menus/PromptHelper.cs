@@ -93,10 +93,12 @@ public class PromptHelper : MonoBehaviour
             hand = headPromptText
         };
         context.SendJson(message);
+        Debug.Log("prompt message: "+ message);
     }
 
     public void ProcessMessage(ReferenceCountedSceneGraphMessage message)
     {
+        Debug.Log("prompt message received"+ message);
         var m = message.FromJson<PromptHelperMessage>();
         if(m.torso != "")
         {
@@ -108,6 +110,7 @@ public class PromptHelper : MonoBehaviour
             headPromptText = m.hand;
             headPrompt.text = "Head Prompt: " + headPromptText;
         }
+
     }
 
 }
