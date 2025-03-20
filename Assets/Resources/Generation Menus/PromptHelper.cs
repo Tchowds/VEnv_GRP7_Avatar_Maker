@@ -12,6 +12,8 @@ public class PromptHelper : MonoBehaviour
     {
         public string torso;
         public string hand;
+        public bool clearTorso;
+        public bool clearHead;
     }
 
     public TMP_Text torsoPrompt;
