@@ -22,7 +22,6 @@ public class ApiRequestHandler : MonoBehaviour
 
     private HttpClient httpClient = new HttpClient();
 
-    public RequestMode CurrentMode { get; set; } = RequestMode.GenerateSkin;
     public CurtainManager curtainManager;
 
     private NetworkContext context;
@@ -32,9 +31,9 @@ public class ApiRequestHandler : MonoBehaviour
         context = NetworkScene.Register(this);
     }
 
-    public async void HandleRequest(List<string> recognizedText)
+    public async void HandleRequest(List<string> recognizedText, RequestMode requestMode)
     {
-        switch (CurrentMode)
+        switch (requestMode)
         {
             case RequestMode.SelectSkin:
                 await SendSkinSelectionRequest(recognizedText[0]);
