@@ -63,21 +63,21 @@ public class PromptHelper : MonoBehaviour
             torsoPromptText = prompt;
             torsoPrompt.text = "Torso Prompt: " + torsoPromptText;
         }
-        sendPromptMessage();
+        sendPromptMessage(false, false);
     }
 
     public void clearHeadPrompt()
     {
         headPromptText = "";
         headPrompt.text = "Head Prompt: " + headPromptText;
-        sendPromptMessage();
+        sendPromptMessage(false, true);
     }
 
     public void clearTorsoPrompt()
     {
         torsoPromptText = "";
         torsoPrompt.text = "Torso Prompt: " + torsoPromptText;
-        sendPromptMessage();
+        sendPromptMessage(true, false);
     }
 
     public (string, string) getPrompts()
@@ -85,12 +85,14 @@ public class PromptHelper : MonoBehaviour
         return (torsoPromptText, headPromptText);
     }
 
-    public void sendPromptMessage()
+    public void sendPromptMessage(clearTorso, clearHead)
     {
         var message = new PromptHelperMessage
         {
             torso = torsoPromptText,
-            hand = headPromptText
+            hand = headPromptText,
+            clearTorso = clearTorso,
+            clearHead = clearHead,
         };
         context.SendJson(message);
         Debug.Log("prompt message: "+ message);
@@ -100,6 +102,16 @@ public class PromptHelper : MonoBehaviour
     {
         Debug.Log("prompt message received"+ message);
         var m = message.FromJson<PromptHelperMessage>();
+        if (m.clearTorso)
+        {
+            torsoPromptText = "";
+            torsoPrompt.text = "Torso Prompt: " + torsoPromptText;
+        }
+        if (m.clearHead)
+        {
+            headPromptText = "";
+            headPrompt.text = "Head Prompt: " + headPromptText;
+        }
         if(m.torso != "")
         {
             torsoPromptText = m.torso;
