@@ -7,6 +7,7 @@ using static SkinConstants;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit;
 using TMPro;
+using System.Collections.Generic;
 
 public class SkinPartSelector : MonoBehaviour
 {
@@ -23,6 +24,8 @@ public class SkinPartSelector : MonoBehaviour
     public Button generateButton;
 
     public ApiRequestHandler apiRequestHandler;
+
+    
     public PromptHelper promptHelper;
 
     public TMP_Text ip_text;
@@ -75,7 +78,6 @@ public class SkinPartSelector : MonoBehaviour
     void incurSkinPart()
     {
         UpdateButtonVisuals();
-        if (apiRequestHandler) apiRequestHandler.selectedSkinPart = skinPart;
     }
 
     void UpdateButtonVisuals()
@@ -117,31 +119,16 @@ public class SkinPartSelector : MonoBehaviour
 
     public void OnGenerateButtonPressed()
     {
-        var (torsoPrompt, headPrompt) = promptHelper.getPrompts();
-
-        if (string.IsNullOrEmpty(torsoPrompt) && string.IsNullOrEmpty(headPrompt))
-        {
-            Debug.LogWarning("No confirmed prompt available.");
-            return;
-        }
-        
-        string confirmedPromptText = "";
 
         if (apiRequestHandler.CurrentMode == RequestMode.GenerateSkin)
         {
-            if (skinPart == SkinConstants.SkinPart.Head || skinPart == SkinConstants.SkinPart.Both)
-            {
-                confirmedPromptText = headPrompt;
-            }
-            else if (skinPart == SkinConstants.SkinPart.Torso)
-            {
-                confirmedPromptText = torsoPrompt;
-            }
-            
-            apiRequestHandler.HandleRequest(confirmedPromptText);
+            var (torsoPrompt, headPrompt) = promptHelper.getPrompts(); 
+            List<string> prompts = new List<string> { headPrompt, torsoPrompt };    
+            apiRequestHandler.HandleRequest(prompts);
         }
         else
         {
+            promptHelper.SetPrompt("Another request is being handled right now, try again later");
             Debug.LogWarning("Unhandled API Request Mode: " + apiRequestHandler.CurrentMode);
         }
     }
