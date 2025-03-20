@@ -6,6 +6,8 @@ using UnityEngine.XR.Interaction.Toolkit;
 using System.Diagnostics;
 using Ubiq.Messaging;
 using Debug = UnityEngine.Debug;
+using static SkinConstants;
+using System.Collections.Generic;
 
 namespace Whisper.Samples
 {
@@ -14,6 +16,8 @@ namespace Whisper.Samples
         public WhisperManager whisper;
         public MicrophoneRecord microphoneRecord;
         public PromptHelper promptHelper;
+        public SkinConstants.RequestMode requestMode;
+        public ApiRequestHandler apiRequestHandler;
         
         private bool isRecording = false;
         private string _buffer;
@@ -117,7 +121,16 @@ namespace Whisper.Samples
             }
 
             string output = res.Result;
-            if(promptHelper != null) promptHelper.SetPrompt(output);
+
+            if (requestMode == RequestMode.SelectSkin)
+            {
+                List<string> skinDescription = new List<string>{output};
+                apiRequestHandler.HandleRequest(skinDescription, RequestMode.SelectSkin);
+            }
+            else if (requestMode == RequestMode.GenerateSkin)
+            {
+                if(promptHelper != null) promptHelper.SetPrompt(output);
+            }
             
             
             long time = sw.ElapsedMilliseconds;

@@ -119,17 +119,8 @@ public class SkinPartSelector : MonoBehaviour
 
     public void OnGenerateButtonPressed()
     {
-
-        if (apiRequestHandler.CurrentMode == RequestMode.GenerateSkin)
-        {
-            var (torsoPrompt, headPrompt) = promptHelper.getPrompts(); 
-            List<string> prompts = new List<string> { headPrompt, torsoPrompt };    
-            apiRequestHandler.HandleRequest(prompts);
-        }
-        else
-        {
-            promptHelper.SetPrompt("Another request is being handled right now, try again later");
-            Debug.LogWarning("Unhandled API Request Mode: " + apiRequestHandler.CurrentMode);
-        }
+        var (torsoPrompt, headPrompt) = promptHelper.getPrompts(); 
+        List<string> prompts = new List<string> { headPrompt, torsoPrompt };    
+        apiRequestHandler.HandleRequest(prompts, RequestMode.GenerateSkin);
     }
 }
