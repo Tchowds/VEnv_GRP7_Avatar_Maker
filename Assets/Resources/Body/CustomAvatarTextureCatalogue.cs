@@ -10,7 +10,7 @@ using System.Linq;
 public class CustomAvatarTextureCatalogue : AvatarTextureCatalogue
 {
     [SerializeField, Tooltip("Base Ubiq Avatar Catalogue")]
-     private AvatarTextureCatalogue baseCatalogue; // Ubiq's Catalogue
+     public AvatarTextureCatalogue baseCatalogue; // Ubiq's Catalogue
     [SerializeField, Tooltip("Dynamically generated and saved textures")]
     private List<Texture2D> dynamicTextures = new List<Texture2D>();
     
@@ -58,6 +58,11 @@ public class CustomAvatarTextureCatalogue : AvatarTextureCatalogue
     public int baseCatalogueCount()
     {
         return baseCatalogue.Textures.Count;
+    }
+
+    public int dynamicTexturesCount()
+    {
+        return dynamicTextures.Count;
     }
 
 
@@ -177,6 +182,7 @@ public class CustomAvatarTextureCatalogue : AvatarTextureCatalogue
             return;
         }
 
+
         // Check if the texture already exists
         foreach (var existingTexture in dynamicTextures)
         {
@@ -203,7 +209,7 @@ public class CustomAvatarTextureCatalogue : AvatarTextureCatalogue
     public Texture2D CombineTextures(Texture2D headTex, Texture2D torsoTex, Texture2D leftHandTex, Texture2D rightHandTex)
     {
         Texture2D combinedTexture = new Texture2D(1024, 1024);
-        combinedTexture.name = "combined_texture_"+DateTime.Now.ToString("HHmmss");
+        combinedTexture.name = "combined_texture_"+Guid.NewGuid().ToString()+"_player_stored";
 
         Rect headRegion = new Rect(0, 535, 641, 488);  
         Rect torsoRegionUpper = new Rect(0, 0, 624, 533);
@@ -212,6 +218,7 @@ public class CustomAvatarTextureCatalogue : AvatarTextureCatalogue
         Rect unknownRegion = new Rect(625, 260, 397, 240);
 
         Debug.Log("here");
+        Debug.Log("Combined texture: "+combinedTexture.name);
 
         // Copy regions from each texture
         CopyRegion(combinedTexture, headTex, headRegion);
@@ -240,6 +247,12 @@ public class CustomAvatarTextureCatalogue : AvatarTextureCatalogue
     private Texture2D SaveTexture(Texture2D texture)
     {
         // Use the texture's name when saving
+        if (texture.name == null)
+        {
+            Debug.LogError("Texture name is null! for texture: "+texture);
+            Debug.Log(texture.name);
+        }
+
         string fileName = texture.name + ".png";
         string path = $"{Application.persistentDataPath}/{fileName}";
         

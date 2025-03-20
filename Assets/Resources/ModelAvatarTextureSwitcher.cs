@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem; 
 using UnityEngine.XR.Interaction.Toolkit;
 using Ubiq.Messaging;
+using System.Linq;
 
 public class ModelAvatarTextureSwitcher : MonoBehaviour
 {
@@ -103,8 +104,27 @@ public class ModelAvatarTextureSwitcher : MonoBehaviour
     private IEnumerator SwitchTextureSectionCoroutine()
     {
         Debug.Log($"Loading for Section {currentSectionIndex}");
+        List<int> newTextureIds;
         // Get the new section's texture IDs
-        List<int> newTextureIds = sectionTextureIds[currentSectionIndex];
+        if (currentSectionIndex == 6)
+        {
+            // If we are in the dynamic id section, load in all the textures that were player_stored
+            newTextureIds = new List<int>();
+            for (int i = Textures.baseCatalogueCount(); i <  Textures.baseCatalogueCount() + Textures.dynamicTexturesCount(); i++)
+            {
+                if (Textures.Get(i).name.EndsWith("player_stored")){
+                    newTextureIds.Add(i);
+                }
+            }
+            if (newTextureIds.Count > avatars.Count)
+            {
+                newTextureIds = newTextureIds
+                    .Skip(newTextureIds.Count - avatars.Count)
+                    .ToList();
+            }
+        } else {
+            newTextureIds = sectionTextureIds[currentSectionIndex];
+        }
 
         // Enable and update avatars in the section
         for (int i = 0; i < avatars.Count; i++)

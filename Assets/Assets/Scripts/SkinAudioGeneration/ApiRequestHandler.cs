@@ -119,7 +119,8 @@ public class ApiRequestHandler : MonoBehaviour
 
                 if(result?.images_base64 != null)
                 {
-                    skinManager.DistributeAndApplySkins(result.images_base64, "face");
+                    List<string> textureUIDs = generateTextureUIDs(result.images_base64.Count);
+                    skinManager.DistributeAndApplySkins(result.images_base64, textureUIDs, "face");
                     Debug.Log("{result.images_base64.Count} head textures generated!");
                 }
                 else
@@ -144,7 +145,8 @@ public class ApiRequestHandler : MonoBehaviour
 
                 if(result?.images_base64 != null)
                 {
-                    skinManager.DistributeAndApplySkins(result.images_base64, "body");
+                    List<string> textureUIDs = generateTextureUIDs(result.images_base64.Count);
+                    skinManager.DistributeAndApplySkins(result.images_base64, textureUIDs, "body");
                     Debug.Log($"{result.images_base64.Count} torso textures generated!");
                 }
                 else
@@ -185,11 +187,13 @@ public class ApiRequestHandler : MonoBehaviour
 
                 if(headSuccess)
                 {
-                    skinManager.DistributeAndApplySkins(resultFace.images_base64, "face");
+                    List<string> textureUIDs = generateTextureUIDs(resultFace.images_base64.Count);
+                    skinManager.DistributeAndApplySkins(resultFace.images_base64, textureUIDs, "face");
                 }
                 if(torsoSuccess)
                 {
-                    skinManager.DistributeAndApplySkins(resultTorso.images_base64, "body");
+                    List<string> textureUIDs = generateTextureUIDs(resultTorso.images_base64.Count);
+                    skinManager.DistributeAndApplySkins(resultTorso.images_base64, textureUIDs, "body");
                 }
                 
             }
@@ -201,6 +205,15 @@ public class ApiRequestHandler : MonoBehaviour
         }
         curtainAnimator.SetTrigger("Hide");
         SendCurtainState(false);
+    }
+
+    private List<string> generateTextureUIDs(int count){
+        List<string> textureUIDs = new List<string>();
+        for (int i = 0; i < count; i++)
+        {
+            textureUIDs.Add(Guid.NewGuid().ToString());
+        }
+        return textureUIDs;
     }
 
     private void SendCurtainState(bool show)
