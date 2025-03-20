@@ -19,13 +19,13 @@ public class DiffuseSkinToMannequinApplier : MonoBehaviour
         context = NetworkScene.Register(this);
     }
 
-    public void DistributeAndApplySkins(List<string> imagesBase64, string body_part)
+    public void DistributeAndApplySkins(List<string> imagesBase64, List<string> textureUIDs, string body_part)
     {
-        SendSkinsMessage(imagesBase64, body_part);
-        ApplyGeneratedSkins(imagesBase64, body_part);
+        SendSkinsMessage(imagesBase64, textureUIDs, body_part);
+        ApplyGeneratedSkins(imagesBase64, textureUIDs, body_part);
     }
 
-    public void ApplyGeneratedSkins(List<string> imagesBase64, string body_part)
+    public void ApplyGeneratedSkins(List<string> imagesBase64, List<string> textureUIDs, string body_part)
     {
         if (avatarMannequins == null || avatarMannequins.Count == 0)
         {
@@ -44,6 +44,7 @@ public class DiffuseSkinToMannequinApplier : MonoBehaviour
         {
             // Convert base64 string to a Texture2D
             Texture2D texture = ConvertBase64ToTexture(imagesBase64[i]);
+            texture.name = textureUIDs[i];
             // Add the texture to the catalogue so it remains available
             if (textureCatalogue != null)
             {
@@ -71,14 +72,16 @@ public class DiffuseSkinToMannequinApplier : MonoBehaviour
     public struct SkinDistibutionMessage
     {
         public List<string> imagesBase64;
+        public List<string> textureUIDs;
         public string body_part;
     }
 
-    public void SendSkinsMessage(List<string> imagesBase64, string body_part)
+    public void SendSkinsMessage(List<string> imagesBase64, List<string> textureUIDs, string body_part)
     {
         var message = new SkinDistibutionMessage
         {
             imagesBase64 = imagesBase64,
+            textureUIDs = textureUIDs,
             body_part = body_part
         };
         context.SendJson(message);
@@ -87,7 +90,7 @@ public class DiffuseSkinToMannequinApplier : MonoBehaviour
     public void ProcessMessage(ReferenceCountedSceneGraphMessage message)
     {
         var m = message.FromJson<SkinDistibutionMessage>();
-        ApplyGeneratedSkins(m.imagesBase64, m.body_part);
+        ApplyGeneratedSkins(m.imagesBase64, m.textureUIDs, m.body_part);
     }
 
 

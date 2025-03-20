@@ -66,17 +66,17 @@ public class CopyToMannequin : MonoBehaviour
         Texture2D leftHandTex = playerFloating.leftHandRenderer.material.mainTexture as Texture2D;
         Texture2D rightHandTex = playerFloating.rightHandRenderer.material.mainTexture as Texture2D;
 
-        ApplyAndSave(headTex, torsoTex, leftHandTex, rightHandTex, true); // playerStored: true (the player stored this on the mannequin)
+        ApplyAndSave(headTex, torsoTex, leftHandTex, rightHandTex, true, Guid.NewGuid().ToString()); // playerStored: true (the player stored this on the mannequin)
 
         sendMessage();
     
     }
 
-    public void ApplyAndSave(Texture2D headTex, Texture2D torsoTex, Texture2D leftHandTex, Texture2D rightHandTex, bool playerStored)
+    public void ApplyAndSave(Texture2D headTex, Texture2D torsoTex, Texture2D leftHandTex, Texture2D rightHandTex, bool playerStored, string newTexName)
     {
         // Combine into 1 texture
         Texture2D combinedTexture = textureCatalogue.CombineTextures(headTex, torsoTex, leftHandTex, rightHandTex);
-        combinedTexture.name = Guid.NewGuid().ToString();
+        combinedTexture.name = newTexName;
         if (playerStored){
             combinedTexture.name += "_player_stored";
         }
@@ -112,7 +112,8 @@ public class CopyToMannequin : MonoBehaviour
             torsoRenderer.material.mainTexture as Texture2D, 
             leftHandRenderer.material.mainTexture as Texture2D, 
             rightHandRenderer.material.mainTexture as Texture2D,
-            false // playerStored: false (the player did not store this texture, it came from the API)
+            false, // playerStored: false (the player did not store this texture, it came from the API)
+            headTex.name
         );
     }
 
@@ -123,7 +124,8 @@ public class CopyToMannequin : MonoBehaviour
             torsoTex,
             leftHandRenderer.material.mainTexture as Texture2D, 
             rightHandRenderer.material.mainTexture as Texture2D,
-            false // playerStored: false (the player did not store this texture, it came from the API)
+            false, // playerStored: false (the player did not store this texture, it came from the API)
+            torsoTex.name
         );
     }
 
@@ -148,7 +150,7 @@ public class CopyToMannequin : MonoBehaviour
         rightHandRenderer.material.mainTexture = tex;
 
         textureCatalogue.AddDynamicTexture(tex);
-        ApplyAndSave(tex, tex, tex, tex, true);
+        ApplyAndSave(tex, tex, tex, tex, true, m.name);
     }
 
     private string EncodeTexture (Texture tex)
