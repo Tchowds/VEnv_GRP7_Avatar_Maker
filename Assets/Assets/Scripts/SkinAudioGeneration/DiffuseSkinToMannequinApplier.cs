@@ -38,16 +38,16 @@ public class DiffuseSkinToMannequinApplier : MonoBehaviour
             return;
         }
 
-        Debug.Log("Received " + imagesBase64.Count + " images to apply to mannequins.");
+
 
         for (int i = 0; i < imagesBase64.Count; i++)
         {
             // Convert base64 string to a Texture2D
             Texture2D texture = ConvertBase64ToTexture(imagesBase64[i]);
-
             // Add the texture to the catalogue so it remains available
             if (textureCatalogue != null)
             {
+                Debug.Log("Adding dynamic texture to catalogue from mannequin: " + i);
                 textureCatalogue.AddDynamicTexture(texture);
             }
             else
@@ -64,6 +64,7 @@ public class DiffuseSkinToMannequinApplier : MonoBehaviour
                 // avatarMannequins[i].transform.Find("Body/Floating_Torso_A").GetComponent<Renderer>().material.mainTexture = texture;
                 avatarMannequins[i].ApplyOnlyTorso(texture);
             }
+            
         }
     }
 

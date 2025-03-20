@@ -7020,6 +7020,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DiffusedMannequin3
       objectReference: {fileID: 0}
+    - target: {fileID: 8930610318754038311, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 6615159234546098292, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
@@ -9718,6 +9722,10 @@ PrefabInstance:
     - target: {fileID: 3770059784482875993, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
       propertyPath: m_Name
       value: DiffusedMannequin4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8930610318754038311, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
