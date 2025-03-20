@@ -45,17 +45,7 @@ public class DiffuseSkinToMannequinApplier : MonoBehaviour
             // Convert base64 string to a Texture2D
             Texture2D texture = ConvertBase64ToTexture(imagesBase64[i]);
             texture.name = textureUIDs[i];
-            // Add the texture to the catalogue so it remains available
-            if (textureCatalogue != null)
-            {
-                Debug.Log("Adding dynamic texture to catalogue from mannequin: " + i);
-                textureCatalogue.AddDynamicTexture(texture);
-            }
-            else
-            {
-                Debug.LogWarning("Texture catalogue reference is missing!");
-            }
-
+            
             // Equip the texture on the corresponding avatar mannequin
             if (body_part == "face"){
                 // avatarMannequins[i].transform.Find("Body/Floating_Head").GetComponent<Renderer>().material.mainTexture = texture;

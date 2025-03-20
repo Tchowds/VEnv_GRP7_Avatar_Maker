@@ -120,6 +120,7 @@ public class AvatarTextureStealerWithSegmentation : MonoBehaviour
 
         // Retrieve the texture from the model avatar
         // Texture2D stolenTexture = modelTexture.GetTexture();
+        Debug.Log("Stealing part: " + avatarPart);
         if (avatarPart == AvatarPart.FULLBODY)
         {
             SetFullBodyTexture();

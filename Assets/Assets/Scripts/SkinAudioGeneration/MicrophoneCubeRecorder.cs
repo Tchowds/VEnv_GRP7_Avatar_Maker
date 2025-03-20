@@ -22,6 +22,8 @@ namespace Whisper.Samples
         private NetworkContext context;
 
         [SerializeField] private TextMeshPro resultText;
+        private const string DEFAULT_TEXT = "Press and hold to record";
+        private const string PROCESSING_TEXT = "Processing...";
 
         private void Start()
         {
@@ -39,6 +41,12 @@ namespace Whisper.Samples
                 initialColor = cubeRenderer.materials[1].color;
             }
             
+            // Set default text
+            if (resultText != null)
+            {
+                resultText.text = DEFAULT_TEXT;
+                resultText.gameObject.SetActive(true);
+            }
         }
 
         // Called on Select Entered event (press and hold)
@@ -90,14 +98,13 @@ namespace Whisper.Samples
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
-
             Debug.Log("Processing...");
 
             _buffer = "";
             
-
-            if (resultText!=null){
-                resultText.gameObject.SetActive(true);
+            if (resultText != null)
+            {
+                resultText.text = PROCESSING_TEXT;
             }   
             
             var res = await whisper.GetTextAsync(recordedAudio.Data, recordedAudio.Frequency, recordedAudio.Channels);
@@ -118,7 +125,7 @@ namespace Whisper.Samples
             Debug.Log($"Time: {time} ms, Rate: {rate:F1}x");
             if (resultText != null)
             {
-                resultText.gameObject.SetActive(false);
+                resultText.text = DEFAULT_TEXT;
             }
         }
 
@@ -136,7 +143,7 @@ namespace Whisper.Samples
                 Material[] mats = cubeRenderer.materials;
                 if (mats.Length > 1)
                 {
-                    mats[1].color = Color.green;
+                    mats[1].color = Color.red;
                 }
                 cubeRenderer.materials = mats;
             }

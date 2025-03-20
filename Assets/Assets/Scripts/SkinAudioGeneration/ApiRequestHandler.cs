@@ -19,12 +19,11 @@ public class ApiRequestHandler : MonoBehaviour
     public TexturedModelAvatar texturedModelAvatar;
     public CustomAvatarTextureCatalogue customAvatarTextureCatalogue;
     public DiffuseSkinToMannequinApplier skinManager;
-    public SkinPart selectedSkinPart = SkinPart.Head;
 
     private HttpClient httpClient = new HttpClient();
 
     public RequestMode CurrentMode { get; set; } = RequestMode.GenerateSkin;
-    public Animator curtainAnimator;
+    public CurtainManager curtainManager;
 
     private NetworkContext context;
 
@@ -33,15 +32,15 @@ public class ApiRequestHandler : MonoBehaviour
         context = NetworkScene.Register(this);
     }
 
-    public async void HandleRequest(string recognizedText)
+    public async void HandleRequest(List<string> recognizedText)
     {
         switch (CurrentMode)
         {
             case RequestMode.SelectSkin:
-                await SendSkinSelectionRequest(recognizedText);
+                await SendSkinSelectionRequest(recognizedText[0]);
                 break;
             case RequestMode.GenerateSkin:
-                await SendGenerateSkinRequest(recognizedText);
+                await SendGenerateSkinRequest(recognizedText[0],recognizedText[1]);
                 break;
             default:
                 Debug.Log("No request mode selected.");
@@ -95,72 +94,28 @@ public class ApiRequestHandler : MonoBehaviour
         }
     }
 
-       private async Task SendGenerateSkinRequest(string prompt)
+       private async Task SendGenerateSkinRequest(string headPrompt, string torsoPrompt)
     {
-        curtainAnimator.SetTrigger("Show");
-        SendCurtainState(true);
+        bool headPromptExists = !string.IsNullOrEmpty(headPrompt);
+        bool torsoPromptExists = !string.IsNullOrEmpty(torsoPrompt);
+
+        if (!headPromptExists && !torsoPromptExists)
+        {
+            Debug.LogWarning("No confirmed head or torso prompt available.");
+            return;
+        }
+
+        curtainManager.showCurtain();
 
         try
         {
-            if(selectedSkinPart == SkinConstants.SkinPart.Head)
-            {
-                // For Head, use the /generate_skin_image_face endpoint
-                string endpoint = $"http://{ipAddress}:8000/generate_skin_image_face";
-                var requestBody = new { prompt_face = prompt, num_images = 4 };
-                string jsonBody = JsonConvert.SerializeObject(requestBody);
-                var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
-
-                Debug.Log($"Making request to: {endpoint} with parameters: {jsonBody}");
-                var response = await httpClient.PostAsync(endpoint, content);
-                response.EnsureSuccessStatusCode();
-
-                var responseString = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<GeneratedImagesResponse>(responseString);
-
-                if(result?.images_base64 != null)
-                {
-                    List<string> textureUIDs = generateTextureUIDs(result.images_base64.Count);
-                    skinManager.DistributeAndApplySkins(result.images_base64, textureUIDs, "face");
-                    Debug.Log("{result.images_base64.Count} head textures generated!");
-                }
-                else
-                {
-                    Debug.Log("No head images received.");
-                }
-            }
-            else if(selectedSkinPart == SkinConstants.SkinPart.Torso)
-            {
-                // For Torso, use the /generate_skin_image_torso endpoint
-                string endpoint = $"http://{ipAddress}:8000/generate_skin_image_torso";
-                var requestBody = new { prompt_torso = prompt, num_images = 4 };
-                string jsonBody = JsonConvert.SerializeObject(requestBody);
-                var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
-
-                Debug.Log($"Making request to: {endpoint} with parameters: {jsonBody}");
-                var response = await httpClient.PostAsync(endpoint, content);
-                response.EnsureSuccessStatusCode();
-
-                var responseString = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<GeneratedImagesResponse>(responseString);
-
-                if(result?.images_base64 != null)
-                {
-                    List<string> textureUIDs = generateTextureUIDs(result.images_base64.Count);
-                    skinManager.DistributeAndApplySkins(result.images_base64, textureUIDs, "body");
-                    Debug.Log($"{result.images_base64.Count} torso textures generated!");
-                }
-                else
-                {
-                    Debug.Log("No torso images received.");
-                }
-            }
-            else if(selectedSkinPart == SkinConstants.SkinPart.Both)
+            if(headPromptExists && torsoPromptExists)
             {
                 // For Both, call both endpoints
 
                 // Request for Head:
                 string endpointFace = $"http://{ipAddress}:8000/generate_skin_image_face";
-                var requestBodyFace = new { prompt_face = prompt, num_images = 4 };
+                var requestBodyFace = new { prompt_face = headPrompt, num_images = 4 };
                 string jsonBodyFace = JsonConvert.SerializeObject(requestBodyFace);
                 var contentFace = new StringContent(jsonBodyFace, Encoding.UTF8, "application/json");
 
@@ -172,7 +127,7 @@ public class ApiRequestHandler : MonoBehaviour
 
                 // Request for Torso:
                 string endpointTorso = $"http://{ipAddress}:8000/generate_skin_image_torso";
-                var requestBodyTorso = new { prompt_torso = prompt, num_images = 4 };
+                var requestBodyTorso = new { prompt_torso = torsoPrompt, num_images = 4 };
                 string jsonBodyTorso = JsonConvert.SerializeObject(requestBodyTorso);
                 var contentTorso = new StringContent(jsonBodyTorso, Encoding.UTF8, "application/json");
 
@@ -197,14 +152,65 @@ public class ApiRequestHandler : MonoBehaviour
                 }
                 
             }
+            else if(headPromptExists)
+            {
+                // For Head, use the /generate_skin_image_face endpoint
+                string endpoint = $"http://{ipAddress}:8000/generate_skin_image_face";
+                var requestBody = new { prompt_face = headPrompt, num_images = 4 };
+                string jsonBody = JsonConvert.SerializeObject(requestBody);
+                var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+
+                Debug.Log($"Making request to: {endpoint} with parameters: {jsonBody}");
+                var response = await httpClient.PostAsync(endpoint, content);
+                response.EnsureSuccessStatusCode();
+
+                var responseString = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<GeneratedImagesResponse>(responseString);
+
+                if(result?.images_base64 != null)
+                {
+                    List<string> textureUIDs = generateTextureUIDs(result.images_base64.Count);
+                    skinManager.DistributeAndApplySkins(result.images_base64, textureUIDs, "face");
+                    Debug.Log("{result.images_base64.Count} head textures generated!");
+                }
+                else
+                {
+                    Debug.Log("No head images received.");
+                }
+            }
+            else
+            {
+                // For Torso, use the /generate_skin_image_torso endpoint
+                string endpoint = $"http://{ipAddress}:8000/generate_skin_image_torso";
+                var requestBody = new { prompt_torso = torsoPrompt, num_images = 4 };
+                string jsonBody = JsonConvert.SerializeObject(requestBody);
+                var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+
+                Debug.Log($"Making request to: {endpoint} with parameters: {jsonBody}");
+                var response = await httpClient.PostAsync(endpoint, content);
+                response.EnsureSuccessStatusCode();
+
+                var responseString = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<GeneratedImagesResponse>(responseString);
+
+                if(result?.images_base64 != null)
+                {
+                    List<string> textureUIDs = generateTextureUIDs(result.images_base64.Count);
+                    skinManager.DistributeAndApplySkins(result.images_base64, textureUIDs, "body");
+                    Debug.Log($"{result.images_base64.Count} torso textures generated!");
+                }
+                else
+                {
+                    Debug.Log("No torso images received.");
+                }
+            }
             
         }
         catch(Exception e)
         {
             Debug.LogError($"Generate Skin Request Failed: {e.Message}");
         }
-        curtainAnimator.SetTrigger("Hide");
-        SendCurtainState(false);
+        curtainManager.hideCurtain();
     }
 
     private List<string> generateTextureUIDs(int count){
@@ -216,13 +222,6 @@ public class ApiRequestHandler : MonoBehaviour
         return textureUIDs;
     }
 
-    private void SendCurtainState(bool show)
-    {
-        context.SendJson(new CurtainMessage
-        {
-            show = show
-        });
-    }
 
     public void SetIp(string ip)
     {
@@ -247,10 +246,6 @@ public class ApiRequestHandler : MonoBehaviour
         public string ip;
     }
 
-    private struct CurtainMessage
-{
-    public bool show;
-}
 
     public void sendMessage()
     {
@@ -270,18 +265,6 @@ public class ApiRequestHandler : MonoBehaviour
             ipAddress = jsonMessage["ip"].ToString();
             Debug.Log($"Updated IP Address: {ipAddress}");
 
-        } else {
-            bool show = jsonMessage["show"].ToObject<bool>();
-            if (show)
-            {
-                curtainAnimator.SetTrigger("Show");
-                Debug.Log("Curtain dropped across all clients.");
-            }
-            else
-            {
-                curtainAnimator.SetTrigger("Hide");
-                Debug.Log("Curtain raised across all clients.");
-            }       
         }
     }
 }
