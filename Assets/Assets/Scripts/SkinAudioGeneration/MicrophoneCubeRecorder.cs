@@ -18,7 +18,8 @@ namespace Whisper.Samples
         private string _buffer;
         private Renderer cubeRenderer;  // For color change
         private Color initialColor;
-        
+
+        [SerializeField] private TextMeshPro resultText;
 
         private void Start()
         {
@@ -34,6 +35,7 @@ namespace Whisper.Samples
             {
                 initialColor = cubeRenderer.materials[1].color;
             }
+            
         }
 
         // Called on Select Entered event (press and hold)
@@ -84,8 +86,14 @@ namespace Whisper.Samples
             Debug.Log("Processing...");
 
             _buffer = "";
+            
 
+            if (resultText!=null){
+                resultText.gameObject.SetActive(true);
+            }   
+            
             var res = await whisper.GetTextAsync(recordedAudio.Data, recordedAudio.Frequency, recordedAudio.Channels);
+            
             sw.Stop();
 
             if (res == null)
@@ -95,12 +103,15 @@ namespace Whisper.Samples
 
             string output = res.Result;
             if(promptHelper != null) promptHelper.SetPrompt(output);
-
-
+            
+            
             long time = sw.ElapsedMilliseconds;
             float rate = recordedAudio.Length / (time * 0.001f);
             Debug.Log($"Time: {time} ms, Rate: {rate:F1}x");
-
+            if (resultText != null)
+            {
+                resultText.gameObject.SetActive(false);
+            }
         }
 
         private void OnProgressHandler(int progress)
