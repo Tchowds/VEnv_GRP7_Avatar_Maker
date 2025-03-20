@@ -50,15 +50,8 @@ public class ShopManager : MonoBehaviour
         StartCoroutine(FadeSound("Crowd_Volume", crowdVolumeInside, 1f)); 
         StartCoroutine(FadeSound(shopMusicParameter, shopVolumeInside, 1f));
         Debug.Log($"Player {roomClient.Me.uuid} entered the shop: {gameObject.name}");
-        playerExperienceController.UpdatePlayerLocation(new PlayerLocationsMessage { playerID = roomClient.Me.uuid, shopName = gameObject.name, inShop=true });
-        context.SendJson(new PlayerLocationsMessage { playerID = roomClient.Me.uuid, shopName = gameObject.name, inShop=true });
-    }
-
-    public struct PlayerLocationsMessage
-    {
-        public string playerID;
-        public string shopName;
-        public bool inShop;
+        playerExperienceController.UpdatePlayerLocation(new PlayerLocationMessage { playerID = roomClient.Me.uuid, shopName = gameObject.name, inShop=true });
+        context.SendJson(new PlayerLocationMessage { playerID = roomClient.Me.uuid, shopName = gameObject.name, inShop=true });
     }
 
     public virtual void ExitShop()
@@ -72,8 +65,8 @@ public class ShopManager : MonoBehaviour
             StartCoroutine(FadeSound(shopMusicParameter, shopVolumeOutside, 1f));
         }
         //Debug.Log($"Player {roomClient.Me.uuid} exited the shop: {gameObject.name}");
-        playerExperienceController.UpdatePlayerLocation(new PlayerLocationsMessage { playerID = roomClient.Me.uuid, shopName = gameObject.name, inShop=false });
-        context.SendJson(new PlayerLocationsMessage { playerID = roomClient.Me.uuid, shopName = gameObject.name, inShop=false });
+        playerExperienceController.UpdatePlayerLocation(new PlayerLocationMessage { playerID = roomClient.Me.uuid, shopName = gameObject.name, inShop=false });
+        context.SendJson(new PlayerLocationMessage { playerID = roomClient.Me.uuid, shopName = gameObject.name, inShop=false });
     }
 
     protected IEnumerator FadeSound(string parameterName, float targetVolume, float duration)
@@ -91,7 +84,7 @@ public class ShopManager : MonoBehaviour
 
     public void ProcessMessage(ReferenceCountedSceneGraphMessage message)
     {
-        var m = message.FromJson<PlayerLocationsMessage>();
+        var m = message.FromJson<PlayerLocationMessage>();
         playerExperienceController.UpdatePlayerLocation(m);
     }
 }

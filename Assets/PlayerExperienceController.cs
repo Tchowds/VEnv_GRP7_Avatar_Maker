@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 using Ubiq.Messaging;
 using Ubiq.Rooms;
 
@@ -25,15 +27,8 @@ public class PlayerExperienceController : MonoBehaviour
     private string player1UID;
     private string player2UID;
 
-    private List<PlayerLocationMessage> playerLocations = new List<PlayerLocationsMessage>();
+    private List<PlayerLocationMessage> playerLocations = new List<PlayerLocationMessage>();
 
-
-    public struct PlayerLocationMessage
-    {
-        public string playerID;
-        public bool inShop;
-        public string shopName;
-    }
 
     void Start()
     {
@@ -49,12 +44,12 @@ public class PlayerExperienceController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Debug.Log($"There are enough players in store to continue: {CheckMinNumPlayersInShop("TinkerTailor", 2)}");
     }
 
-    void UpdatePlayerLocations(PlayerLocationMessage locationMessage)
+    public void UpdatePlayerLocation(PlayerLocationMessage locationMessage)
     {
-        Debug.Log("PlayerExperienceController: ShopLocationMessage received - playerID: " + locationMessage.playerID + " shopName: " + locationMessage.shopName + " enterShop: " + locationMessage.enterShop);
+        Debug.Log("PlayerExperienceController: ShopLocationMessage received - playerID: " + locationMessage.playerID + " shopName: " + locationMessage.shopName + " enterShop: " + locationMessage.inShop);
         bool found = false;
         for (int i = 0; i < playerLocations.Count; i++)
         {
@@ -72,8 +67,22 @@ public class PlayerExperienceController : MonoBehaviour
         PrintPlayerLocations();
     }
 
-    void PrintPlayerLocations()
+    private bool CheckMinNumPlayersInShop(string shop, int minNumPlayers)
     {
+        int countPlayersInStore = 0;
+        for (int i = 0; i < playerLocations.Count; i++)
+        {
+            if (playerLocations[i].shopName == shop && playerLocations[i].inShop)
+            {
+                countPlayersInStore++;
+            }
+        }
+        return countPlayersInStore >= minNumPlayers;
+    }
+
+    private void PrintPlayerLocations()
+    {
+        Debug.Log("Player Locations:");
         for (int i = 0; i < playerLocations.Count; i++)
         {
             Debug.Log("PlayerID: " + playerLocations[i].playerID + " inShop: " + playerLocations[i].inShop + " shopName: " + playerLocations[i].shopName);
