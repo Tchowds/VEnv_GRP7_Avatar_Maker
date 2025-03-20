@@ -1,6 +1,9 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using Ubiq.Messaging;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class PromptHelper : MonoBehaviour
 {
@@ -14,6 +17,9 @@ public class PromptHelper : MonoBehaviour
     public TMP_Text torsoPrompt;
     public TMP_Text headPrompt;
 
+    private Button clearHeadPromptButton;
+    private Button clearTorsoPromptButton;
+
     private string torsoPromptText;
     private string headPromptText;
 
@@ -26,6 +32,16 @@ public class PromptHelper : MonoBehaviour
         headPromptText = "";
         skinPartSelector = GetComponent<SkinPartSelector>();
         context = NetworkScene.Register(this);
+
+        clearHeadPromptButton = headPrompt.transform.GetComponentInChildren<Button>();
+        clearTorsoPromptButton = torsoPrompt.transform.GetComponentInChildren<Button>();
+
+        clearHeadPromptButton.onClick.AddListener(() => clearHeadPrompt());
+        clearTorsoPromptButton.onClick.AddListener(() => clearTorsoPrompt());
+
+        clearHeadPromptButton.transform.GetComponent<XRSimpleInteractable>().selectEntered.AddListener((arg0) => clearHeadPrompt());
+        clearTorsoPromptButton.transform.GetComponent<XRSimpleInteractable>().selectEntered.AddListener((arg0) => clearTorsoPrompt());
+
     }
 
     public void SetPrompt(string prompt)
@@ -47,6 +63,20 @@ public class PromptHelper : MonoBehaviour
             torsoPromptText = prompt;
             torsoPrompt.text = "Torso Prompt: " + torsoPromptText;
         }
+        sendPromptMessage();
+    }
+
+    public void clearHeadPrompt()
+    {
+        headPromptText = "";
+        headPrompt.text = "Head Prompt: " + headPromptText;
+        sendPromptMessage();
+    }
+
+    public void clearTorsoPrompt()
+    {
+        torsoPromptText = "";
+        torsoPrompt.text = "Torso Prompt: " + torsoPromptText;
         sendPromptMessage();
     }
 

@@ -4,6 +4,9 @@ using UnityEngine.UI;
 using Ubiq.Messaging;
 using Ubiq.Rooms;
 using static SkinConstants;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.XR.Interaction.Toolkit;
+using TMPro;
 
 public class SkinPartSelector : MonoBehaviour
 {
@@ -17,9 +20,12 @@ public class SkinPartSelector : MonoBehaviour
     public Button headButton;
     public Button torsoButton;
     public Button bothButton;
+    public Button generateButton;
 
     public ApiRequestHandler apiRequestHandler;
     public PromptHelper promptHelper;
+
+    public TMP_Text ip_text;
 
     // Define your selected and normal colors.
     // You can adjust these as needed.
@@ -34,12 +40,23 @@ public class SkinPartSelector : MonoBehaviour
         torsoButton.onClick.AddListener(() => OnButtonPressed(SkinConstants.SkinPart.Torso));
         bothButton.onClick.AddListener(() => OnButtonPressed(SkinConstants.SkinPart.Both));
 
+        headButton.transform.GetComponent<XRSimpleInteractable>().selectEntered.AddListener((arg0) => OnButtonPressed(SkinConstants.SkinPart.Head));
+        torsoButton.transform.GetComponent<XRSimpleInteractable>().selectEntered.AddListener((arg0) => OnButtonPressed(SkinConstants.SkinPart.Torso));
+        bothButton.transform.GetComponent<XRSimpleInteractable>().selectEntered.AddListener((arg0) => OnButtonPressed(SkinConstants.SkinPart.Both));
+
+        generateButton.onClick.AddListener(OnGenerateButtonPressed);
+        generateButton.transform.GetComponent<XRSimpleInteractable>().selectEntered.AddListener((arg0) => OnGenerateButtonPressed());
+
         context = NetworkScene.Register(this);
 
         // Optionally, initialize the visuals with a default selection.
         OnButtonPressed(skinPart);
 
-        
+    }
+
+    void Update()
+    {
+        ip_text.text = "Generation Endpoint API Ip:" + apiRequestHandler.ipAddress;
     }
 
     void OnButtonPressed(SkinConstants.SkinPart part)
@@ -58,7 +75,7 @@ public class SkinPartSelector : MonoBehaviour
     void incurSkinPart()
     {
         UpdateButtonVisuals();
-        apiRequestHandler.selectedSkinPart = skinPart;
+        if (apiRequestHandler) apiRequestHandler.selectedSkinPart = skinPart;
     }
 
     void UpdateButtonVisuals()
