@@ -4,6 +4,7 @@ using TMPro;
 using System;
 using UnityEngine.XR.Interaction.Toolkit;
 using System.Diagnostics;
+using Ubiq.Messaging;
 using Debug = UnityEngine.Debug;
 
 namespace Whisper.Samples
@@ -18,13 +19,15 @@ namespace Whisper.Samples
         private string _buffer;
         private Renderer cubeRenderer;  // For color change
         private Color initialColor;
+        private NetworkContext context;
 
         [SerializeField] private TextMeshPro resultText;
 
         private void Start()
         {
             cubeRenderer = GetComponent<Renderer>();  // Get the renderer component
-
+            context = NetworkScene.Register(this);
+            
             // Subscribe to events
             whisper.OnProgress += OnProgressHandler;
             microphoneRecord.OnRecordStop += OnRecordStop;
@@ -45,8 +48,8 @@ namespace Whisper.Samples
             {
                 microphoneRecord.StartRecord();
                 isRecording = true;
-
                 Debug.Log("Recording...");
+                context.SendJson(new IsRecordingMessage { isRecording = true });
                 
                 // Change the cube's color to green to indicate recording
                 Material[] mats = cubeRenderer.materials;
@@ -66,6 +69,7 @@ namespace Whisper.Samples
                 microphoneRecord.StopRecord();
                 isRecording = false;
                 Debug.Log("Stopped recording...");
+                context.SendJson(new IsRecordingMessage { isRecording = false });
                 
                 // Revert the cube's color
                 Material[] mats = cubeRenderer.materials;
@@ -75,6 +79,10 @@ namespace Whisper.Samples
                 }
                 cubeRenderer.materials = mats;
             }
+        }
+
+        private struct IsRecordingMessage{
+            public bool isRecording;
         }
 
         private async void OnRecordStop(AudioChunk recordedAudio)
@@ -117,6 +125,31 @@ namespace Whisper.Samples
         private void OnProgressHandler(int progress)
         {
             Debug.Log($"Progress: {progress}%");
+        }
+
+        public void ProcessMessage(ReferenceCountedSceneGraphMessage message)
+        {
+            var m = message.FromJson<IsRecordingMessage>();
+
+            if (m.isRecording)
+            {
+                Material[] mats = cubeRenderer.materials;
+                if (mats.Length > 1)
+                {
+                    mats[1].color = Color.green;
+                }
+                cubeRenderer.materials = mats;
+            }
+            else
+            {
+                // Revert the cube's color to original
+                Material[] mats = cubeRenderer.materials;
+                if (mats.Length > 1)
+                {
+                    mats[1].color = initialColor;
+                }
+                cubeRenderer.materials = mats;
+            }
         }
     }
 }
