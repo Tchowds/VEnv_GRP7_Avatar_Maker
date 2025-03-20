@@ -443,6 +443,54 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
+--- !u!1 &15846190
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 15846192}
+  - component: {fileID: 15846191}
+  m_Layer: 0
+  m_Name: PlayerExperienceController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &15846191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 15846190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 554410e8cbf7b4d55b91981b5ec6e465, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentState: 0
+  tailorAudioSource: {fileID: 0}
+  waitingClip: {fileID: 0}
+  bothPlayersInShopClip: {fileID: 0}
+--- !u!4 &15846192
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 15846190}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 12.313881, y: 2.3534272, z: -22.702332}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &16546962 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5088829427296280434, guid: 8324d290a4659b140a89f68e6a9e3ab3, type: 3}
@@ -6724,6 +6772,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   globalAudioMixer: {fileID: 24100000, guid: b62c8a2a584d549d8b1fe48d63ba1b60, type: 2}
   shopMusicParameter: ShopMusicTinkerTailor_Volume
+  playerExperienceController: {fileID: 15846191}
   crowdVolumeInside: -40
   crowdVolumeOutside: -20
   shopVolumeInside: -15
@@ -6783,6 +6832,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   globalAudioMixer: {fileID: 24100000, guid: b62c8a2a584d549d8b1fe48d63ba1b60, type: 2}
   shopMusicParameter: ShopMusicSwapStudio_Volume
+  playerExperienceController: {fileID: 0}
   crowdVolumeInside: -40
   crowdVolumeOutside: -20
   shopVolumeInside: -15
@@ -11197,6 +11247,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   globalAudioMixer: {fileID: 24100000, guid: b62c8a2a584d549d8b1fe48d63ba1b60, type: 2}
   shopMusicParameter: ShopMusicDiffusionDesign_Volume
+  playerExperienceController: {fileID: 0}
   crowdVolumeInside: -45
   crowdVolumeOutside: -20
   shopVolumeInside: -30
@@ -12037,3 +12088,4 @@ SceneRoots:
   - {fileID: 200217633}
   - {fileID: 128207663}
   - {fileID: 1419770113}
+  - {fileID: 15846192}

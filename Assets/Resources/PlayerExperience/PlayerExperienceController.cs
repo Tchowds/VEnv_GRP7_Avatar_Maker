@@ -7,11 +7,11 @@ using Ubiq.Rooms;
 public class PlayerExperienceController : MonoBehaviour
 {
 
-    public ExperienceState currentState = ExperienceState.WaitingForPlayersToEnterShopFirstTIme;
+    public ExperienceState currentState = ExperienceState.WaitingForPlayersToEnterShopFirstTime;
     
     public enum ExperienceState
     {
-        WaitingForPlayersToEnterShopFirstTIme,
+        WaitingForPlayersToEnterShopFirstTime,
         BothPlayersEnteredShopGetStarted,
         BothPlayersReturnedToShopFirstTime,
         BothPlayersAppliedSkinsToTheirMannequins
@@ -27,7 +27,7 @@ public class PlayerExperienceController : MonoBehaviour
     private string player1UID;
     private string player2UID;
 
-    private List<PlayerLocationMessage> playerLocations = new List<PlayerLocationMessage>();
+    private List<PlayerState> playerStates = new List<PlayerState>();
 
 
     void Start()
@@ -44,35 +44,51 @@ public class PlayerExperienceController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log($"There are enough players in store to continue: {CheckMinNumPlayersInShop("TinkerTailor", 2)}");
+        if (currentState == ExperienceState.WaitingForPlayersToEnterShopFirstTime)
+        {
+            if (CheckMinNumPlayersInShop("TinkerTailorShopManager", 2))
+            {
+                currentState = ExperienceState.BothPlayersEnteredShopGetStarted;
+                Debug.Log("Both players are in the shop, let's get started!");
+                // if (tailorAudioSource && bothPlayersInShopClip)
+                // {
+                //     tailorAudioSource.PlayOneShot(bothPlayersInShopClip);
+                // }
+            } else
+            {
+                Debug.Log("Waiting for both players to enter the shop...");
+            }
+        }
     }
 
     public void UpdatePlayerLocation(PlayerLocationMessage locationMessage)
     {
         Debug.Log("PlayerExperienceController: ShopLocationMessage received - playerID: " + locationMessage.playerID + " shopName: " + locationMessage.shopName + " enterShop: " + locationMessage.inShop);
         bool found = false;
-        for (int i = 0; i < playerLocations.Count; i++)
+        for (int i = 0; i < playerStates.Count; i++)
         {
-            if (playerLocations[i].playerID == locationMessage.playerID)
+            if (playerStates[i].playerID == locationMessage.playerID)
             {
-                playerLocations[i] = locationMessage;
+                playerStates[i].location = locationMessage;
                 found = true;
                 break;
             }
         }
         if (!found)
         {
-            playerLocations.Add(locationMessage);
+            playerStates.Add(new PlayerState { playerID = locationMessage.playerID, location = locationMessage });
         }
-        PrintPlayerLocations();
+        PrintPlayerStates();
     }
 
     private bool CheckMinNumPlayersInShop(string shop, int minNumPlayers)
     {
+        Debug.Log("There are "+playerStates.Count+" players registered");
+
         int countPlayersInStore = 0;
-        for (int i = 0; i < playerLocations.Count; i++)
+        for (int i = 0; i < playerStates.Count; i++)
         {
-            if (playerLocations[i].shopName == shop && playerLocations[i].inShop)
+            if (playerStates[i].location.shopName == shop && playerStates[i].location.inShop)
             {
                 countPlayersInStore++;
             }
@@ -80,12 +96,17 @@ public class PlayerExperienceController : MonoBehaviour
         return countPlayersInStore >= minNumPlayers;
     }
 
-    private void PrintPlayerLocations()
+    private void PrintPlayerStates()
     {
-        Debug.Log("Player Locations:");
-        for (int i = 0; i < playerLocations.Count; i++)
+        Debug.Log("Player States:");
+        for (int i = 0; i < playerStates.Count; i++)
         {
-            Debug.Log("PlayerID: " + playerLocations[i].playerID + " inShop: " + playerLocations[i].inShop + " shopName: " + playerLocations[i].shopName);
+            Debug.Log("PlayerID: " + playerStates[i].playerID + " inShop: " + playerStates[i].location.inShop + " shopName: " + playerStates[i].location.shopName);
         }
     }
+
+    // private IEnumerator WaitFor(float seconds)
+    // {
+    //     yield return new WaitForSeconds(seconds);
+    // }
 }
