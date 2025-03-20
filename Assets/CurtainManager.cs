@@ -11,6 +11,11 @@ public class CurtainManager : MonoBehaviour
         public bool show;
     }
 
+    private void Start()
+    {
+        context = NetworkScene.Register(this);
+    }
+
     public void showCurtain() {
         curtainAnimator.SetTrigger("Show");
         SendCurtainState(true);
