@@ -15,6 +15,10 @@ public class ApiRequestHandler : MonoBehaviour
 {
     public string ipAddress;
 
+    public string webServerAddress;
+
+    private string serverURL;
+
     [Header("Dependencies")]
     public TexturedModelAvatar texturedModelAvatar;
     public CustomAvatarTextureCatalogue customAvatarTextureCatalogue;
@@ -29,6 +33,15 @@ public class ApiRequestHandler : MonoBehaviour
     private void Start() {
         httpClient.Timeout = TimeSpan.FromSeconds(1800);
         context = NetworkScene.Register(this);
+        // TODO - Ping the web server address to check if it is active, if not, drop down to the the IP address one
+        if (string.IsNullOrEmpty(webServerAddress))
+        {
+            serverURL = $"http://{ipAddress}:8000";
+        } else {
+            serverURL = webServerAddress;
+        }
+
+        Debug.Log($"Server URL: {serverURL}");
     }
 
     public async void HandleRequest(List<string> recognizedText, RequestMode requestMode)
@@ -51,7 +64,7 @@ public class ApiRequestHandler : MonoBehaviour
     {
         try
         {
-            var requestUrl = $"http://{ipAddress}:8000/ping";
+            var requestUrl = $"{serverURL}/ping";
             var response = await httpClient.PostAsync(requestUrl, null);
             return response.IsSuccessStatusCode;
         }
@@ -64,7 +77,7 @@ public class ApiRequestHandler : MonoBehaviour
 
     private async Task SendSkinSelectionRequest(string query)
     {
-        var requestUrl = $"http://{ipAddress}:8000/select_skin";
+        var requestUrl = $"{serverURL}/select_skin";
 
         var requestBody = new
         {
@@ -133,7 +146,8 @@ public class ApiRequestHandler : MonoBehaviour
                 // For Both, call both endpoints
 
                 // Request for Head:
-                string endpointFace = $"http://{ipAddress}:8000/generate_skin_image_face";
+                string endpointFace = $"{serverURL}/generate_skin_image_face";
+                Debug.Log("Face endpoint: " + endpointFace);
                 var requestBodyFace = new { prompt_face = headPrompt, num_images = 4 };
                 string jsonBodyFace = JsonConvert.SerializeObject(requestBodyFace);
                 var contentFace = new StringContent(jsonBodyFace, Encoding.UTF8, "application/json");
@@ -145,7 +159,7 @@ public class ApiRequestHandler : MonoBehaviour
                 var resultFace = JsonConvert.DeserializeObject<GeneratedImagesResponse>(responseStringFace);
 
                 // Request for Torso:
-                string endpointTorso = $"http://{ipAddress}:8000/generate_skin_image_torso";
+                string endpointTorso = $"{serverURL}/generate_skin_image_torso";
                 var requestBodyTorso = new { prompt_torso = torsoPrompt, num_images = 4 };
                 string jsonBodyTorso = JsonConvert.SerializeObject(requestBodyTorso);
                 var contentTorso = new StringContent(jsonBodyTorso, Encoding.UTF8, "application/json");
@@ -174,7 +188,7 @@ public class ApiRequestHandler : MonoBehaviour
             else if(headPromptExists)
             {
                 // For Head, use the /generate_skin_image_face endpoint
-                string endpoint = $"http://{ipAddress}:8000/generate_skin_image_face";
+                string endpoint = $"{serverURL}/generate_skin_image_face";
                 var requestBody = new { prompt_face = headPrompt, num_images = 4 };
                 string jsonBody = JsonConvert.SerializeObject(requestBody);
                 var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
@@ -200,7 +214,7 @@ public class ApiRequestHandler : MonoBehaviour
             else
             {
                 // For Torso, use the /generate_skin_image_torso endpoint
-                string endpoint = $"http://{ipAddress}:8000/generate_skin_image_torso";
+                string endpoint = $"{serverURL}/generate_skin_image_torso";
                 var requestBody = new { prompt_torso = torsoPrompt, num_images = 4 };
                 string jsonBody = JsonConvert.SerializeObject(requestBody);
                 var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
