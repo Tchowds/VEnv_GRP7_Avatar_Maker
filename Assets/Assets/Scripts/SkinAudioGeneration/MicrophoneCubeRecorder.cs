@@ -28,6 +28,7 @@ namespace Whisper.Samples
         [SerializeField] private TextMeshPro resultText;
         private const string DEFAULT_TEXT = "Press and hold to record";
         private const string PROCESSING_TEXT = "Processing...";
+        private bool wasActiveRecorder = false;
 
         private void Start()
         {
@@ -61,7 +62,11 @@ namespace Whisper.Samples
                 microphoneRecord.StartRecord();
                 isRecording = true;
                 Debug.Log("Recording...");
-                context.SendJson(new IsRecordingMessage { isRecording = true });
+                wasActiveRecorder = true;
+                context.SendJson(new IsRecordingMessage { 
+                    isRecording = true,
+                    requestMode = this.requestMode
+                });
                 
                 // Change the cube's color to green to indicate recording
                 Material[] mats = cubeRenderer.materials;
@@ -81,7 +86,10 @@ namespace Whisper.Samples
                 microphoneRecord.StopRecord();
                 isRecording = false;
                 Debug.Log("Stopped recording...");
-                context.SendJson(new IsRecordingMessage { isRecording = false });
+                        context.SendJson(new IsRecordingMessage { 
+                    isRecording = false,
+                    requestMode = this.requestMode
+                });
                 
                 // Revert the cube's color
                 Material[] mats = cubeRenderer.materials;
@@ -93,12 +101,16 @@ namespace Whisper.Samples
             }
         }
 
-        private struct IsRecordingMessage{
+        private struct IsRecordingMessage {
             public bool isRecording;
+            public SkinConstants.RequestMode requestMode;
         }
 
         private async void OnRecordStop(AudioChunk recordedAudio)
         {
+            if (!wasActiveRecorder) return;
+            wasActiveRecorder = false;
+
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
@@ -124,6 +136,11 @@ namespace Whisper.Samples
 
             if (requestMode == RequestMode.SelectSkin)
             {
+                var skinSearchText = GameObject.Find("SkinSearchText")?.GetComponent<TextMeshPro>();
+                if (skinSearchText != null)
+                {
+                    skinSearchText.text = output.Replace(" ", "\n");
+                }
                 List<string> skinDescription = new List<string>{output};
                 apiRequestHandler.HandleRequest(skinDescription, RequestMode.SelectSkin);
             }
@@ -151,24 +168,27 @@ namespace Whisper.Samples
         {
             var m = message.FromJson<IsRecordingMessage>();
 
-            if (m.isRecording)
+            if (m.requestMode == this.requestMode)
             {
-                Material[] mats = cubeRenderer.materials;
-                if (mats.Length > 1)
-                {
-                    mats[1].color = Color.red;
-                }
-                cubeRenderer.materials = mats;
-            }
-            else
-            {
-                // Revert the cube's color to original
-                Material[] mats = cubeRenderer.materials;
-                if (mats.Length > 1)
-                {
-                    mats[1].color = initialColor;
-                }
-                cubeRenderer.materials = mats;
+                    if (m.isRecording)
+                    {
+                        Material[] mats = cubeRenderer.materials;
+                        if (mats.Length > 1)
+                        {
+                            mats[1].color = Color.red;
+                        }
+                        cubeRenderer.materials = mats;
+                    }
+                    else
+                    {
+                        // Revert the cube's color to original
+                        Material[] mats = cubeRenderer.materials;
+                        if (mats.Length > 1)
+                        {
+                            mats[1].color = initialColor;
+                        }
+                        cubeRenderer.materials = mats;
+                    }
             }
         }
     }

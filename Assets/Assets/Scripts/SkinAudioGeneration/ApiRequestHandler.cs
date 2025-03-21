@@ -47,6 +47,21 @@ public class ApiRequestHandler : MonoBehaviour
         }
     }
 
+    public async Task<bool> PingServer()
+    {
+        try
+        {
+            var requestUrl = $"http://{ipAddress}:8000/ping";
+            var response = await httpClient.PostAsync(requestUrl, null);
+            return response.IsSuccessStatusCode;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Ping failed: {e.Message}");
+            return false;
+        }
+    }
+
     private async Task SendSkinSelectionRequest(string query)
     {
         var requestUrl = $"http://{ipAddress}:8000/select_skin";
@@ -90,6 +105,11 @@ public class ApiRequestHandler : MonoBehaviour
         catch (Exception e)
         {
             Debug.LogError($"Skin Selection Request Failed: {e.Message}");
+        }
+        // Update skin search UI
+        if (GameObject.Find("SkinSearchText") != null && GameObject.Find("SkinSearchText").GetComponent<TMP_Text>() != null)
+        {
+            GameObject.Find("SkinSearchText").GetComponent<TMP_Text>().text = "SKIN\nSEARCH";
         }
     }
 

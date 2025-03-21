@@ -5,6 +5,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using TMPro;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 public class IpMenuSelector : MonoBehaviour
 {
@@ -15,6 +16,10 @@ public class IpMenuSelector : MonoBehaviour
     private Button recordButton;
     private TMP_Text ipInputField;
     private ApiRequestHandler apiRequestHandler;
+    
+    // Add cube references
+    private GameObject statusCube;
+    private Renderer cubeRenderer;
 
     void Start()
     {
@@ -43,6 +48,19 @@ public class IpMenuSelector : MonoBehaviour
         apiRequestHandler = FindObjectOfType<ApiRequestHandler>();
         recordButton.onClick.AddListener(Interactable_SelectEntered_Record_Button);
         recordButton.transform.GetComponent<XRSimpleInteractable>().selectEntered.AddListener((arg0) => Interactable_SelectEntered_Record_Button());
+        
+        // Create or find the status cube
+        statusCube = transform.Find("StatusCube")?.gameObject;
+        if (statusCube == null)
+        {
+            statusCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            statusCube.name = "StatusCube";
+            statusCube.transform.SetParent(transform);
+            statusCube.transform.localPosition = new Vector3(1.0f, 0.5f, 0); // Position to the right of menu
+            statusCube.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f); // Make it smaller
+        }
+        cubeRenderer = statusCube.GetComponent<Renderer>();
+        cubeRenderer.material.color = Color.gray; // Default color
     }
 
     private void OnDestroy()
@@ -70,8 +88,14 @@ public class IpMenuSelector : MonoBehaviour
         Debug.Log("Record:" + field);
     }
 
-    public void Interactable_SelectEntered_Record_Button()
+    public async void Interactable_SelectEntered_Record_Button()
     {
         apiRequestHandler.SetIp(ipInputField.text);
+        
+        bool pingResult = await apiRequestHandler.PingServer();
+        if (cubeRenderer != null)
+        {
+            cubeRenderer.material.color = pingResult ? Color.green : Color.red;
+        }
     }
 }
