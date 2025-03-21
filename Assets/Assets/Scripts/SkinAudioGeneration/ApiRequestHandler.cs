@@ -36,6 +36,8 @@ public class ApiRequestHandler : MonoBehaviour
     private async void Start() {
         httpClient.Timeout = TimeSpan.FromSeconds(1800);
         context = NetworkScene.Register(this);
+
+        // Set up the server URL and test connection, with automated fallback to local network
         if (string.IsNullOrEmpty(webServerAddress))
         {
             serverURL = $"http://{ipAddress}:8000";
@@ -61,8 +63,6 @@ public class ApiRequestHandler : MonoBehaviour
                 Debug.Log($"Web server at {serverURL} reachable.");
             }
         }
-
-        Debug.Log($"Server URL: {serverURL}");
     }
 
     public async void HandleRequest(List<string> recognizedText, RequestMode requestMode)
@@ -280,6 +280,8 @@ public class ApiRequestHandler : MonoBehaviour
     public void SetIp(string ip)
     {
         ipAddress = ip;
+        serverURL = $"http://{ipAddress}:8000";
+        Debug.Log($"Set server url to {serverURL} ");
         sendMessage();
     }
 
