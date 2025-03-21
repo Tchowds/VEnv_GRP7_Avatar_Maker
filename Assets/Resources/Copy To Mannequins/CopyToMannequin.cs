@@ -8,12 +8,14 @@ using Ubiq.Messaging;
 using Ubiq.Rooms;
 using Ubiq.Avatars;
 using System;
+using Newtonsoft.Json.Linq; 
 
 
 public class CopyToMannequin : MonoBehaviour
 {
 
     private NetworkContext context;
+    private RoomClient roomClient;
 
     private XRSimpleInteractable copySphereInteractable;
     private FloatingAvatarSeparatedTextures playerFloating;
@@ -23,7 +25,14 @@ public class CopyToMannequin : MonoBehaviour
     private Renderer leftHandRenderer;
     private Renderer rightHandRenderer;
 
+    [SerializeField]
+    private int mannequinPlayerNum = -1; // Is this mannequin for player 1 or player 2. -1 if the mannequin should not be assigned to a player as by default
+
+    public PlayerExperienceController playerExperienceController;
+
     public CustomAvatarTextureCatalogue textureCatalogue;  // Reference to the texture catalogue
+
+
 
     private struct CopyMessage
     {
@@ -48,6 +57,7 @@ public class CopyToMannequin : MonoBehaviour
         rightHandRenderer = floating.rightHandRenderer;
 
         context = NetworkScene.Register(this);
+        roomClient = NetworkScene.Find(this).GetComponentInChildren<RoomClient>();
     }
 
     private void Interactable_SelectEntered_CopyToMannequin(SelectEnterEventArgs arg0)
@@ -56,6 +66,17 @@ public class CopyToMannequin : MonoBehaviour
         var roomClient = networkScene.GetComponentInChildren<RoomClient>();
         var avatarManager = networkScene.GetComponentInChildren<AvatarManager>();
         var playerAvatar = avatarManager.FindAvatar(roomClient.Me);
+
+        // Check that the mannequin being saved to is the player's
+        if (playerExperienceController.getPlayerState(roomClient.Me.uuid)!=null)
+        {
+            int playerNum = playerExperienceController.getPlayerState(roomClient.Me.uuid).playerNum;
+            if (playerNum != -1 && playerNum != mannequinPlayerNum)
+            {
+                Debug.Log("This mannequin is not for player " + roomClient.Me.uuid);
+                return;
+            }
+        }
 
         playerTextured = playerAvatar.GetComponent<TexturedAvatar>();
         playerFloating = playerAvatar.GetComponentInChildren<FloatingAvatarSeparatedTextures>();
@@ -80,7 +101,6 @@ public class CopyToMannequin : MonoBehaviour
         if (playerStored){
             combinedTexture.name += "_player_stored";
         }
-        Debug.Log("new texture name: " + combinedTexture.name);
 
         headRenderer.material.mainTexture = combinedTexture;
         torsoRenderer.material.mainTexture = combinedTexture;
@@ -98,6 +118,13 @@ public class CopyToMannequin : MonoBehaviour
         {
             Debug.LogError("CustomAvatarTextureCatalogue not found in the scene!");
         }
+
+        if (mannequinPlayerNum != -1)
+        {
+            playerExperienceController.SkinSavedOnMannequin(roomClient.Me.uuid, mannequinPlayerNum);
+            context.SendJson(new MannequinStoreMessage { playerID = roomClient.Me.uuid, playerNum = mannequinPlayerNum });
+        }
+
     }
 
     public void ApplyOnlyHead(Texture2D headTex)
@@ -140,18 +167,26 @@ public class CopyToMannequin : MonoBehaviour
 
     public void ProcessMessage(ReferenceCountedSceneGraphMessage message)
     {
-        var m = message.FromJson<CopyMessage>();
-        Texture2D tex = DecodeTexture(m.texture);
-        tex.name = m.name;
 
-        headRenderer.material.mainTexture = tex;
-        torsoRenderer.material.mainTexture = tex;
-        leftHandRenderer.material.mainTexture = tex;
-        rightHandRenderer.material.mainTexture = tex;
+        JObject jsonMessage = JObject.Parse(message.ToString());
+        if (jsonMessage.ContainsKey("texture"))
+        {
+            Texture2D tex = DecodeTexture(jsonMessage["texture"].ToString());
+            tex.name = jsonMessage["name"].ToString();
 
-        textureCatalogue.AddDynamicTexture(tex);
-        ApplyAndSave(tex, tex, tex, tex, true, m.name);
+            headRenderer.material.mainTexture = tex;
+            torsoRenderer.material.mainTexture = tex;
+            leftHandRenderer.material.mainTexture = tex;
+            rightHandRenderer.material.mainTexture = tex;
+
+            textureCatalogue.AddDynamicTexture(tex);
+            ApplyAndSave(tex, tex, tex, tex, true, jsonMessage["name"].ToString());
+
+        } else {
+            playerExperienceController.SkinSavedOnMannequin(jsonMessage["playerID"].ToString(), jsonMessage["playerNum"].ToObject<int>());
+        }        
     }
+
 
     private string EncodeTexture (Texture tex)
     {

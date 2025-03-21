@@ -42,7 +42,7 @@
         {
             if (currentState == ExperienceState.WaitingForPlayersToEnterShopFirstTime)
             {
-                if (CheckMinNumPlayersInShop("TinkerTailorShopManager", 1))
+                if (CheckMinNumPlayersInShop("TinkerTailorShopManager", 2))
                 {
                     currentState = ExperienceState.BothPlayersEnteredShopGetStarted;
                     Debug.Log("Both players are in the shop, let's get started!");
@@ -57,7 +57,7 @@
                 }
             } else if (currentState == ExperienceState.BothPlayersEnteredShopGetStarted)
             {
-                Debug.Log("Both players in shop sending message");
+                // TODO implement check, that at least 2 players have state added 2 skins, then we can proceed to the end state and play the end thanks for helping me out message
             }
         }
 
@@ -76,10 +76,45 @@
             }
             if (!found)
             {
-                playerStates.Add(new PlayerState { playerID = locationMessage.playerID, location = locationMessage });
+                playerStates.Add(new PlayerState { playerID = locationMessage.playerID, location = locationMessage, playerNum = -1, skinsSavedOnMannequins = 0 });
             }
             PrintPlayerStates();
         }
+
+        public void SkinSavedOnMannequin(string playerID, int playerNum)
+        {
+            Debug.Log("Skin saved on mannequin for playerID: " + playerID + " playerNum: " + playerNum);
+            var playerState = getPlayerState(playerID);
+            playerState.skinsSavedOnMannequins++;
+
+            if (playerState.playerNum == -1)
+            {
+                playerState.playerNum = playerNum;
+                // Set the other player's playerNum to the opposite
+                foreach (var otherPlayer in playerStates)
+                {
+                    if (otherPlayer.playerID != playerID && otherPlayer.playerNum == -1)
+                    {
+                        otherPlayer.playerNum = (playerNum == 1) ? 2 : 1;
+                    }
+                }
+            }
+            PrintPlayerStates();
+        }
+
+        public PlayerState getPlayerState(string playerID)
+        {
+            for (int i = 0; i < playerStates.Count; i++)
+            {
+                if (playerStates[i].playerID == playerID)
+                {
+                    return playerStates[i];
+                }
+            }
+            return null;
+        }
+
+
 
         private bool CheckMinNumPlayersInShop(string shop, int minNumPlayers)
         {
@@ -101,7 +136,7 @@
             Debug.Log("Player States:");
             for (int i = 0; i < playerStates.Count; i++)
             {
-                Debug.Log("PlayerID: " + playerStates[i].playerID + " inShop: " + playerStates[i].location.inShop + " shopName: " + playerStates[i].location.shopName);
+                Debug.Log("PlayerID: " + playerStates[i].playerID + " inShop: " + playerStates[i].location.inShop + " shopName: " + playerStates[i].location.shopName + " playerNum: " + playerStates[i].playerNum + " skinsSavedOnMannequins: " + playerStates[i].skinsSavedOnMannequins);
             }
         }
 
