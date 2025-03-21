@@ -65,7 +65,8 @@ namespace Whisper.Samples
                 wasActiveRecorder = true;
                 context.SendJson(new IsRecordingMessage { 
                     isRecording = true,
-                    requestMode = this.requestMode
+                    requestMode = this.requestMode,
+                    isProcessing = false
                 });
                 
                 // Change the cube's color to green to indicate recording
@@ -88,7 +89,8 @@ namespace Whisper.Samples
                 Debug.Log("Stopped recording...");
                         context.SendJson(new IsRecordingMessage { 
                     isRecording = false,
-                    requestMode = this.requestMode
+                    requestMode = this.requestMode,
+                    isProcessing = false
                 });
                 
                 // Revert the cube's color
@@ -104,6 +106,7 @@ namespace Whisper.Samples
         private struct IsRecordingMessage {
             public bool isRecording;
             public SkinConstants.RequestMode requestMode;
+            public bool isProcessing;
         }
 
         private async void OnRecordStop(AudioChunk recordedAudio)
@@ -121,7 +124,13 @@ namespace Whisper.Samples
             if (resultText != null)
             {
                 resultText.text = PROCESSING_TEXT;
-            }   
+            }
+
+            context.SendJson(new IsRecordingMessage { 
+                    isRecording = false,
+                    requestMode = this.requestMode,
+                    isProcessing = true
+            });
             
             var res = await whisper.GetTextAsync(recordedAudio.Data, recordedAudio.Frequency, recordedAudio.Channels);
             
@@ -157,6 +166,11 @@ namespace Whisper.Samples
             {
                 resultText.text = DEFAULT_TEXT;
             }
+            context.SendJson(new IsRecordingMessage { 
+                    isRecording = false,
+                    requestMode = this.requestMode,
+                    isProcessing = false
+            });
         }
 
         private void OnProgressHandler(int progress)
@@ -180,7 +194,19 @@ namespace Whisper.Samples
                         cubeRenderer.materials = mats;
                     }
                     else
-                    {
+                    {   
+                        if (m.isProcessing){
+                            if (resultText != null)
+                            {
+                                resultText.text = PROCESSING_TEXT;
+                            }
+                        }
+                        else{
+                            if (resultText != null)
+                            {
+                                resultText.text = DEFAULT_TEXT;
+                            }
+                        }
                         // Revert the cube's color to original
                         Material[] mats = cubeRenderer.materials;
                         if (mats.Length > 1)
