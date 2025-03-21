@@ -33,15 +33,33 @@ public class ApiRequestHandler : MonoBehaviour
 
     private NetworkContext context;
 
-    private void Start() {
+    private async void Start() {
         httpClient.Timeout = TimeSpan.FromSeconds(1800);
         context = NetworkScene.Register(this);
-        // TODO - Ping the web server address to check if it is active, if not, drop down to the the IP address one
         if (string.IsNullOrEmpty(webServerAddress))
         {
             serverURL = $"http://{ipAddress}:8000";
+            if (!await PingServer())
+            {
+                Debug.LogWarning($"Local network server {serverURL} unreachable");                    
+            } else {
+                Debug.Log($"Local network server {serverURL} reachable.");
+            }
         } else {
             serverURL = webServerAddress;
+            if (!await PingServer())
+            {
+                Debug.LogWarning($"Web server at {serverURL} unreachable, attempting to connect to local network server.");
+                serverURL = $"http://{ipAddress}:8000"; 
+                if (!await PingServer())
+                {
+                    Debug.LogWarning($"Local network server {serverURL} also unreachable");                    
+                } else {
+                    Debug.Log($"Local network server {serverURL} reachable.");
+                }
+            } else {
+                Debug.Log($"Web server at {serverURL} reachable.");
+            }
         }
 
         Debug.Log($"Server URL: {serverURL}");
