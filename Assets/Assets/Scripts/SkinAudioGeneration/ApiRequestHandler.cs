@@ -13,7 +13,10 @@ using Newtonsoft.Json.Linq;
 
 public class ApiRequestHandler : MonoBehaviour
 {
+    [Header("Server Configuration")]
+    [Tooltip("Enter the local network server ip address.")]
     public string ipAddress;
+    [Tooltip("Enter the ngrok web address here if using ngrok. Leave blank to use the local network server.")]
 
     public string webServerAddress;
 
