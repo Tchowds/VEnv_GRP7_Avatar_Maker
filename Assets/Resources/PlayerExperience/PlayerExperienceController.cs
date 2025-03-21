@@ -29,6 +29,8 @@
 
         private List<PlayerState> playerStates = new List<PlayerState>();
 
+        public int minPlayersForExperience = 2;
+
 
         void Start()
         {
@@ -42,7 +44,7 @@
         {
             if (currentState == ExperienceState.WaitingForPlayersToEnterShopFirstTime)
             {
-                if (CheckMinNumPlayersInShop("TinkerTailorShopManager", 2))
+                if (CheckMinNumPlayersInShop("TinkerTailorShopManager", minPlayersForExperience))
                 {
                     currentState = ExperienceState.BothPlayersEnteredShopGetStarted;
                     Debug.Log("Both players are in the shop, let's get started!");
