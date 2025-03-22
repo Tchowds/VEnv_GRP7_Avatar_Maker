@@ -8,6 +8,8 @@ using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit;
 using TMPro;
 using System.Collections.Generic;
+using System.Collections;
+using System.Threading.Tasks;
 
 public class SkinPartSelector : MonoBehaviour
 {
@@ -24,6 +26,8 @@ public class SkinPartSelector : MonoBehaviour
     public Button generateButton;
 
     public ApiRequestHandler apiRequestHandler;
+
+    public GameObject statusCube;
 
     
     public PromptHelper promptHelper;
@@ -54,12 +58,39 @@ public class SkinPartSelector : MonoBehaviour
 
         // Optionally, initialize the visuals with a default selection.
         OnButtonPressed(skinPart);
+        StartCoroutine(CheckEndpointStatus());
 
     }
 
-    void Update()
+    // void Update()
+    // {
+    //     ip_text.text = "Generation Endpoint API address:" + apiRequestHandler.serverURL;
+    // }
+
+    private IEnumerator CheckEndpointStatus()
     {
-        ip_text.text = "Generation Endpoint API Ip:" + apiRequestHandler.ipAddress;
+        while (true)
+        {
+            yield return new WaitForSeconds(1.0f); 
+
+            UpdateEndpointStatus();
+        }
+    }
+
+    private void UpdateEndpointStatus()
+    {
+    if (statusCube != null)
+        {
+            var indicator = statusCube.GetComponent<StatusIndicator>();
+            if (indicator != null && indicator.status == "Online")
+            {
+                ip_text.text = "Connected to Generation Endpoint: " + apiRequestHandler.getServerURL();
+            }
+            else
+            {
+                ip_text.text = "Connection failed: " + apiRequestHandler.getServerURL();
+            }
+        }
     }
 
     void OnButtonPressed(SkinConstants.SkinPart part)

@@ -323,4 +323,9 @@ public class ApiRequestHandler : MonoBehaviour
 
         }
     }
+
+    public string getServerURL()
+    {
+        return serverURL;
+    }
 }
