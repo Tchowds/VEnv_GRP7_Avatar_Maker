@@ -63,6 +63,26 @@
             }
         }
 
+        public bool checkIfBothPlayersAppliedSkinsToMannequins()
+        {
+            bool bothPlayersAppliedSkins = true;
+            int numPlayersAppliedSkins = 0;
+            for (int i = 0; i < playerStates.Count; i++)
+            {
+                if (playerStates[i].skinsSavedOnMannequins >= 2)
+                {
+                    numPlayersAppliedSkins++;
+                }
+            }
+
+            if (numPlayersAppliedSkins < minPlayersForExperience){
+                bothPlayersAppliedSkins = false;
+            }
+
+            return bothPlayersAppliedSkins;
+
+        }
+
         public void UpdatePlayerLocation(PlayerLocationMessage locationMessage)
         {
             Debug.Log("PlayerExperienceController: ShopLocationMessage received - playerID: " + locationMessage.playerID + " shopName: " + locationMessage.shopName + " enterShop: " + locationMessage.inShop);
