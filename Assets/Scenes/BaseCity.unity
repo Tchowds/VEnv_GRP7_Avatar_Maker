@@ -10445,6 +10445,14 @@ PrefabInstance:
       propertyPath: m_PresetInfoIsWorld
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6676721634736255563, guid: 0761d5a08c5bc3f42aa8a73be776c025, type: 3}
+      propertyPath: statusCube
+      value: 
+      objectReference: {fileID: 449949851}
+    - target: {fileID: 6676721634736255563, guid: 0761d5a08c5bc3f42aa8a73be776c025, type: 3}
+      propertyPath: pingTimePeriod
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
