@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 using UnityEngine.Events;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
@@ -60,7 +61,29 @@ public class IpMenuSelector : MonoBehaviour
             statusCube.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f); // Make it smaller
         }
         cubeRenderer = statusCube.GetComponent<Renderer>();
-        cubeRenderer.material.color = Color.gray; // Default color
+        cubeRenderer.sharedMaterial.color = Color.gray; // Default color
+
+        StartCoroutine(PingServerPeriodically());
+    }
+
+    private IEnumerator PingServerPeriodically()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1.0f); 
+
+            _ = PingAndUpdateColor();
+        }
+    }
+
+    // Separate async method for pinging
+    private async Task PingAndUpdateColor()
+    {
+        bool pingResult = await apiRequestHandler.PingServer();
+        if (cubeRenderer != null)
+        {
+            cubeRenderer.sharedMaterial.color = pingResult ? Color.green : Color.red;
+        }
     }
 
     private void OnDestroy()
@@ -95,7 +118,7 @@ public class IpMenuSelector : MonoBehaviour
         bool pingResult = await apiRequestHandler.PingServer();
         if (cubeRenderer != null)
         {
-            cubeRenderer.material.color = pingResult ? Color.green : Color.red;
+            cubeRenderer.sharedMaterial.color = pingResult ? Color.green : Color.red;
         }
     }
 }

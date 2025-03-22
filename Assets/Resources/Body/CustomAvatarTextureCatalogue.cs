@@ -19,7 +19,6 @@ public class CustomAvatarTextureCatalogue : AvatarTextureCatalogue
 
     public void LoadRecentDynamicTextures()
     {
-        Debug.Log("Loading recent textures");
         string path = Application.persistentDataPath;
         if (!Directory.Exists(path))
         {
@@ -38,7 +37,6 @@ public class CustomAvatarTextureCatalogue : AvatarTextureCatalogue
             if (loadedTexture != null)
             {
                 dynamicTextures.Add(loadedTexture);
-                Debug.Log($"Loaded recent texture: {loadedTexture.name}");
             }
         }
     }
@@ -81,12 +79,9 @@ public class CustomAvatarTextureCatalogue : AvatarTextureCatalogue
 
         // Load base textures from the base catalogue
         Textures = new List<Texture2D>(baseCatalogue.Textures);
-        Debug.Log($"Copied {Textures.Count} textures from base catalogue.");
 
         dynamicTextures = new List<Texture2D>(); 
         LoadRecentDynamicTextures();
-        Debug.Log("dynamic textures: "+dynamicTextures.Count);
-        
     }
 
 
