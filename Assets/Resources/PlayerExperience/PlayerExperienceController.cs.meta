@@ -5,8 +5,9 @@ MonoImporter:
   serializedVersion: 2
   defaultReferences:
   - tailorAudioSource: {instanceID: 0}
-  - waitingClip: {instanceID: 0}
-  - bothPlayersInShopClip: {instanceID: 0}
+  - waitingClip: {fileID: 8300000, guid: 70b95cbaf56574dfe8f4ee8f7d03918f, type: 3}
+  - bothPlayersInShopClip: {fileID: 8300000, guid: d3eb1811eeaeb41349de15370af35a3a, type: 3}
+  - endingClip: {fileID: 8300000, guid: 6a25822d610094aefb8a337c8e990b51, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

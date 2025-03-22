@@ -22,6 +22,8 @@
         public AudioClip waitingClip;              // “Oii, over here!” 
         public AudioClip bothPlayersInShopClip;    // Next line after both are inside
 
+        public AudioClip endingClip;              // “You both did a great job!”
+
         private NetworkContext context;
 
         private string player1UID;
@@ -59,7 +61,16 @@
                 }
             } else if (currentState == ExperienceState.BothPlayersEnteredShopGetStarted)
             {
-                // TODO implement check, that at least 2 players have state added 2 skins, then we can proceed to the end state and play the end thanks for helping me out message
+                if (checkIfBothPlayersAppliedSkinsToMannequins()){
+                    currentState = ExperienceState.BothPlayersAppliedSkinsToTheirMannequins;
+                    if (tailorAudioSource && endingClip){
+                        tailorAudioSource.Stop();
+                        tailorAudioSource.PlayOneShot(endingClip);
+                    }
+                }
+                else{
+                    Debug.Log("Waiting for both players to apply skins to their mannequins...");
+                }
             }
         }
 
