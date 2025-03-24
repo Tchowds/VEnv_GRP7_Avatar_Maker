@@ -25,6 +25,8 @@ public class CopyToMannequin : MonoBehaviour
     private Renderer leftHandRenderer;
     private Renderer rightHandRenderer;
 
+    
+
     [SerializeField]
     private int mannequinPlayerNum = -1; // Is this mannequin for player 1 or player 2. -1 if the mannequin should not be assigned to a player as by default
 
@@ -32,7 +34,7 @@ public class CopyToMannequin : MonoBehaviour
 
     public CustomAvatarTextureCatalogue textureCatalogue;  // Reference to the texture catalogue
 
-
+    public int mannequinId = -1;
 
     private struct CopyMessage
     {
@@ -121,6 +123,7 @@ public class CopyToMannequin : MonoBehaviour
 
         if (mannequinPlayerNum != -1)
         {
+            playerExperienceController.UpdateMannequinSkin(mannequinId);
             playerExperienceController.SkinSavedOnMannequin(roomClient.Me.uuid, mannequinPlayerNum);
             context.SendJson(new MannequinStoreMessage { playerID = roomClient.Me.uuid, playerNum = mannequinPlayerNum });
         }

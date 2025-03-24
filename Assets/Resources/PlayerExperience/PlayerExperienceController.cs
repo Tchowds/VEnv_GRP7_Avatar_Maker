@@ -39,6 +39,8 @@
 
         public int minPlayersForExperience = 2;
 
+        // create a list of four elements
+        private List<int> mannequinChanged = new List<int> { 0, 0, 0, 0 };
 
         void Start()
         {
@@ -88,21 +90,20 @@
         public bool checkIfBothPlayersAppliedSkinsToMannequins()
         {
             bool bothPlayersAppliedSkins = true;
-            int numPlayersAppliedSkins = 0;
-            for (int i = 0; i < playerStates.Count; i++)
+            
+            for (int i = 0; i < mannequinChanged.Count; i++)
             {
-                if (playerStates[i].skinsSavedOnMannequins >= 2)
+                if (mannequinChanged[i] == 1)
                 {
-                    numPlayersAppliedSkins++;
+                    bothPlayersAppliedSkins = bothPlayersAppliedSkins && true;
+                }
+                else
+                {
+                    bothPlayersAppliedSkins = false;
+                    break;
                 }
             }
-
-            if (numPlayersAppliedSkins < minPlayersForExperience){
-                bothPlayersAppliedSkins = false;
-            }
-
             return bothPlayersAppliedSkins;
-
         }
 
         public void UpdatePlayerLocation(PlayerLocationMessage locationMessage)
@@ -125,6 +126,14 @@
             PrintPlayerStates();
         }
 
+        public void UpdateMannequinSkin(int mannequinId)
+        {   
+            if (mannequinChanged[mannequinId] == 0)
+            {
+                Debug.Log("Mannequin " + mannequinId + " has been updated");
+                mannequinChanged[mannequinId]++;
+            }
+        }
         public void SkinSavedOnMannequin(string playerID, int playerNum)
         {
             Debug.Log("Skin saved on mannequin for playerID: " + playerID + " playerNum: " + playerNum);
