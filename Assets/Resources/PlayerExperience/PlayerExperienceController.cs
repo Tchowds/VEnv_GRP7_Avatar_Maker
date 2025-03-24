@@ -19,15 +19,21 @@
 
         [Header("Audio/Dialogue")]
         public AudioSource tailorAudioSource;       // Assign via Inspector if you want voice lines
-        public AudioClip waitingClip;              // “Oii, over here!” 
-        public AudioClip bothPlayersInShopClip;    // Next line after both are inside
-
-        public AudioClip endingClip;              // “You both did a great job!”
+        public AudioClip tailorInitialWaitingClip;              // “Oii, over here!” 
+        public AudioClip tailorInstructionsOnceBothIn;    // Next line after both are inside
+        public AudioClip swapStudioInstructions;   
+        public AudioClip bothPlayersReturnTinkerTailorFirstTime;   
+        public AudioClip diffusionDesignInstructions;
+        public AudioClip bothPlayersReturnTinkerTailorSecondTime;   
+        public AudioClip tailorEndingClip;              // “You both did a great job!”
 
         private NetworkContext context;
 
-        private string player1UID;
-        private string player2UID;
+        private float updateInterval = 0.5f; // seconds
+        private float nextUpdateTime = 0f;
+
+        //private string player1UID;
+        //private string player2UID;
 
         private List<PlayerState> playerStates = new List<PlayerState>();
 
@@ -36,7 +42,6 @@
 
         void Start()
         {
-            context = NetworkScene.Register(this);
             StartCoroutine(WaitingForPlayersToEnterFirstTimeCoroutine());
             Debug.Log("Tailor: Oii, over here! (waiting for both players to enter)");
         }
@@ -44,16 +49,22 @@
         // Update is called once per frame
         void Update()
         {
+            if (Time.time < nextUpdateTime)
+                return; 
+
+            nextUpdateTime = Time.time + updateInterval;
+            Debug.Log("Update!");
+
             if (currentState == ExperienceState.WaitingForPlayersToEnterShopFirstTime)
             {
                 if (CheckMinNumPlayersInShop("TinkerTailorShopManager", minPlayersForExperience))
                 {
                     currentState = ExperienceState.BothPlayersEnteredShopGetStarted;
                     Debug.Log("Both players are in the shop, let's get started!");
-                    if (tailorAudioSource && bothPlayersInShopClip)
+                    if (tailorAudioSource && tailorInstructionsOnceBothIn)
                     {
                         tailorAudioSource.Stop();
-                        tailorAudioSource.PlayOneShot(bothPlayersInShopClip);
+                        tailorAudioSource.PlayOneShot(tailorInstructionsOnceBothIn);
                     }
                 } else
                 {
@@ -63,9 +74,9 @@
             {
                 if (checkIfBothPlayersAppliedSkinsToMannequins()){
                     currentState = ExperienceState.BothPlayersAppliedSkinsToTheirMannequins;
-                    if (tailorAudioSource && endingClip){
+                    if (tailorAudioSource && tailorEndingClip){
                         tailorAudioSource.Stop();
-                        tailorAudioSource.PlayOneShot(endingClip);
+                        tailorAudioSource.PlayOneShot(tailorEndingClip);
                     }
                 }
                 else{
@@ -181,13 +192,13 @@
 
         private IEnumerator WaitingForPlayersToEnterFirstTimeCoroutine()
         {
-            // Continue looping until we exit the waiting state
+
             while (currentState == ExperienceState.WaitingForPlayersToEnterShopFirstTime)
             {
-                // If we have an AudioSource and a waiting clip, play it
-                if (tailorAudioSource && waitingClip)
+    
+                if (tailorAudioSource && tailorInitialWaitingClip)
                 {
-                    tailorAudioSource.PlayOneShot(waitingClip);
+                    tailorAudioSource.PlayOneShot(tailorInitialWaitingClip);
                 }
 
                 // Wait 20 seconds before playing again
@@ -197,8 +208,4 @@
             Debug.Log("Exited waiting state, stopping waitingClip loop.");
         }
 
-        // private IEnumerator WaitFor(float seconds)
-        // {
-        //     yield return new WaitForSeconds(seconds);
-        // }
     }

@@ -427,10 +427,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentState: 0
   tailorAudioSource: {fileID: 1092181177}
-  waitingClip: {fileID: 8300000, guid: 70b95cbaf56574dfe8f4ee8f7d03918f, type: 3}
-  bothPlayersInShopClip: {fileID: 8300000, guid: d3eb1811eeaeb41349de15370af35a3a, type: 3}
-  endingClip: {fileID: 8300000, guid: 6a25822d610094aefb8a337c8e990b51, type: 3}
-  minPlayersForExperience: 2
+  tailorInitialWaitingClip: {fileID: 8300000, guid: 70b95cbaf56574dfe8f4ee8f7d03918f, type: 3}
+  tailorInstructionsOnceBothIn: {fileID: 8300000, guid: d3eb1811eeaeb41349de15370af35a3a, type: 3}
+  swapStudioInstructions: {fileID: 8300000, guid: bb8e9f6245ece425f85c025e7105f2f5, type: 3}
+  bothPlayersReturnTinkerTailorFirstTime: {fileID: 8300000, guid: 5210b0a4b26a242ca98547fa96c186d0, type: 3}
+  diffusionDesignInstructions: {fileID: 8300000, guid: 03de9ceb3f56d4572bf148a3b08a8485, type: 3}
+  bothPlayersReturnTinkerTailorSecondTime: {fileID: 8300000, guid: 71ea75d62ed9b40848980293ee9c4fea, type: 3}
+  tailorEndingClip: {fileID: 8300000, guid: 6a25822d610094aefb8a337c8e990b51, type: 3}
+  minPlayersForExperience: 1
 --- !u!4 &15846192
 Transform:
   m_ObjectHideFlags: 0
@@ -1250,7 +1254,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ipAddress: 10.0.0.32
-  webServerAddress: https://8dfb-128-16-11-22.ngrok-free.app
+  webServerAddress: https://73f4-128-16-9-226.ngrok-free.app
   texturedModelAvatar: {fileID: 1951152317}
   customAvatarTextureCatalogue: {fileID: 11400000, guid: b9b5ab83068724908937dfdd4d246538, type: 2}
   skinManager: {fileID: 1892218466}
@@ -14172,27 +14176,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 743039901501322695, guid: 73369a530bd8253469d623a3ea6dcff9, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 743039901501322695, guid: 73369a530bd8253469d623a3ea6dcff9, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 743039901501322695, guid: 73369a530bd8253469d623a3ea6dcff9, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 30
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 743039901501322695, guid: 73369a530bd8253469d623a3ea6dcff9, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 40
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 743039901501322695, guid: 73369a530bd8253469d623a3ea6dcff9, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 53
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 743039901501322695, guid: 73369a530bd8253469d623a3ea6dcff9, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -22.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1082635309853141966, guid: 73369a530bd8253469d623a3ea6dcff9, type: 3}
       propertyPath: avatarPrefab
@@ -14400,27 +14404,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6806867407171974117, guid: 73369a530bd8253469d623a3ea6dcff9, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6806867407171974117, guid: 73369a530bd8253469d623a3ea6dcff9, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6806867407171974117, guid: 73369a530bd8253469d623a3ea6dcff9, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 30
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6806867407171974117, guid: 73369a530bd8253469d623a3ea6dcff9, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 40
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6806867407171974117, guid: 73369a530bd8253469d623a3ea6dcff9, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 21
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6806867407171974117, guid: 73369a530bd8253469d623a3ea6dcff9, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -22.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6866552682078070656, guid: 73369a530bd8253469d623a3ea6dcff9, type: 3}
       propertyPath: m_AnchorMax.y
