@@ -16,11 +16,14 @@ public class ApiRequestHandler : MonoBehaviour
     [Header("Server Configuration")]
     [Tooltip("Enter the local network server ip address.")]
     public string ipAddress;
+    private string prevIpAddress;
     [Tooltip("Enter the ngrok web address here if using ngrok. Leave blank to use the local network server.")]
 
     public string webServerAddress;
+    private string prevWebServerAddress;
 
     private string serverURL;
+
 
     [Header("Dependencies")]
     public TexturedModelAvatar texturedModelAvatar;
@@ -37,6 +40,13 @@ public class ApiRequestHandler : MonoBehaviour
         httpClient.Timeout = TimeSpan.FromSeconds(1800);
         context = NetworkScene.Register(this);
 
+        connectOrFallback();
+        prevIpAddress = ipAddress;
+        prevWebServerAddress = webServerAddress;
+        Debug.Log(prevWebServerAddress);
+    }
+
+    private async void connectOrFallback() {
         // Set up the server URL and test connection, with automated fallback to local network
         if (string.IsNullOrEmpty(webServerAddress))
         {
@@ -65,6 +75,25 @@ public class ApiRequestHandler : MonoBehaviour
         }
     }
 
+    private async void Update() {
+        if (ipAddress != prevIpAddress)
+        {
+            serverURL = $"http://{ipAddress}:8000";
+            Debug.Log($"Updated server url to {serverURL} ");
+            sendMessage();
+            connectOrFallback();
+            prevIpAddress = ipAddress;
+        } else if (webServerAddress != prevWebServerAddress)
+        {
+            serverURL = webServerAddress;
+            Debug.Log($"Updated server url to {serverURL} ");
+            sendMessage();
+            connectOrFallback();
+            prevWebServerAddress = webServerAddress;
+        }
+    }
+
+
     public async void HandleRequest(List<string> recognizedText, RequestMode requestMode)
     {
         switch (requestMode)
@@ -83,6 +112,7 @@ public class ApiRequestHandler : MonoBehaviour
 
     public async Task<bool> PingServer()
     {
+        Debug.Log("Pinging: "+serverURL);
         try
         {
             var requestUrl = $"{serverURL}/ping";
