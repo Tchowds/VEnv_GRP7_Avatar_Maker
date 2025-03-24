@@ -19,7 +19,8 @@ public class IpMenuSelector : MonoBehaviour
     private ApiRequestHandler apiRequestHandler;
     
     // Add cube references
-    private GameObject statusCube;
+    public GameObject statusCube;
+    public float pingTimePeriod = 5.0f;
     private Renderer cubeRenderer;
 
     void Start()
@@ -46,7 +47,7 @@ public class IpMenuSelector : MonoBehaviour
             child.GetComponent<Button>().onClick.AddListener(listener);
             child.GetComponent<XRSimpleInteractable>().selectEntered.AddListener(eventListener);
         }
-        apiRequestHandler = FindObjectOfType<ApiRequestHandler>();
+        apiRequestHandler = FindFirstObjectByType<ApiRequestHandler>();
         recordButton.onClick.AddListener(Interactable_SelectEntered_Record_Button);
         recordButton.transform.GetComponent<XRSimpleInteractable>().selectEntered.AddListener((arg0) => Interactable_SelectEntered_Record_Button());
         
@@ -70,7 +71,7 @@ public class IpMenuSelector : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(1.0f); 
+            yield return new WaitForSeconds(pingTimePeriod); 
 
             _ = PingAndUpdateColor();
         }
@@ -83,6 +84,11 @@ public class IpMenuSelector : MonoBehaviour
         if (cubeRenderer != null)
         {
             cubeRenderer.sharedMaterial.color = pingResult ? Color.green : Color.red;
+            var indicator = statusCube.GetComponent<StatusIndicator>();
+            if (indicator != null)
+            {
+                indicator.status = pingResult ? "Online" : "Offline";
+            }
         }
     }
 
