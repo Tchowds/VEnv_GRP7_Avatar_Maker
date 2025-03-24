@@ -123,7 +123,6 @@
                 Debug.Log("Mannequin " + mannequinId + " has been updated");
                 mannequinChanged[mannequinId]++;
             }
-            
         }
         public void SkinSavedOnMannequin(string playerID, int playerNum)
         {
