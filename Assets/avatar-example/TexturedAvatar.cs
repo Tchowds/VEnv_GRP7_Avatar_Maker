@@ -40,6 +40,7 @@ public class TexturedAvatar : MonoBehaviour
         
         if (avatar.IsLocal)
         {
+            roomClient.OnJoinedRoom.AddListener(OnJoinedRoom);
             var hasSavedSettings = false;
             if (SaveTextureSetting)
             {
@@ -53,6 +54,27 @@ public class TexturedAvatar : MonoBehaviour
         
         roomClient.OnPeerUpdated.AddListener(RoomClient_OnPeerUpdated);
     }
+
+    private void OnJoinedRoom(IRoom room)
+    {
+        Debug.Log("[TexturedAvatar] Joined room - broadcasting texture settings");
+
+        var floatingAvatar = GetComponentInChildren<FloatingAvatarSeparatedTextures>();
+
+        // Convert materials to Texture2D first
+        var headTexture = floatingAvatar.headRenderer.material.mainTexture as Texture2D;
+        var torsoTexture = floatingAvatar.torsoRenderer.material.mainTexture as Texture2D;
+        var leftHandTexture = floatingAvatar.leftHandRenderer.material.mainTexture as Texture2D;
+        var rightHandTexture = floatingAvatar.rightHandRenderer.material.mainTexture as Texture2D;
+
+        // Then call SetTexture with the textures, not UUIDs
+        SetTexture(headTexture, AvatarPart.HEAD);
+        SetTexture(torsoTexture, AvatarPart.TORSO);
+        SetTexture(leftHandTexture, AvatarPart.LEFTHAND);
+        SetTexture(rightHandTexture, AvatarPart.RIGHTHAND);
+    }
+
+
 
     private void OnDestroy()
     {
