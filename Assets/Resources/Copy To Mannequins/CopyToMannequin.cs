@@ -65,7 +65,7 @@ public class CopyToMannequin : MonoBehaviour
     private void Interactable_SelectEntered_CopyToMannequin(SelectEnterEventArgs arg0)
     {
         var networkScene = NetworkScene.Find(this);
-        var roomClient = networkScene.GetComponentInChildren<RoomClient>();
+        //var roomClient = networkScene.GetComponentInChildren<RoomClient>();
         var avatarManager = networkScene.GetComponentInChildren<AvatarManager>();
         var playerAvatar = avatarManager.FindAvatar(roomClient.Me);
 

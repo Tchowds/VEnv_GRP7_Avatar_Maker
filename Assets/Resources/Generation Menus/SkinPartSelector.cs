@@ -100,6 +100,13 @@ public class SkinPartSelector : MonoBehaviour
         incurSkinPart();
     }
 
+    public void InitialSetBodyPart(SkinConstants.SkinPart part)
+    {
+        skinPart = part;
+        sendMessage();
+        incurSkinPart();
+    }
+
     public void ButtonOnClick(string part)
     {
         skinPart = (SkinConstants.SkinPart)Enum.Parse(typeof(SkinConstants.SkinPart), part);

@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using Ubiq.Messaging;
     using Ubiq.Rooms;
+    using static SkinConstants;
 
     public class PlayerExperienceController : MonoBehaviour
     {
@@ -13,27 +14,30 @@
         {
             WaitingForPlayersToEnterShopFirstTime,
             BothPlayersEnteredShopGetStarted,
-            BothPlayersReturnedToShopFirstTime,
-            BothPlayersAppliedSkinsToTheirMannequins
+            BothPlayersEnteredSwapStudio,
+            BothPlayersReturnedTinkerTailorFirstTime,
+            bothPlayersAddedFirstSkinToMannequin,
+            BothPlayersEnteredDiffusionDesign,
+            BothPlayersReturnedTinkerTailorSecondTime,
+            BothPlayersAppliedSkinsToBothTheirMannequinsEnding,
+
         }
 
-        [Header("Audio/Dialogue")]
+        [Header("Audio Dialogue Clips")]
         public AudioSource tailorAudioSource;       // Assign via Inspector if you want voice lines
         public AudioClip tailorInitialWaitingClip;              // “Oii, over here!” 
         public AudioClip tailorInstructionsOnceBothIn;    // Next line after both are inside
         public AudioClip swapStudioInstructions;   
         public AudioClip bothPlayersReturnTinkerTailorFirstTime;   
+        public AudioClip bothPlayersAddedFirstSkinToMannequin;
         public AudioClip diffusionDesignInstructions;
         public AudioClip bothPlayersReturnTinkerTailorSecondTime;   
         public AudioClip tailorEndingClip;              // “You both did a great job!”
 
         private NetworkContext context;
-
         private float updateInterval = 0.5f; // seconds
         private float nextUpdateTime = 0f;
-
-        //private string player1UID;
-        //private string player2UID;
+        private RoomClient roomClient;
 
         private List<PlayerState> playerStates = new List<PlayerState>();
 
@@ -44,6 +48,8 @@
 
         void Start()
         {
+            roomClient = NetworkScene.Find(this).GetComponentInChildren<RoomClient>();
+            SetTailorSpatialBlend(1f);
             StartCoroutine(WaitingForPlayersToEnterFirstTimeCoroutine());
             Debug.Log("Tailor: Oii, over here! (waiting for both players to enter)");
         }
@@ -55,7 +61,7 @@
                 return; 
 
             nextUpdateTime = Time.time + updateInterval;
-            Debug.Log("Update!");
+            Debug.Log("Current state: !"+currentState);
 
             if (currentState == ExperienceState.WaitingForPlayersToEnterShopFirstTime)
             {
@@ -63,6 +69,7 @@
                 {
                     currentState = ExperienceState.BothPlayersEnteredShopGetStarted;
                     Debug.Log("Both players are in the shop, let's get started!");
+                    SetHeadTorsoSelectionForPlayers();
                     if (tailorAudioSource && tailorInstructionsOnceBothIn)
                     {
                         tailorAudioSource.Stop();
@@ -70,15 +77,99 @@
                     }
                 } else
                 {
-                    Debug.Log("Waiting for both players to enter the shop...");
+                    Debug.Log("Waiting for both players to enter the tinker tailor shop...");
                 }
             } else if (currentState == ExperienceState.BothPlayersEnteredShopGetStarted)
             {
-                if (checkIfBothPlayersAppliedSkinsToMannequins()){
-                    currentState = ExperienceState.BothPlayersAppliedSkinsToTheirMannequins;
+                if(CheckMinNumPlayersInShop("SwapStudioShopManager", minPlayersForExperience))
+                {
+                    currentState = ExperienceState.BothPlayersEnteredSwapStudio;
+                    Debug.Log("Both players are in the Swap Studio");
+                    SetTailorSpatialBlend(0.2f);
+                    if (tailorAudioSource && swapStudioInstructions)
+                    {
+                        tailorAudioSource.Stop();
+                        tailorAudioSource.PlayOneShot(swapStudioInstructions);
+                    }
+                }
+                else
+                {
+                    Debug.Log("Waiting for both players to enter the Swap Studio...");
+                }
+            } else if (currentState == ExperienceState.BothPlayersEnteredSwapStudio) {
+                if (CheckMinNumPlayersInShop("TinkerTailorShopManager", minPlayersForExperience))
+                {
+                    currentState = ExperienceState.BothPlayersReturnedTinkerTailorFirstTime;
+                    Debug.Log("Both players are back in the Tinker Tailor shop return first time");
+                    SetTailorSpatialBlend(1f);
+                    if (tailorAudioSource && bothPlayersReturnTinkerTailorFirstTime)
+                    {
+                        tailorAudioSource.Stop();
+                        tailorAudioSource.PlayOneShot(bothPlayersReturnTinkerTailorFirstTime);
+                    }
+                }
+                else
+                {
+                    Debug.Log("Waiting for both players to return to the Tinker Tailor shop for first time...");
+                }
+            } if (currentState == ExperienceState.BothPlayersReturnedTinkerTailorFirstTime) {
+                if (checkIfPlayersAppliedSkinsToFirstMannequins())
+                {
+                    currentState = ExperienceState.bothPlayersAddedFirstSkinToMannequin;
+                    Debug.Log("Both players have added a skin to their mannequin");
+                    SetTailorSpatialBlend(1f);
+                    if (tailorAudioSource && bothPlayersAddedFirstSkinToMannequin)
+                    {
+                        tailorAudioSource.Stop();
+                        tailorAudioSource.PlayOneShot(bothPlayersAddedFirstSkinToMannequin);
+                    }
+                }
+                else
+                {
+                    Debug.Log("Waiting for both players to add their first skin to their mannequins");
+                }
+            }
+            else if (currentState == ExperienceState.bothPlayersAddedFirstSkinToMannequin) 
+            {
+                if (CheckMinNumPlayersInShop("DiffusionDesignShopManager", minPlayersForExperience))
+                {
+                    currentState = ExperienceState.BothPlayersEnteredDiffusionDesign;
+                    Debug.Log("Both players are in the Diffusion Design shop");
+                    SetTailorSpatialBlend(0.2f);
+                    if (tailorAudioSource && diffusionDesignInstructions)
+                    {
+                        tailorAudioSource.Stop();
+                        tailorAudioSource.PlayOneShot(diffusionDesignInstructions);
+                    }
+                }
+                else
+                {
+                    Debug.Log("Waiting for both players to enter the Diffusion Design shop...");
+                }
+            } else if (currentState == ExperienceState.BothPlayersEnteredDiffusionDesign) {
+                if (CheckMinNumPlayersInShop("TinkerTailorShopManager", minPlayersForExperience))
+                {
+                    currentState = ExperienceState.BothPlayersReturnedTinkerTailorSecondTime;
+                    Debug.Log("Both players are back in the Tinker Tailor shop return second time");
+                    SetTailorSpatialBlend(1f);
+                    if (tailorAudioSource && bothPlayersReturnTinkerTailorSecondTime)
+                    {
+                        tailorAudioSource.Stop();
+                        tailorAudioSource.PlayOneShot(bothPlayersReturnTinkerTailorSecondTime);
+                    }
+                }
+                else
+                {
+                    Debug.Log("Waiting for both players to return to the Tinker Tailor shop for second time...");
+                }
+            } else if (currentState == ExperienceState.BothPlayersReturnedTinkerTailorSecondTime)
+            {
+                if (checkIfPlayersAppliedSkinsToBothMannequins()){
+                    currentState = ExperienceState.BothPlayersAppliedSkinsToBothTheirMannequinsEnding;
+                    Debug.Log("Both players have applied skins to both their mannequins, experience complete!");
                     if (tailorAudioSource && tailorEndingClip){
                         tailorAudioSource.Stop();
-                        tailorAudioSource.PlayOneShot(tailorEndingClip);
+                        tailorAudioSource.PlayOneShot(tailorEndingClip);                        
                     }
                 }
                 else{
@@ -87,23 +178,42 @@
             }
         }
 
-        public bool checkIfBothPlayersAppliedSkinsToMannequins()
+        public bool checkIfPlayersAppliedSkinsToFirstMannequins()
         {
-            bool bothPlayersAppliedSkins = true;
-            
-            for (int i = 0; i < mannequinChanged.Count; i++)
+            bool player1Updated = mannequinChanged[0] == 1 || mannequinChanged[1] == 1;
+            bool player2Updated = mannequinChanged[2] == 1 || mannequinChanged[3] == 1;
+
+            if (playerStates.Count == 1)
             {
-                if (mannequinChanged[i] == 1)
-                {
-                    bothPlayersAppliedSkins = bothPlayersAppliedSkins && true;
-                }
-                else
-                {
-                    bothPlayersAppliedSkins = false;
-                    break;
-                }
+                // If only one player, allow either player 1 OR player 2 mannequin to be updated
+                return player1Updated || player2Updated;
             }
-            return bothPlayersAppliedSkins;
+            else if (playerStates.Count >= 2)
+            {
+                // Both players must have updated at least one of their mannequins
+                return player1Updated && player2Updated;
+            }
+
+            return false;
+        }
+
+        public bool checkIfPlayersAppliedSkinsToBothMannequins()
+        {
+            bool player1Updated = mannequinChanged[0] == 1 && mannequinChanged[1] == 1;
+            bool player2Updated = mannequinChanged[2] == 1 && mannequinChanged[3] == 1;
+
+            if (playerStates.Count == 1)
+            {
+                // If only one player, allow either player 1 OR player 2 mannequin to be updated
+                return player1Updated || player2Updated;
+            }
+            else if (playerStates.Count >= 2)
+            {
+                // Both players must have updated at least one of their mannequins
+                return player1Updated && player2Updated;
+            }
+
+            return false;
         }
 
         public void UpdatePlayerLocation(PlayerLocationMessage locationMessage)
@@ -194,10 +304,16 @@
         }
 
 
+        // When in tinker tailor or before we start, use spatial audio, when in other shops, dont.
+        private void SetTailorSpatialBlend(float value)
+        {
+            if (tailorAudioSource != null)
+            {
+                tailorAudioSource.spatialBlend = Mathf.Clamp01(value); 
+                Debug.Log($"[TailorAudio] Spatial blend set to {value}");
+            }
+        }
 
-
-
-        // State couroutine loops
 
         private IEnumerator WaitingForPlayersToEnterFirstTimeCoroutine()
         {
@@ -217,4 +333,22 @@
             Debug.Log("Exited waiting state, stopping waitingClip loop.");
         }
 
+        public void SetHeadTorsoSelectionForPlayers() {
+            for (int i = 0; i < playerStates.Count; i++)
+            {
+                if (playerStates[i].playerID == roomClient.Me.uuid)
+                {
+                    var skinPartSelector = Object.FindFirstObjectByType<SkinPartSelector>();
+                    if (i % 2 == 0)
+                    {
+                        // player selection set to the head
+                        skinPartSelector.InitialSetBodyPart(SkinConstants.SkinPart.Head);
+                    } else {
+                        // player selection set to the torso
+                        skinPartSelector.InitialSetBodyPart(SkinConstants.SkinPart.Torso);
+                    }
+                }
+            }
+            
+        }
     }

@@ -392,7 +392,7 @@ PrefabInstance:
     - target: {fileID: 8930610318754038311, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
       propertyPath: playerExperienceController
       value: 
-      objectReference: {fileID: 15846191}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 6615159234546098292, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
@@ -408,7 +408,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 15846192}
-  - component: {fileID: 15846191}
+  - component: {fileID: 15846193}
   m_Layer: 0
   m_Name: PlayerExperienceController
   m_TagString: Untagged
@@ -416,7 +416,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &15846191
+--- !u!4 &15846192
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 15846190}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 12.313881, y: 2.3534272, z: -22.702332}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &15846193
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -434,25 +449,11 @@ MonoBehaviour:
   tailorInstructionsOnceBothIn: {fileID: 8300000, guid: d3eb1811eeaeb41349de15370af35a3a, type: 3}
   swapStudioInstructions: {fileID: 8300000, guid: bb8e9f6245ece425f85c025e7105f2f5, type: 3}
   bothPlayersReturnTinkerTailorFirstTime: {fileID: 8300000, guid: 5210b0a4b26a242ca98547fa96c186d0, type: 3}
+  bothPlayersAddedFirstSkinToMannequin: {fileID: 8300000, guid: bb53595de19564bad8ebb2943223a50b, type: 3}
   diffusionDesignInstructions: {fileID: 8300000, guid: 03de9ceb3f56d4572bf148a3b08a8485, type: 3}
   bothPlayersReturnTinkerTailorSecondTime: {fileID: 8300000, guid: 71ea75d62ed9b40848980293ee9c4fea, type: 3}
   tailorEndingClip: {fileID: 8300000, guid: 6a25822d610094aefb8a337c8e990b51, type: 3}
   minPlayersForExperience: 1
---- !u!4 &15846192
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 15846190}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12.313881, y: 2.3534272, z: -22.702332}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &16546962 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5088829427296280434, guid: 8324d290a4659b140a89f68e6a9e3ab3, type: 3}
@@ -2082,7 +2083,7 @@ PrefabInstance:
     - target: {fileID: 8930610318754038311, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
       propertyPath: playerExperienceController
       value: 
-      objectReference: {fileID: 15846191}
+      objectReference: {fileID: 15846193}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7858773065302751155, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
@@ -4115,7 +4116,7 @@ PrefabInstance:
     - target: {fileID: 8930610318754038311, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
       propertyPath: playerExperienceController
       value: 
-      objectReference: {fileID: 15846191}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 6615159234546098292, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
@@ -5895,7 +5896,7 @@ PrefabInstance:
     - target: {fileID: 8930610318754038311, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
       propertyPath: playerExperienceController
       value: 
-      objectReference: {fileID: 15846191}
+      objectReference: {fileID: 15846193}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7858773065302751155, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
@@ -6544,7 +6545,7 @@ PrefabInstance:
     - target: {fileID: 8930610318754038311, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
       propertyPath: playerExperienceController
       value: 
-      objectReference: {fileID: 15846191}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8562,7 +8563,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   globalAudioMixer: {fileID: 24100000, guid: b62c8a2a584d549d8b1fe48d63ba1b60, type: 2}
   shopMusicParameter: ShopMusicTinkerTailor_Volume
-  playerExperienceController: {fileID: 15846191}
+  playerExperienceController: {fileID: 15846193}
   crowdVolumeInside: -40
   crowdVolumeOutside: -30
   shopVolumeInside: -35
@@ -8622,7 +8623,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   globalAudioMixer: {fileID: 24100000, guid: b62c8a2a584d549d8b1fe48d63ba1b60, type: 2}
   shopMusicParameter: ShopMusicSwapStudio_Volume
-  playerExperienceController: {fileID: 15846191}
+  playerExperienceController: {fileID: 15846193}
   crowdVolumeInside: -40
   crowdVolumeOutside: -30
   shopVolumeInside: -30
@@ -9293,7 +9294,7 @@ PrefabInstance:
     - target: {fileID: 8930610318754038311, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
       propertyPath: playerExperienceController
       value: 
-      objectReference: {fileID: 15846191}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 6615159234546098292, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
@@ -10758,7 +10759,7 @@ PrefabInstance:
     - target: {fileID: 8930610318754038311, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
       propertyPath: playerExperienceController
       value: 
-      objectReference: {fileID: 15846191}
+      objectReference: {fileID: 15846193}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7858773065302751155, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
@@ -11924,7 +11925,7 @@ PrefabInstance:
     - target: {fileID: 8930610318754038311, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
       propertyPath: playerExperienceController
       value: 
-      objectReference: {fileID: 15846191}
+      objectReference: {fileID: 15846193}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7858773065302751155, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
@@ -12620,7 +12621,7 @@ PrefabInstance:
     - target: {fileID: 8930610318754038311, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
       propertyPath: playerExperienceController
       value: 
-      objectReference: {fileID: 15846191}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 6615159234546098292, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
@@ -14004,7 +14005,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   globalAudioMixer: {fileID: 24100000, guid: b62c8a2a584d549d8b1fe48d63ba1b60, type: 2}
   shopMusicParameter: ShopMusicDiffusionDesign_Volume
-  playerExperienceController: {fileID: 15846191}
+  playerExperienceController: {fileID: 15846193}
   crowdVolumeInside: -45
   crowdVolumeOutside: -30
   shopVolumeInside: -30
@@ -14525,27 +14526,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 743039901501322695, guid: 73369a530bd8253469d623a3ea6dcff9, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 743039901501322695, guid: 73369a530bd8253469d623a3ea6dcff9, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 743039901501322695, guid: 73369a530bd8253469d623a3ea6dcff9, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 743039901501322695, guid: 73369a530bd8253469d623a3ea6dcff9, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 743039901501322695, guid: 73369a530bd8253469d623a3ea6dcff9, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 53
       objectReference: {fileID: 0}
     - target: {fileID: 743039901501322695, guid: 73369a530bd8253469d623a3ea6dcff9, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -22.5
       objectReference: {fileID: 0}
     - target: {fileID: 1082635309853141966, guid: 73369a530bd8253469d623a3ea6dcff9, type: 3}
       propertyPath: avatarPrefab
@@ -14753,27 +14754,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6806867407171974117, guid: 73369a530bd8253469d623a3ea6dcff9, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6806867407171974117, guid: 73369a530bd8253469d623a3ea6dcff9, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6806867407171974117, guid: 73369a530bd8253469d623a3ea6dcff9, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 6806867407171974117, guid: 73369a530bd8253469d623a3ea6dcff9, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 6806867407171974117, guid: 73369a530bd8253469d623a3ea6dcff9, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 6806867407171974117, guid: 73369a530bd8253469d623a3ea6dcff9, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -22.5
       objectReference: {fileID: 0}
     - target: {fileID: 6866552682078070656, guid: 73369a530bd8253469d623a3ea6dcff9, type: 3}
       propertyPath: m_AnchorMax.y
