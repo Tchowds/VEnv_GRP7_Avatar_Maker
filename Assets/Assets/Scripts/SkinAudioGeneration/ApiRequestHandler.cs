@@ -153,7 +153,7 @@ public class ApiRequestHandler : MonoBehaviour
 
                 if (SkinConstants.skinFileToID.TryGetValue(filename, out int skinId))
                 {
-                    embeddedNetworkedMannequin.ApplyEmbeddedSkin(skinId);
+                    embeddedNetworkedMannequin.ApplyEmbeddedSkin(skinId, query);
                     Debug.Log($"Applied Skin: {filename}");
                 }
                 else
