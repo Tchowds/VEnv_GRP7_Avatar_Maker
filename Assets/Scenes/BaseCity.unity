@@ -8504,10 +8504,10 @@ MonoBehaviour:
   globalAudioMixer: {fileID: 24100000, guid: b62c8a2a584d549d8b1fe48d63ba1b60, type: 2}
   shopMusicParameter: ShopMusicTinkerTailor_Volume
   playerExperienceController: {fileID: 15846193}
-  crowdVolumeInside: -40
-  crowdVolumeOutside: -30
-  shopVolumeInside: -35
-  shopVolumeOutside: -55
+  crowdVolumeInside: -50
+  crowdVolumeOutside: -35
+  shopVolumeInside: -40
+  shopVolumeOutside: -60
 --- !u!4 &1214413448 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 929486501417002637, guid: 69d38928653954c99ab596d8dc962b9a, type: 3}
