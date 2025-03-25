@@ -52,7 +52,6 @@ public class ModelAvatarTextureSwitcher : MonoBehaviour
             Debug.LogError("MixMatchModelAvatars not found! Check hierarchy.");
         }
 
-        Debug.Log("Avatars found: "+avatars.Count);
 
         // Ensure we have textures
 
@@ -103,7 +102,6 @@ public class ModelAvatarTextureSwitcher : MonoBehaviour
 
     private IEnumerator SwitchTextureSectionCoroutine()
     {
-        Debug.Log($"Loading for Section {currentSectionIndex}");
         List<int> newTextureIds;
         // Get the new section's texture IDs
         if (currentSectionIndex == 6)
@@ -119,9 +117,10 @@ public class ModelAvatarTextureSwitcher : MonoBehaviour
             if (newTextureIds.Count > avatars.Count)
             {
                 newTextureIds = newTextureIds
-                    .Skip(newTextureIds.Count - avatars.Count)
+                    .Skip(newTextureIds.Count - avatars.Count + 2)
                     .ToList();
             }
+    
         } else {
             newTextureIds = sectionTextureIds[currentSectionIndex];
         }
@@ -138,10 +137,7 @@ public class ModelAvatarTextureSwitcher : MonoBehaviour
                     avatars[i].DefaultTextureId = newTextureId;
                     avatars[i].SetTexture(texture);
                     avatars[i].transform.rotation = initialRotation;
-                    
-                    Debug.Log($"Avatar {avatars[i].name} switched to Texture ID {newTextureId}");
                 } else {
-                    Debug.Log("texture for id: "+newTextureId+" not found");
                     avatars[i].gameObject.SetActive(false);
                 }
             }

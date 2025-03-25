@@ -27,7 +27,7 @@ public class CustomAvatarTextureCatalogue : AvatarTextureCatalogue
         }
         var skinFiles = Directory.GetFiles(path, "*.png")
                              .OrderByDescending(File.GetLastWriteTime)
-                             .Take(numDynamicTexturesLoad)
+                             //.Take(numDynamicTexturesLoad)
                              .Reverse()
                              .ToList();
     
@@ -92,8 +92,6 @@ public class CustomAvatarTextureCatalogue : AvatarTextureCatalogue
             Debug.LogError("CustomAvatarTextureCatalogue: Base catalogue is not assigned or empty!");
             return null;
         }
-
-        Debug.Log($"Get texture {i} (Base Count: {baseCatalogue.Textures.Count}, Dynamic Count: {dynamicTextures.Count})");
         
         // Use existing textures first
         if (i < baseCatalogue.Textures.Count)
@@ -151,12 +149,9 @@ public class CustomAvatarTextureCatalogue : AvatarTextureCatalogue
             return index.ToString();
         }
 
-        // Debug.Log($"Texture name: {texture.name}");
-
         // If the texture is dynamic, return its name
         foreach (var dynamicTexture in dynamicTextures)
         {
-            // Debug.Log($"Dynamic texture name: {dynamicTexture.name}");
             if (dynamicTexture.name == texture.name)
             {
                 return dynamicTexture.name;
@@ -211,9 +206,6 @@ public class CustomAvatarTextureCatalogue : AvatarTextureCatalogue
         Rect torsoRegionLower = new Rect(620, 0, 400, 259);
         Rect handRegion = new Rect(640, 502, 381, 522);
         Rect unknownRegion = new Rect(625, 260, 397, 240);
-
-        Debug.Log("here");
-        Debug.Log("Combined texture: "+combinedTexture.name);
 
         // Copy regions from each texture
         CopyRegion(combinedTexture, headTex, headRegion);
