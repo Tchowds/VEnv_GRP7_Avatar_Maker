@@ -61,7 +61,7 @@
                 return; 
 
             nextUpdateTime = Time.time + updateInterval;
-            Debug.Log("Current state: !"+currentState);
+            // Debug.Log("Current state: !"+currentState);
 
             if (currentState == ExperienceState.WaitingForPlayersToEnterShopFirstTime)
             {
@@ -75,10 +75,11 @@
                         tailorAudioSource.Stop();
                         tailorAudioSource.PlayOneShot(tailorInstructionsOnceBothIn);
                     }
-                } else
-                {
-                    Debug.Log("Waiting for both players to enter the tinker tailor shop...");
-                }
+                } 
+                // else
+                // {
+                //     Debug.Log("Waiting for both players to enter the tinker tailor shop...");
+                // }
             } else if (currentState == ExperienceState.BothPlayersEnteredShopGetStarted)
             {
                 if(CheckMinNumPlayersInShop("SwapStudioShopManager", minPlayersForExperience))
@@ -281,7 +282,7 @@
 
         private bool CheckMinNumPlayersInShop(string shop, int minNumPlayers)
         {
-            Debug.Log("There are "+playerStates.Count+" players registered");
+            // Debug.Log("There are "+playerStates.Count+" players registered");
 
             int countPlayersInStore = 0;
             for (int i = 0; i < playerStates.Count; i++)

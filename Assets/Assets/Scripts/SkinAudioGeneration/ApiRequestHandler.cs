@@ -26,7 +26,7 @@ public class ApiRequestHandler : MonoBehaviour
 
 
     [Header("Dependencies")]
-    public TexturedModelAvatar texturedModelAvatar;
+    public EmbeddedNetworkedMannequin embeddedNetworkedMannequin;
     public CustomAvatarTextureCatalogue customAvatarTextureCatalogue;
     public DiffuseSkinToMannequinApplier skinManager;
 
@@ -153,7 +153,7 @@ public class ApiRequestHandler : MonoBehaviour
 
                 if (SkinConstants.skinFileToID.TryGetValue(filename, out int skinId))
                 {
-                    texturedModelAvatar.SetTexture(texturedModelAvatar.Textures.Get(skinId));
+                    embeddedNetworkedMannequin.ApplyEmbeddedSkin(skinId);
                     Debug.Log($"Applied Skin: {filename}");
                 }
                 else
