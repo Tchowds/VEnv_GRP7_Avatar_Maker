@@ -5,6 +5,7 @@ using UnityEngine;
 using Avatar = Ubiq.Avatars.Avatar;
 using Ubiq.Rooms;
 using Ubiq.Messaging;
+using System.Linq;
 
 /// <summary>
 /// This class sets the avatar to use a specific texture. It also handles
@@ -25,6 +26,8 @@ public class TexturedAvatar : MonoBehaviour
     private RoomClient roomClient;
 
     private Texture2D cached; // Cache for GetTexture. Do not do anything else with this; use the uuid
+
+    private int peerCount = 1;
 
     private void Start()
     {
@@ -52,6 +55,15 @@ public class TexturedAvatar : MonoBehaviour
         }
         
         roomClient.OnPeerUpdated.AddListener(RoomClient_OnPeerUpdated);
+    }
+
+    private void Update()
+    {
+        if (roomClient.Peers.Count() != peerCount)
+        {
+            peerCount = roomClient.Peers.Count();
+            SaveSettings();
+        }
     }
 
     private void OnDestroy()
