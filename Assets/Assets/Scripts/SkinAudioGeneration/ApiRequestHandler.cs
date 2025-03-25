@@ -171,10 +171,7 @@ public class ApiRequestHandler : MonoBehaviour
             Debug.LogError($"Skin Selection Request Failed: {e.Message}");
         }
         // Update skin search UI
-        if (GameObject.Find("SkinSearchText") != null && GameObject.Find("SkinSearchText").GetComponent<TMP_Text>() != null)
-        {
-            GameObject.Find("SkinSearchText").GetComponent<TMP_Text>().text = "SKIN\nSEARCH";
-        }
+        _ = ResetSkinSearchTextAfterDelay(5);
     }
 
        private async Task SendGenerateSkinRequest(string headPrompt, string torsoPrompt)
@@ -351,5 +348,18 @@ public class ApiRequestHandler : MonoBehaviour
     public string getServerURL()
     {
         return serverURL;
+    }
+
+    private async Task ResetSkinSearchTextAfterDelay(int delaySeconds)
+    {
+        // Wait for the specified time
+        await Task.Delay(delaySeconds * 1000);
+        
+        // Update the UI text after the delay
+        if (GameObject.Find("SkinSearchText") != null && 
+            GameObject.Find("SkinSearchText").GetComponent<TMP_Text>() != null)
+        {
+            GameObject.Find("SkinSearchText").GetComponent<TMP_Text>().text = "SKIN\nSEARCH";
+        }
     }
 }

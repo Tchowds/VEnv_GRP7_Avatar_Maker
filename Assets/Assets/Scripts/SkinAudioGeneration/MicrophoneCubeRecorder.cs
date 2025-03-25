@@ -148,7 +148,7 @@ namespace Whisper.Samples
                 var skinSearchText = GameObject.Find("SkinSearchText")?.GetComponent<TextMeshPro>();
                 if (skinSearchText != null)
                 {
-                    skinSearchText.text = output.Replace(" ", "\n");
+                    skinSearchText.text = output.ToUpper().Replace(" ", "\n") + "\n";
                 }
                 List<string> skinDescription = new List<string>{output};
                 apiRequestHandler.HandleRequest(skinDescription, RequestMode.SelectSkin);

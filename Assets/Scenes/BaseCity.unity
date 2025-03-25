@@ -1265,7 +1265,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ipAddress: 10.0.0.32
   webServerAddress: https://c92a-128-16-11-100.ngrok-free.app
-  embeddedNetworkedMannequin: {fileID: 0}
+  embeddedNetworkedMannequin: {fileID: 2046112063}
   customAvatarTextureCatalogue: {fileID: 11400000, guid: b9b5ab83068724908937dfdd4d246538, type: 2}
   skinManager: {fileID: 1892218466}
   curtainManager: {fileID: 1251488413}
@@ -2241,8 +2241,8 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 1, g: 0, b: 0, a: 1}
-    - _Color: {r: 1, g: 0, b: 0, a: 1}
+    - _BaseColor: {r: 0, g: 1, b: 0, a: 1}
+    - _Color: {r: 0, g: 1, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
@@ -2873,7 +2873,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3770059784482875993, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2046112063}
   m_SourcePrefab: {fileID: 100100000, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
 --- !u!1 &330363254 stripped
 GameObject:
@@ -3517,7 +3520,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 176f4e89b77ab4fbe822ab23ad7cb230, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  status: Offline
+  status: Online
 --- !u!1 &451598276
 GameObject:
   m_ObjectHideFlags: 0
@@ -13119,6 +13122,24 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f4ce9dcafc65d4096b03bc0dd1c8cd9e, type: 3}
+--- !u!1 &2046112057 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3770059784482875993, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
+  m_PrefabInstance: {fileID: 315665596}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2046112063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2046112057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 553c6a6a1ed585d4aaa44e6cf75eb648, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  promptText: {fileID: 185182630}
 --- !u!1 &2081566341
 GameObject:
   m_ObjectHideFlags: 0
