@@ -27,7 +27,6 @@ public class TexturedAvatar : MonoBehaviour
 
     private Texture2D cached; // Cache for GetTexture. Do not do anything else with this; use the uuid
 
-    private int peerCount = 1;
 
     private void Start()
     {
@@ -57,14 +56,6 @@ public class TexturedAvatar : MonoBehaviour
         roomClient.OnPeerUpdated.AddListener(RoomClient_OnPeerUpdated);
     }
 
-    private void Update()
-    {
-        if (roomClient.Peers.Count() != peerCount)
-        {
-            peerCount = roomClient.Peers.Count();
-            SaveSettings();
-        }
-    }
 
     private void OnDestroy()
     {

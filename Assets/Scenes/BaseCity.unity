@@ -1253,8 +1253,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ipAddress: 10.0.0.32
-  webServerAddress: https://8dfb-128-16-11-22.ngrok-free.app
+  webServerAddress: https://c92a-128-16-11-100.ngrok-free.app
   texturedModelAvatar: {fileID: 1951152317}
+  embeddedMannequin: {fileID: 0}
   customAvatarTextureCatalogue: {fileID: 11400000, guid: b9b5ab83068724908937dfdd4d246538, type: 2}
   skinManager: {fileID: 1892218466}
   curtainManager: {fileID: 1251488413}

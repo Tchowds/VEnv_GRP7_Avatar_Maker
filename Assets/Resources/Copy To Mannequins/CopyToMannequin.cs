@@ -159,6 +159,18 @@ public class CopyToMannequin : MonoBehaviour
         );
     }
 
+    public void ApplyNoSave(Texture2D tex)
+    {
+        ApplyAndSave(
+            tex,
+            tex,
+            tex,
+            tex,
+            false, // playerStored: false (the player did not store this texture, it came from the API)
+            tex.name
+        );
+    }
+
     public void sendMessage()
     {
         context.SendJson(new CopyMessage

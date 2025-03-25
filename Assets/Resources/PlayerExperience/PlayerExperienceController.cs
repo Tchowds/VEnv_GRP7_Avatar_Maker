@@ -57,10 +57,11 @@
                         tailorAudioSource.Stop();
                         tailorAudioSource.PlayOneShot(bothPlayersInShopClip);
                     }
-                } else
-                {
-                    Debug.Log("Waiting for both players to enter the shop...");
-                }
+                } 
+                // else
+                // {
+                //     Debug.Log("Waiting for both players to enter the shop...");
+                // }
             } else if (currentState == ExperienceState.BothPlayersEnteredShopGetStarted)
             {
                 if (checkIfBothPlayersAppliedSkinsToMannequins()){
@@ -161,7 +162,7 @@
 
         private bool CheckMinNumPlayersInShop(string shop, int minNumPlayers)
         {
-            Debug.Log("There are "+playerStates.Count+" players registered");
+            // Debug.Log("There are "+playerStates.Count+" players registered");
 
             int countPlayersInStore = 0;
             for (int i = 0; i < playerStates.Count; i++)
