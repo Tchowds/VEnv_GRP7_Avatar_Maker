@@ -41,6 +41,9 @@ public class TexturedAvatar : MonoBehaviour
         if (avatar.IsLocal)
         {
             roomClient.OnJoinedRoom.AddListener(OnJoinedRoom);
+            // Listen for new peers joining the room
+            roomClient.OnPeerAdded.AddListener(OnPeerAdded);
+            
             var hasSavedSettings = false;
             if (SaveTextureSetting)
             {
@@ -59,7 +62,27 @@ public class TexturedAvatar : MonoBehaviour
     {
         Debug.Log("[TexturedAvatar] Joined room - broadcasting texture settings");
 
+        // Broadcast own textures to others when joining a room
+        BroadcastTextureSettings();
+    }
+    
+    // This method is triggered when a new peer joins the room
+    private void OnPeerAdded(IPeer peer)
+    {
+        if (avatar.IsLocal)
+        {
+            Debug.Log("[TexturedAvatar] New peer joined - re-broadcasting texture settings to them");
+            
+            // Re-broadcast our textures when a new peer joins
+            BroadcastTextureSettings();
+        }
+    }
+    
+    // Helper method to broadcast texture settings
+    private void BroadcastTextureSettings()
+    {
         var floatingAvatar = GetComponentInChildren<FloatingAvatarSeparatedTextures>();
+        if (floatingAvatar == null) return;
 
         // Convert materials to Texture2D first
         var headTexture = floatingAvatar.headRenderer.material.mainTexture as Texture2D;
@@ -74,8 +97,6 @@ public class TexturedAvatar : MonoBehaviour
         SetTexture(rightHandTexture, AvatarPart.RIGHTHAND);
     }
 
-
-
     private void OnDestroy()
     {
         // Cleanup the event for new properties so it does not get called after
@@ -83,6 +104,10 @@ public class TexturedAvatar : MonoBehaviour
         if (roomClient)
         {
             roomClient.OnPeerUpdated.RemoveListener(RoomClient_OnPeerUpdated);
+            if (avatar.IsLocal)
+            {
+                roomClient.OnPeerAdded.RemoveListener(OnPeerAdded);
+            }
         }
     }
 
