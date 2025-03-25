@@ -49,9 +49,8 @@
         void Start()
         {
             roomClient = NetworkScene.Find(this).GetComponentInChildren<RoomClient>();
-            SetTailorSpatialBlend(1f);
+            SetTailorAudio(1f, 1f);
             StartCoroutine(WaitingForPlayersToEnterFirstTimeCoroutine());
-            Debug.Log("Tailor: Oii, over here! (waiting for both players to enter)");
         }
 
         // Update is called once per frame
@@ -76,17 +75,13 @@
                         tailorAudioSource.PlayOneShot(tailorInstructionsOnceBothIn);
                     }
                 } 
-                // else
-                // {
-                //     Debug.Log("Waiting for both players to enter the tinker tailor shop...");
-                // }
             } else if (currentState == ExperienceState.BothPlayersEnteredShopGetStarted)
             {
                 if(CheckMinNumPlayersInShop("SwapStudioShopManager", minPlayersForExperience))
                 {
                     currentState = ExperienceState.BothPlayersEnteredSwapStudio;
                     Debug.Log("Both players are in the Swap Studio");
-                    SetTailorSpatialBlend(0.2f);
+                    SetTailorAudio(0.2f, 0.25f);
                     if (tailorAudioSource && swapStudioInstructions)
                     {
                         tailorAudioSource.Stop();
@@ -102,7 +97,7 @@
                 {
                     currentState = ExperienceState.BothPlayersReturnedTinkerTailorFirstTime;
                     Debug.Log("Both players are back in the Tinker Tailor shop return first time");
-                    SetTailorSpatialBlend(1f);
+                    SetTailorAudio(1f, 1f);
                     if (tailorAudioSource && bothPlayersReturnTinkerTailorFirstTime)
                     {
                         tailorAudioSource.Stop();
@@ -118,7 +113,7 @@
                 {
                     currentState = ExperienceState.bothPlayersAddedFirstSkinToMannequin;
                     Debug.Log("Both players have added a skin to their mannequin");
-                    SetTailorSpatialBlend(1f);
+                    SetTailorAudio(1f, 1f);
                     if (tailorAudioSource && bothPlayersAddedFirstSkinToMannequin)
                     {
                         tailorAudioSource.Stop();
@@ -136,7 +131,7 @@
                 {
                     currentState = ExperienceState.BothPlayersEnteredDiffusionDesign;
                     Debug.Log("Both players are in the Diffusion Design shop");
-                    SetTailorSpatialBlend(0.2f);
+                    SetTailorAudio(0.2f, 0.25f);
                     if (tailorAudioSource && diffusionDesignInstructions)
                     {
                         tailorAudioSource.Stop();
@@ -152,7 +147,7 @@
                 {
                     currentState = ExperienceState.BothPlayersReturnedTinkerTailorSecondTime;
                     Debug.Log("Both players are back in the Tinker Tailor shop return second time");
-                    SetTailorSpatialBlend(1f);
+                    SetTailorAudio(1f, 1f);
                     if (tailorAudioSource && bothPlayersReturnTinkerTailorSecondTime)
                     {
                         tailorAudioSource.Stop();
@@ -219,7 +214,6 @@
 
         public void UpdatePlayerLocation(PlayerLocationMessage locationMessage)
         {
-            Debug.Log("PlayerExperienceController: ShopLocationMessage received - playerID: " + locationMessage.playerID + " shopName: " + locationMessage.shopName + " enterShop: " + locationMessage.inShop);
             bool found = false;
             for (int i = 0; i < playerStates.Count; i++)
             {
@@ -234,20 +228,17 @@
             {
                 playerStates.Add(new PlayerState { playerID = locationMessage.playerID, location = locationMessage, playerNum = -1, skinsSavedOnMannequins = 0 });
             }
-            PrintPlayerStates();
         }
 
         public void UpdateMannequinSkin(int mannequinId)
         {   
             if (mannequinChanged[mannequinId] == 0)
             {
-                Debug.Log("Mannequin " + mannequinId + " has been updated");
                 mannequinChanged[mannequinId]++;
             }
         }
         public void SkinSavedOnMannequin(string playerID, int playerNum)
         {
-            Debug.Log("Skin saved on mannequin for playerID: " + playerID + " playerNum: " + playerNum);
             var playerState = getPlayerState(playerID);
             playerState.skinsSavedOnMannequins++;
 
@@ -282,8 +273,6 @@
 
         private bool CheckMinNumPlayersInShop(string shop, int minNumPlayers)
         {
-            // Debug.Log("There are "+playerStates.Count+" players registered");
-
             int countPlayersInStore = 0;
             for (int i = 0; i < playerStates.Count; i++)
             {
@@ -306,12 +295,12 @@
 
 
         // When in tinker tailor or before we start, use spatial audio, when in other shops, dont.
-        private void SetTailorSpatialBlend(float value)
+        private void SetTailorAudio(float blendValue, float volume)
         {
             if (tailorAudioSource != null)
             {
-                tailorAudioSource.spatialBlend = Mathf.Clamp01(value); 
-                Debug.Log($"[TailorAudio] Spatial blend set to {value}");
+                tailorAudioSource.spatialBlend = Mathf.Clamp01(blendValue); 
+                tailorAudioSource.volume = Mathf.Clamp01(volume);
             }
         }
 
@@ -330,7 +319,6 @@
                 // Wait 20 seconds before playing again
                 yield return new WaitForSeconds(20f);
             }
-
             Debug.Log("Exited waiting state, stopping waitingClip loop.");
         }
 
