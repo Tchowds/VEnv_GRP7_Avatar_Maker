@@ -327,31 +327,25 @@ public class ApiRequestHandler : MonoBehaviour
         public List<string> images_base64;
     }
 
-    private struct IpMessage
+    private struct ServerURLMessage
     {
-        public string ip;
+        public string serverURL;
     }
 
 
     public void sendMessage()
     {
-        context.SendJson(new IpMessage
+        context.SendJson(new ServerURLMessage
         {
-            ip = ipAddress
+            serverURL = serverURL
         });
     }
 
     public void ProcessMessage(ReferenceCountedSceneGraphMessage message)
     {
-        //var m = message.FromJson<IpMessage>();
-        //ipAddress = m.ip;
-        JObject jsonMessage = JObject.Parse(message.ToString());
-        if (jsonMessage.ContainsKey("ip"))
-        {
-            ipAddress = jsonMessage["ip"].ToString();
-            Debug.Log($"Updated IP Address: {ipAddress}");
-
-        }
+        var m = message.FromJson<ServerURLMessage>();
+        serverURL = m.serverURL;
+        Debug.Log($"Received updated ServerURL: {serverURL}");
     }
 
     public string getServerURL()

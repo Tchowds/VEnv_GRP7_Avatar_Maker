@@ -453,7 +453,7 @@ MonoBehaviour:
   diffusionDesignInstructions: {fileID: 8300000, guid: 03de9ceb3f56d4572bf148a3b08a8485, type: 3}
   bothPlayersReturnTinkerTailorSecondTime: {fileID: 8300000, guid: 71ea75d62ed9b40848980293ee9c4fea, type: 3}
   tailorEndingClip: {fileID: 8300000, guid: 6a25822d610094aefb8a337c8e990b51, type: 3}
-  minPlayersForExperience: 1
+  minPlayersForExperience: 2
 --- !u!4 &16546962 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5088829427296280434, guid: 8324d290a4659b140a89f68e6a9e3ab3, type: 3}
