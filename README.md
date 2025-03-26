@@ -38,7 +38,9 @@ Follow these steps to set up the project:
 4. **Configure for Meta Quest:**  
    Open the project in Unity Editor and set all the necessary settings for building on Meta Quest devices. Refer to the project documentation for detailed steps on configuring these settings.
 
-To download the application apk directly you can find it at [this link](https://liveuclac-my.sharepoint.com/:u:/g/personal/zcabfab_ucl_ac_uk/EajW1xWZkqVDi9xtj5YAV4kBWFELjfcmnxjXfKrv3kkhFQ?e=5If7cH)
+You can download the apk's and try it out here!
+* [Quest 2 APK](https://liveuclac-my.sharepoint.com/:u:/g/personal/zcabfab_ucl_ac_uk/EYv0lMaosVFPoS6vJcPorXcBMLKkcWISaiuFV6NsYExu6A?e=khm1fZ)
+* [Quest 3 APK](https://liveuclac-my.sharepoint.com/:u:/g/personal/zcabfab_ucl_ac_uk/ES-yV_5pfsVHneFUkNppAV4BTN0f5Oq2fIlYsBnRTcW4KA?e=G0ukhB)
 
 ## Project Structure
 
