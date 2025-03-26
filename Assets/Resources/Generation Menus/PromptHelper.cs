@@ -5,6 +5,11 @@ using Ubiq.Messaging;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit;
 
+/// <summary>
+/// This class helps to manage prompt messages for the diffusion components
+/// Specifically it manages the text and buttons for the torso and head prompts in the generation menu
+/// These components are also networked to ensure that the prompt messages are consistent across peers
+/// </summary>
 public class PromptHelper : MonoBehaviour
 {
 
@@ -46,6 +51,7 @@ public class PromptHelper : MonoBehaviour
 
     }
 
+    // Applies the prompt based on what body part is selected in the skin part selector
     public void SetPrompt(string prompt)
     {
         if(skinPartSelector.skinPart == SkinConstants.SkinPart.Torso)
