@@ -3093,7 +3093,6 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'SKIN
 
-
     SEARCH'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3379,7 +3378,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ipAddress: 10.0.0.32
   webServerAddress: https://c92a-128-16-11-100.ngrok-free.app
-  embeddedNetworkedMannequin: {fileID: 2046112063}
+  embeddedNetworkedMannequin: {fileID: 2046112069}
   customAvatarTextureCatalogue: {fileID: 11400000, guid: b9b5ab83068724908937dfdd4d246538, type: 2}
   skinManager: {fileID: 1892218466}
   curtainManager: {fileID: 1251488413}
@@ -5825,13 +5824,14 @@ PrefabInstance:
       propertyPath: Textures
       value: 
       objectReference: {fileID: 11400000, guid: b9b5ab83068724908937dfdd4d246538, type: 2}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 0}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3770059784482875993, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2046112063}
+      addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
 --- !u!1 &318344557
 GameObject:
@@ -8007,7 +8007,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68c0480cf833a8b4dad9e92b23ba1b97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 332963220}
 --- !u!114 &485341996
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15061,7 +15060,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68c0480cf833a8b4dad9e92b23ba1b97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 821521860}
 --- !u!114 &888199483
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16067,7 +16065,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68c0480cf833a8b4dad9e92b23ba1b97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 919257073}
 --- !u!114 &919257076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28343,7 +28340,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68c0480cf833a8b4dad9e92b23ba1b97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 868960227}
 --- !u!114 &1584697756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30040,7 +30036,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68c0480cf833a8b4dad9e92b23ba1b97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 1736918811}
 --- !u!114 &1736918814
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31942,7 +31937,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68c0480cf833a8b4dad9e92b23ba1b97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 1832739584}
 --- !u!114 &1832739588
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33157,7 +33151,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68c0480cf833a8b4dad9e92b23ba1b97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 527164829}
 --- !u!114 &1909413661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35209,7 +35202,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68c0480cf833a8b4dad9e92b23ba1b97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 1785485217}
 --- !u!114 &2029885656
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35791,8 +35783,8 @@ GameObject:
   - component: {fileID: 2046112067}
   - component: {fileID: 2046112066}
   - component: {fileID: 2046112065}
-  - component: {fileID: 2046112064}
-  - component: {fileID: 2046112063}
+  - component: {fileID: 2046112069}
+  - component: {fileID: 2046112070}
   m_Layer: 0
   m_Name: WordEmbeddingsMannequin
   m_TagString: Untagged
@@ -35800,44 +35792,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2046112063
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2046112057}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 553c6a6a1ed585d4aaa44e6cf75eb648, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  promptText: {fileID: 185182630}
-  embeddedMannequin: {fileID: 0}
---- !u!114 &2046112064
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 8930610318754038311, guid: d42d6ae2603a04b448ab53bd8cb3c17c, type: 3}
-  m_PrefabInstance: {fileID: 315665596}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2046112057}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4763eb94d250d7849a012624c0aee3a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roomClient: {fileID: 0}
-  copySphereInteractable: {fileID: 0}
-  playerFloating: {fileID: 0}
-  playerTextured: {fileID: 0}
-  headRenderer: {fileID: 0}
-  torsoRenderer: {fileID: 0}
-  leftHandRenderer: {fileID: 0}
-  rightHandRenderer: {fileID: 0}
-  mannequinPlayerNum: -1
-  playerExperienceController: {fileID: 0}
-  textureCatalogue: {fileID: 11400000, guid: b9b5ab83068724908937dfdd4d246538, type: 2}
-  mannequinId: -1
 --- !u!114 &2046112065
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35863,7 +35817,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68c0480cf833a8b4dad9e92b23ba1b97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 2046112057}
 --- !u!114 &2046112067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35891,6 +35844,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UpdateRate: 60
+--- !u!114 &2046112069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2046112057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50c56f5e13fbda14784a1612e54f6b70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  promptText: {fileID: 185182630}
+--- !u!114 &2046112070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2046112057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45d8878c8cd55144ab458d601aab05f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mannequinPlayerNum: -1
+  playerExperienceController: {fileID: 15846193}
+  textureCatalogue: {fileID: 11400000, guid: b9b5ab83068724908937dfdd4d246538, type: 2}
+  mannequinId: -1
 --- !u!1 &2054134314
 GameObject:
   m_ObjectHideFlags: 0
