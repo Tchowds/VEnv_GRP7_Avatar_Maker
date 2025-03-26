@@ -3,7 +3,7 @@
 A simple and fun project that allows you to collaborate and create customised avatars. This project leverages Unity alongside advanced diffusion techniques to offer a dynamic avatar creation experience.
 
 ![City Scene Shops](Images/CitySceneShops.png)
-![Diffusion Skin Examples](diffusion_skin_examples.png)
+![Diffusion Skin Examples](Images/diffusion_skin_examples.png)
 
 ## Table of Contents
 
