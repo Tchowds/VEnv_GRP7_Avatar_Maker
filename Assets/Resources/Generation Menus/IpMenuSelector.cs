@@ -8,8 +8,13 @@ using TMPro;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+/// <summary>
+/// This class is responsible for allowing users to set the generation API endpoint IP address
+/// It also pings the server to check if it is online and updates the status cube accordingly
+/// </summary>
 public class IpMenuSelector : MonoBehaviour
 {
+    // Keypad objects
     private List<GameObject> keypadObjects;
     private List<UnityAction> keypadListeners;
     private List<UnityAction<SelectEnterEventArgs>> keypadEventListeners;
@@ -18,7 +23,7 @@ public class IpMenuSelector : MonoBehaviour
     private TMP_Text ipInputField;
     private ApiRequestHandler apiRequestHandler;
     
-    // Add cube references
+    // Status cube
     public GameObject statusCube;
     public float pingTimePeriod = 5.0f;
     private Renderer cubeRenderer;
@@ -32,6 +37,7 @@ public class IpMenuSelector : MonoBehaviour
         recordButton = transform.Find("RecordButton").GetComponent<Button>();
         ipInputField = transform.Find("IpInputField").GetComponent<TMP_Text>();
 
+        // Add listeners to all the keypad buttons
         var keypad = transform.Find("Keypad");
         for (int i = 0; i < keypad.childCount; i++)
         {
@@ -47,19 +53,20 @@ public class IpMenuSelector : MonoBehaviour
             child.GetComponent<Button>().onClick.AddListener(listener);
             child.GetComponent<XRSimpleInteractable>().selectEntered.AddListener(eventListener);
         }
+
         apiRequestHandler = FindFirstObjectByType<ApiRequestHandler>();
         recordButton.onClick.AddListener(Interactable_SelectEntered_Record_Button);
         recordButton.transform.GetComponent<XRSimpleInteractable>().selectEntered.AddListener((arg0) => Interactable_SelectEntered_Record_Button());
         
-        // Create or find the status cube
+        // Initialize the status cube
         statusCube = transform.Find("StatusCube")?.gameObject;
         if (statusCube == null)
         {
             statusCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
             statusCube.name = "StatusCube";
             statusCube.transform.SetParent(transform);
-            statusCube.transform.localPosition = new Vector3(1.0f, 0.5f, 0); // Position to the right of menu
-            statusCube.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f); // Make it smaller
+            statusCube.transform.localPosition = new Vector3(1.0f, 0.5f, 0);
+            statusCube.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
         }
         cubeRenderer = statusCube.GetComponent<Renderer>();
         cubeRenderer.sharedMaterial.color = Color.gray; // Default color
@@ -77,7 +84,7 @@ public class IpMenuSelector : MonoBehaviour
         }
     }
 
-    // Separate async method for pinging
+    // Separate async method for pinging the server and updating the color based on the result
     private async Task PingAndUpdateColor()
     {
         bool pingResult = await apiRequestHandler.PingServer();
@@ -102,6 +109,7 @@ public class IpMenuSelector : MonoBehaviour
         recordButton.onClick.RemoveListener(Interactable_SelectEntered_Record_Button);
     }
 
+    // Keypad listener to input the IP address
     public void Interactable_SelectEntered_Enter_Key(string field)
     {
         string currentText = ipInputField.text;
@@ -117,6 +125,7 @@ public class IpMenuSelector : MonoBehaviour
         Debug.Log("Record:" + field);
     }
 
+    // Keypad listener for the record button to store the IP address
     public async void Interactable_SelectEntered_Record_Button()
     {
         apiRequestHandler.SetIp(ipInputField.text);

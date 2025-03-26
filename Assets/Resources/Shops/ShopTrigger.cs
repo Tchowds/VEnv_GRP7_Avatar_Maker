@@ -19,7 +19,6 @@ public class ShopTrigger : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        // If the object exiting the trigger is the player's XR Rig
         if (other.gameObject == playerXRig)
         {
             Debug.Log("Player exited the shop");

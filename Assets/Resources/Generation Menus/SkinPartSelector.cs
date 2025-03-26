@@ -1,16 +1,19 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using TMPro;
 using Ubiq.Messaging;
 using Ubiq.Rooms;
 using static SkinConstants;
-using UnityEngine.XR.Interaction.Toolkit.Interactables;
-using UnityEngine.XR.Interaction.Toolkit;
-using TMPro;
-using System.Collections.Generic;
-using System.Collections;
-using System.Threading.Tasks;
 
+/// <summary>
+/// The class is responsible for selecting the body part modde for the skin generation process
+/// It also handles pinging the external API for use in the skin generation process
+/// </summary>
 public class SkinPartSelector : MonoBehaviour
 {
     public struct SkinPartSelectorMessage
@@ -32,41 +35,29 @@ public class SkinPartSelector : MonoBehaviour
     
     public PromptHelper promptHelper;
 
+    // This text objects is used to display the current endpoint at the top of the menu
     public TMP_Text ip_text;
 
-    // Define your selected and normal colors.
-    // You can adjust these as needed.
     private Color selectedColor = Color.red;
     private Color normalColor = Color.white;    
 
     private NetworkContext context;
     void Start()
     {
-        // Add click listeners to each button.
-        headButton.onClick.AddListener(() => OnButtonPressed(SkinConstants.SkinPart.Head));
-        torsoButton.onClick.AddListener(() => OnButtonPressed(SkinConstants.SkinPart.Torso));
-        bothButton.onClick.AddListener(() => OnButtonPressed(SkinConstants.SkinPart.Both));
 
         headButton.transform.GetComponent<XRSimpleInteractable>().selectEntered.AddListener((arg0) => OnButtonPressed(SkinConstants.SkinPart.Head));
         torsoButton.transform.GetComponent<XRSimpleInteractable>().selectEntered.AddListener((arg0) => OnButtonPressed(SkinConstants.SkinPart.Torso));
         bothButton.transform.GetComponent<XRSimpleInteractable>().selectEntered.AddListener((arg0) => OnButtonPressed(SkinConstants.SkinPart.Both));
 
-        generateButton.onClick.AddListener(OnGenerateButtonPressed);
         generateButton.transform.GetComponent<XRSimpleInteractable>().selectEntered.AddListener((arg0) => OnGenerateButtonPressed());
 
         context = NetworkScene.Register(this);
 
-        // Optionally, initialize the visuals with a default selection.
         OnButtonPressed(skinPart);
         StartCoroutine(CheckEndpointStatus());
-
     }
 
-    // void Update()
-    // {
-    //     ip_text.text = "Generation Endpoint API address:" + apiRequestHandler.serverURL;
-    // }
-
+    // Every second pings the endpoint to see if its valid and working
     private IEnumerator CheckEndpointStatus()
     {
         while (true)
@@ -77,6 +68,7 @@ public class SkinPartSelector : MonoBehaviour
         }
     }
 
+    // Use the statusCube to find the status of the endpoint and display it
     private void UpdateEndpointStatus()
     {
     if (statusCube != null)
@@ -97,27 +89,18 @@ public class SkinPartSelector : MonoBehaviour
     {
         skinPart = part;
         sendMessage();
-        incurSkinPart();
+        UpdateButtonVisuals();
     }
 
+    // Used by player experience to set the initial body part for each player
     public void InitialSetBodyPart(SkinConstants.SkinPart part)
     {
         skinPart = part;
         sendMessage();
-        incurSkinPart();
-    }
-
-    public void ButtonOnClick(string part)
-    {
-        skinPart = (SkinConstants.SkinPart)Enum.Parse(typeof(SkinConstants.SkinPart), part);
-        OnButtonPressed(skinPart);
-    }
-
-    void incurSkinPart()
-    {
         UpdateButtonVisuals();
     }
 
+    // Ensure all the buttons match the selection of the skin part
     void UpdateButtonVisuals()
     {
         // Change each button's color based on whether it is the current selection.
@@ -128,9 +111,7 @@ public class SkinPartSelector : MonoBehaviour
 
     void UpdateButtonColor(Button button, bool isSelected)
     {
-        // Get the current ColorBlock settings.
         ColorBlock colors = button.colors;
-        // Set the normal (idle) color to selected or normal.
         colors.normalColor = isSelected ? selectedColor : normalColor;
         button.colors = colors;
     }
@@ -144,6 +125,7 @@ public class SkinPartSelector : MonoBehaviour
         context.SendJson(message);
     }
 
+    // Keeps the button selections in sync, players should see opposing selections unless they're selecting both
     public void ProcessMessage(ReferenceCountedSceneGraphMessage message)
     {
         SkinPartSelectorMessage msg = message.FromJson<SkinPartSelectorMessage>();
@@ -152,9 +134,10 @@ public class SkinPartSelector : MonoBehaviour
         if (skinPart == SkinConstants.SkinPart.Head) skinPart = SkinConstants.SkinPart.Torso;
         else if (skinPart == SkinConstants.SkinPart.Torso) skinPart = SkinConstants.SkinPart.Head;
 
-        incurSkinPart();
+        UpdateButtonVisuals();
     }
 
+    // When the generate button is pressed, call the generation process
     public void OnGenerateButtonPressed()
     {
         var (torsoPrompt, headPrompt) = promptHelper.getPrompts(); 

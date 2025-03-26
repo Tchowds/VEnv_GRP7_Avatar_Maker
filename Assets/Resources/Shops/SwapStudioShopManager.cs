@@ -20,16 +20,12 @@ public class SwapStudioShopManager : ShopManager
     public override void EnterShop()
     {
         base.EnterShop(); // Handles music
-
-        Debug.Log("SwapStudioShopManager: Activating avatars & rotators.");
         ToggleRotators(true);
     }
 
     public override void ExitShop()
     {
         base.ExitShop(); // Handles music
-
-        Debug.Log("SwapStudioShopManager: Deactivating avatars & rotators.");
         ToggleRotators(false);
     }
 
