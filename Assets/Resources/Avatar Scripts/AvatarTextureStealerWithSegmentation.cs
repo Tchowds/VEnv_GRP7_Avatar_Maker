@@ -101,14 +101,8 @@ public class AvatarTextureStealerWithSegmentation : MonoBehaviour
         var playerAvatar = avatarManager.FindAvatar(roomClient.Me);
         var playerTexture = playerAvatar.GetComponent<TexturedAvatar>();
 
-        // Need to set the avatar part so only that body part is updated
-        var floatingAvatar = playerAvatar.GetComponentInChildren<FloatingAvatarSeparatedTextures>();
-        if (floatingAvatar != null){
-            floatingAvatar.avatarPart = avatarPart;
-        }
-
         // Apply the stolen texture to the player's avatar
-        playerTexture.SetTexture(stolenTexture);
+        playerTexture.SetTexture(stolenTexture, avatarPart);
 
         Debug.Log("Texture successfully applied to the player!");
     }

@@ -9,6 +9,8 @@ using Ubiq.Messaging;
 /// <summary>
 /// This class sets the avatar to use a specific texture. It also handles
 /// syncing the currently active texture over the network using properties.
+/// 
+/// This class has been adjusted to use multiple PlayerPrefs to save individual body part ids instead of a single id for the whole body
 /// </summary>
 public class TexturedAvatar : MonoBehaviour
 {
@@ -61,7 +63,7 @@ public class TexturedAvatar : MonoBehaviour
 
         var floatingAvatar = GetComponentInChildren<FloatingAvatarSeparatedTextures>();
 
-        // Convert materials to Texture2D first
+        // Set textures for all body parts
         var headTexture = floatingAvatar.headRenderer.material.mainTexture as Texture2D;
         var torsoTexture = floatingAvatar.torsoRenderer.material.mainTexture as Texture2D;
         var leftHandTexture = floatingAvatar.leftHandRenderer.material.mainTexture as Texture2D;
@@ -95,6 +97,7 @@ public class TexturedAvatar : MonoBehaviour
             return;
         }
         
+        // Set textures for all body parts
         SetTexture(peer["ubiq.avatar.texture.uuid"]);
         SetTexture(Textures.Get(peer["ubiq.avatar.texture.head.uuid"]), AvatarPart.HEAD);
         SetTexture(Textures.Get(peer["ubiq.avatar.texture.torso.uuid"]), AvatarPart.TORSO);
@@ -102,16 +105,14 @@ public class TexturedAvatar : MonoBehaviour
         SetTexture(Textures.Get(peer["ubiq.avatar.texture.righthand.uuid"]), AvatarPart.RIGHTHAND);
     }
 
-    /// <summary>
-    /// Try to set the Texture by reference to a Texture in the Catalogue. If the Texture is not in the
-    /// catalogue then this method has no effect, as Texture2Ds cannot be streamed yet.
-    /// </summary>
+
     public void SetTexture(Texture2D texture)
     {
         Debug.Log("Setting texture to" + texture);
         SetTexture(Textures.Get(texture));
     }
 
+    // Added method in case caller doesn't want to set avatar part
     public void SetTexture(Texture2D texture, AvatarPart avatarPart)
     {
         var floatingAvatar = GetComponentInChildren<FloatingAvatarSeparatedTextures>();
@@ -184,6 +185,10 @@ public class TexturedAvatar : MonoBehaviour
     public void ClearSettings()
     {
         PlayerPrefs.DeleteKey("ubiq.avatar.texture.uuid");
+        PlayerPrefs.DeleteKey("ubiq.avatar.texture.head.uuid");
+        PlayerPrefs.DeleteKey("ubiq.avatar.texture.torso.uuid");
+        PlayerPrefs.DeleteKey("ubiq.avatar.texture.lefthand.uuid");
+        PlayerPrefs.DeleteKey("ubiq.avatar.texture.righthand.uuid");
     }
 
     public Texture2D GetTexture()
