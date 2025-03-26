@@ -2,8 +2,10 @@
 using UnityEngine;
 
 /// <summary>
-/// Recroom/rayman style avatar with hands, torso and head. This class is only
-/// here for compatibility. You can safely ignore it for this example/tutorial.
+/// Recroom/rayman style avatar with hands, torso and head.
+/// Copied from avatar-example
+/// Identical with one modification to TextureAvatar_OnTextureChanged 
+/// which is now protected virtual for overriding in a derived class.
 /// </summary>
 public class FloatingAvatar : MonoBehaviour
 {
@@ -109,7 +111,7 @@ public class FloatingAvatar : MonoBehaviour
         rightHand.rotation = pose.value.rotation;                    
     }
 
-    private void TexturedAvatar_OnTextureChanged(Texture2D tex)
+    protected virtual void TexturedAvatar_OnTextureChanged(Texture2D tex)
     {
         headRenderer.material.mainTexture = tex;
         torsoRenderer.material = headRenderer.material;

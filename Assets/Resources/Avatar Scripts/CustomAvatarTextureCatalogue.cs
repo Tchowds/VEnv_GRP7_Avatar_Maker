@@ -182,7 +182,7 @@ public class CustomAvatarTextureCatalogue : AvatarTextureCatalogue
                 return;
             }
         }
-        // TODO - this doesnt need to return the texture
+
         Texture2D savedTexture = SaveTexture(texture);
 
         if (savedTexture != null)

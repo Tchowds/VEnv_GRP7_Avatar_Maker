@@ -60,7 +60,6 @@
                 return; 
 
             nextUpdateTime = Time.time + updateInterval;
-            // Debug.Log("Current state: !"+currentState);
 
             if (currentState == ExperienceState.WaitingForPlayersToEnterShopFirstTime)
             {
@@ -254,7 +253,6 @@
                     }
                 }
             }
-            PrintPlayerStates();
         }
 
         public PlayerState getPlayerState(string playerID)
@@ -284,14 +282,6 @@
             return countPlayersInStore >= minNumPlayers;
         }
 
-        private void PrintPlayerStates()
-        {
-            Debug.Log("Player States:");
-            for (int i = 0; i < playerStates.Count; i++)
-            {
-                Debug.Log("PlayerID: " + playerStates[i].playerID + " inShop: " + playerStates[i].location.inShop + " shopName: " + playerStates[i].location.shopName + " playerNum: " + playerStates[i].playerNum + " skinsSavedOnMannequins: " + playerStates[i].skinsSavedOnMannequins);
-            }
-        }
 
 
         // When in tinker tailor or before we start, use spatial audio, when in other shops, dont.

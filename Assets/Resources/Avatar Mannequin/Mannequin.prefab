@@ -12,8 +12,7 @@ GameObject:
   - component: {fileID: 5983732160417333288}
   - component: {fileID: -3317875243874149491}
   - component: {fileID: 4879411640079367770}
-  - component: {fileID: 8583003690775338813}
-  - component: {fileID: 8930610318754038311}
+  - component: {fileID: 6356012749204093275}
   m_Layer: 0
   m_Name: Mannequin
   m_TagString: Untagged
@@ -79,20 +78,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 3770059784482875993}
---- !u!114 &8583003690775338813
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3770059784482875993}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37057d05c687e4e9fa5959c41c1a7bfb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotationSpeed: 30
---- !u!114 &8930610318754038311
+--- !u!114 &6356012749204093275
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -101,10 +87,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 3770059784482875993}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4763eb94d250d7849a012624c0aee3a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 45d8878c8cd55144ab458d601aab05f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mannequinPlayerNum: -1
+  playerExperienceController: {fileID: 0}
   textureCatalogue: {fileID: 11400000, guid: b9b5ab83068724908937dfdd4d246538, type: 2}
+  mannequinId: -1
 --- !u!1 &6615159234546098292
 GameObject:
   m_ObjectHideFlags: 0

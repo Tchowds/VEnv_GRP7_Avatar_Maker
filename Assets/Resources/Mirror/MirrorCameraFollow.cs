@@ -4,22 +4,22 @@ public class MirrorCameraFollow : MonoBehaviour
 {   
     [Tooltip("Assign the player's XR Rig Main Camera here. If the camera does not move, it's because it hasn't been assigned here.")]
 
-    public Transform playerCamera; // XR Rig's Main Camera
+    public Transform playerCamera;
     [Tooltip("Assign the mirror's plane (the reflective surface).")]
-    public Transform mirrorPlane;  // The Mirror Plane (reflective surface)
-    private Camera mirrorCam; // The camera rendering the mirror
+    public Transform mirrorPlane;
+    private Camera mirrorCam; 
 
-    private RenderTexture mirrorTexture; // Unique Render Texture
+    private RenderTexture mirrorTexture;
 
     void Start()
     {
-        mirrorCam = GetComponent<Camera>(); // Get the Camera component attached to this object
+        mirrorCam = GetComponent<Camera>();
         if (mirrorCam == null)
         {
             Debug.LogError("MirrorCameraFollow: No Camera component found on this GameObject!");
         }
 
-         // create a unique Render Texture for this mirror
+
         mirrorTexture = new RenderTexture(1024, 1024, 16) 
         {
             name = "MirrorTexture_" + gameObject.name,
@@ -50,8 +50,8 @@ void LateUpdate()
         return;
     }
 
-    // Ensure the mirror normal is correct (whichever worked before)
-    Vector3 mirrorNormal = mirrorPlane.right; // Adjust this if necessary
+
+    Vector3 mirrorNormal = mirrorPlane.right; 
 
     // Reflect the camera’s position across the mirror
     Vector3 toPlayer = playerCamera.position - mirrorPlane.position;
@@ -60,8 +60,6 @@ void LateUpdate()
     // Ensure the mirror camera follows horizontal movement, but not tilt (lock roll)
     Vector3 lookDirection = new Vector3(reflectedPosition.x, transform.position.y, reflectedPosition.z) - transform.position;
     Quaternion targetRotation = Quaternion.LookRotation(lookDirection, Vector3.up); // Forces world-up
-
-    // Lock the roll by setting the z-axis rotation to zero
     targetRotation = Quaternion.Euler(targetRotation.eulerAngles.x, targetRotation.eulerAngles.y, 0f);
 
     transform.rotation = targetRotation;

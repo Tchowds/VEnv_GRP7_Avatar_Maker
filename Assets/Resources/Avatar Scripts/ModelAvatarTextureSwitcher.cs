@@ -67,13 +67,13 @@ public class ModelAvatarTextureSwitcher : MonoBehaviour
     void DefineSectionTextureIds()
     {   
         // sections
-        // 0 - Alien and Astro
+        // 0 Alien and Astro
         // 1 athlete
-        //2 business, casual, farmer, Skater
-        //3 Cyborg, fantasy, Zombie, Robot
-        //4 military Survivor Criminal
-        //5 Racers
-        // Custom dynamic textures
+        // 2 business, casual, farmer, Skater
+        // 3 Cyborg, fantasy, Zombie, Robot
+        // 4 military Survivor Criminal
+        // 5 Racers
+        // 6 Custom dynamic textures
         sectionTextureIds = new Dictionary<int, List<int>>();
         sectionTextureIds[0] = new List<int> {0,1,2,3,4,5,6};
         sectionTextureIds[1] = new List<int> {7,8,9,10,11,12,13,14};

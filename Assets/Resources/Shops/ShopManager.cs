@@ -64,7 +64,7 @@ public class ShopManager : MonoBehaviour
             StartCoroutine(FadeSound("Crowd_Volume", crowdVolumeOutside, 1f));
             StartCoroutine(FadeSound(shopMusicParameter, shopVolumeOutside, 1f));
         }
-        //Debug.Log($"Player {roomClient.Me.uuid} exited the shop: {gameObject.name}");
+
         playerExperienceController.UpdatePlayerLocation(new PlayerLocationMessage { playerID = roomClient.Me.uuid, shopName = gameObject.name, inShop=false });
         context.SendJson(new PlayerLocationMessage { playerID = roomClient.Me.uuid, shopName = gameObject.name, inShop=false });
     }
