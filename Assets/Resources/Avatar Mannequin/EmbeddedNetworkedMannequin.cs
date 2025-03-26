@@ -1,6 +1,7 @@
 using UnityEngine;
 using Ubiq.Messaging;
 using TMPro;
+using System.Threading.Tasks;
 
 // Due to output of word embeddings only being from the base catalogue we can just give the index of the texture
 public struct EmbeddedMessage
@@ -51,7 +52,16 @@ public class EmbeddedNetworkedMannequin : MonoBehaviour
         Texture2D tex = embeddedMannequin.textureCatalogue.Get(embeddedMessage.texId);
         embeddedMannequin.ApplyAndSave(tex, tex, tex, tex, false, embeddedMessage.texName);
         promptText.text = embeddedMessage.promptText.ToUpper().Replace(" ", "\n") + "\n";
-        await Task.Delay(5000);
-        promptText.text = "SKIN\nSEARCH";
+        _ = ResetPromptTextAfterDelay(promptText, 5);
+    }
+
+    private async Task ResetPromptTextAfterDelay(TMP_Text textComponent, int delaySeconds)
+    {
+        await Task.Delay(delaySeconds * 1000);
+        
+        if (this != null && textComponent != null)
+        {
+            textComponent.text = "SKIN\nSEARCH";
+        }
     }
 }
