@@ -10,16 +10,19 @@ using Ubiq.Avatars;
 using System;
 using Newtonsoft.Json.Linq; 
 
-
+/// <summary>
+/// Purpose of this class is to interface to the Mannequin avatar prefab to apply
+/// skins to them in a way that is consistent with networking and other experience processes
+/// </summary>
 public class CopyToMannequin : MonoBehaviour
 {
 
     private NetworkContext context;
     private RoomClient roomClient;
 
+    // Interactable, avatar and rendering components attached to the mannequin
     private XRSimpleInteractable copySphereInteractable;
     private FloatingAvatarSeparatedTextures playerFloating;
-    private TexturedAvatar playerTextured;
     private Renderer headRenderer;
     private Renderer torsoRenderer;
     private Renderer leftHandRenderer;
@@ -34,7 +37,7 @@ public class CopyToMannequin : MonoBehaviour
 
     public CustomAvatarTextureCatalogue textureCatalogue;  // Reference to the texture catalogue
 
-    public int mannequinId = -1;
+    public int mannequinId = -1; // Numbering for player experience
 
     private struct CopyMessage
     {
@@ -42,9 +45,9 @@ public class CopyToMannequin : MonoBehaviour
         public string texture;
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        // Floating sphere on mannequin is the interactable object to copy the player's skin to the mannequin
         if (transform.Find("Sphere"))
         {
             copySphereInteractable = transform.Find("Sphere").GetComponent<XRSimpleInteractable>();
@@ -65,11 +68,10 @@ public class CopyToMannequin : MonoBehaviour
     private void Interactable_SelectEntered_CopyToMannequin(SelectEnterEventArgs arg0)
     {
         var networkScene = NetworkScene.Find(this);
-        //var roomClient = networkScene.GetComponentInChildren<RoomClient>();
         var avatarManager = networkScene.GetComponentInChildren<AvatarManager>();
         var playerAvatar = avatarManager.FindAvatar(roomClient.Me);
 
-        // Check that the mannequin being saved to is the player's
+        // Check that the mannequin being saved to is the player's own from Tinker Tailor
         if (playerExperienceController.getPlayerState(roomClient.Me.uuid)!=null)
         {
             int playerNum = playerExperienceController.getPlayerState(roomClient.Me.uuid).playerNum;
@@ -80,7 +82,6 @@ public class CopyToMannequin : MonoBehaviour
             }
         }
 
-        playerTextured = playerAvatar.GetComponent<TexturedAvatar>();
         playerFloating = playerAvatar.GetComponentInChildren<FloatingAvatarSeparatedTextures>();
 
         // Get the player's textures
@@ -91,13 +92,14 @@ public class CopyToMannequin : MonoBehaviour
 
         ApplyAndSave(headTex, torsoTex, leftHandTex, rightHandTex, true, Guid.NewGuid().ToString()); // playerStored: true (the player stored this on the mannequin)
 
+        // Send skin over the network to ensure mannequins (and catalogue) are in sync
         sendMessage();
     
     }
 
     public void ApplyAndSave(Texture2D headTex, Texture2D torsoTex, Texture2D leftHandTex, Texture2D rightHandTex, bool playerStored, string newTexName)
     {
-        // Combine into 1 texture
+        // Combine into one texture to be saved and reapplied to the mannequin
         Texture2D combinedTexture = textureCatalogue.CombineTextures(headTex, torsoTex, leftHandTex, rightHandTex);
         combinedTexture.name = newTexName;
         if (playerStored){
@@ -113,7 +115,6 @@ public class CopyToMannequin : MonoBehaviour
         if (textureCatalogue != null)
         {
             textureCatalogue.AddDynamicTexture(combinedTexture);
-
             Debug.Log("Modified textures and added them to CustomAvatarTextureCatalogue!");
         }
         else
@@ -130,13 +131,10 @@ public class CopyToMannequin : MonoBehaviour
 
     }
 
+    // Method to apply a texture to the mannequin's head, used as an interface for diffusion output
     public void ApplyOnlyHead(Texture2D headTex)
     {
-        Debug.Log(headTex);
-        Debug.Log(torsoRenderer);
-        Debug.Log(leftHandRenderer);
-        Debug.Log(rightHandRenderer);
-        
+        // Diffusion by default doesn't automatically save the texture   
         ApplyAndSave(
             headTex,
             torsoRenderer.material.mainTexture as Texture2D, 
@@ -147,6 +145,7 @@ public class CopyToMannequin : MonoBehaviour
         );
     }
 
+    // Method to apply a texture to the mannequin's torso, used as an interface for diffusion output
     public void ApplyOnlyTorso(Texture2D torsoTex)
     {
         ApplyAndSave(
@@ -159,6 +158,7 @@ public class CopyToMannequin : MonoBehaviour
         );
     }
 
+    // Sends the texture over the network to ensure mannequins (and catalogue) are in sync
     public void sendMessage()
     {
         context.SendJson(new CopyMessage
@@ -168,6 +168,7 @@ public class CopyToMannequin : MonoBehaviour
         });
     }
 
+    // Need to decode the message, apply the skin and sync with catalogue and player experience
     public void ProcessMessage(ReferenceCountedSceneGraphMessage message)
     {
 
@@ -190,7 +191,7 @@ public class CopyToMannequin : MonoBehaviour
         }        
     }
 
-
+    // Encoding method to serialize a texture over WebRTC
     private string EncodeTexture (Texture tex)
     {
         Texture2D tex2D = tex as Texture2D;
@@ -200,6 +201,7 @@ public class CopyToMannequin : MonoBehaviour
         return System.Convert.ToBase64String(bytes);
     }
 
+    // Decoding method to deserialize a texture over WebRTC
     private Texture2D DecodeTexture (string encoded)
     {
         byte[] bytes = System.Convert.FromBase64String(encoded);
@@ -208,37 +210,10 @@ public class CopyToMannequin : MonoBehaviour
         return tex;
     }
 
+    // Remove interactable listener when the object is destroyed
     void OnDestroy()
     {
         if (copySphereInteractable) copySphereInteractable.selectEntered.RemoveListener(Interactable_SelectEntered_CopyToMannequin);
-    }
-
-    private Texture2D ModifyTexture(Texture2D originalTexture)
-    {
-        if (originalTexture == null)
-        {
-            Debug.LogError("ModifyTexture: Original texture is null!");
-            return null;
-        }
-        Texture2D newTexture = new Texture2D(originalTexture.width, originalTexture.height, TextureFormat.RGB24, false);
-
-        newTexture.SetPixels(originalTexture.GetPixels());
-
-        // Apply modification (red tint)
-        Color[] pixels = newTexture.GetPixels();
-        for (int i = 0; i < pixels.Length; i++)
-        {
-            pixels[i] *= new Color(0.8f, 1.2f, 0.8f); // Apply green tint
-            pixels[i].a = 1f;
-        }
-        newTexture.SetPixels(pixels);
-        newTexture.Apply();
-
-        // newTexture.name = originalTexture.name + "_Modified_" + DateTime.Now.ToString("HHmmss");
-        newTexture.name = Guid.NewGuid().ToString();
-        // newTexture.name = textureCatalogue.getNextTextureName();
-        Debug.Log($"Created new modified texture {newTexture.name} with matching format: {originalTexture.format}");
-        return newTexture;
     }
 
 }
