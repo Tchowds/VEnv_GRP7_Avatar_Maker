@@ -50,6 +50,6 @@ public class EmbeddedNetworkedMannequin : MonoBehaviour
         var embeddedMessage = message.FromJson<EmbeddedMessage>();
         Texture2D tex = embeddedMannequin.textureCatalogue.Get(embeddedMessage.texId);
         embeddedMannequin.ApplyAndSave(tex, tex, tex, tex, false, embeddedMessage.texName);
-        promptText.text = embeddedMessage.promptText;
+        promptText.text = embeddedMessage.promptText.ToUpper().Replace(" ", "\n") + "\n";;
     }
 }
