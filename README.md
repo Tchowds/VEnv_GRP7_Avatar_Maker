@@ -31,7 +31,7 @@ Follow these steps to set up the project:
 2. **Clone the Repository:**  
     In your workspace, run:
 
-    https://github.com/Tchowds/VEnv_GRP7_Avatar_Maker.git
+    `git clone https://github.com/Tchowds/VEnv_GRP7_Avatar_Maker.git`
 
 
 3. **Add the Project:**  
